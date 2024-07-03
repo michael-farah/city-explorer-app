@@ -10,7 +10,7 @@ const googlePlacesAPI = axios.create({
 
 const getAttractionsHeaders = {
     "Content-Type": "application/json",
-    "X-Goog-Api-Key": "API KEY HERE",
+    "X-Goog-Api-Key": "INSERT KEY HERE",
     "X-Goog-FieldMask": "places.name,places.id,places.types,places.nationalPhoneNumber,places.formattedAddress,places.location,places.rating,places.websiteUri,places.regularOpeningHours,places.businessStatus,places.priceLevel,places.userRatingCount,places.displayName.text,places.primaryTypeDisplayName.text,places.photos,places.reviews,places.editorialSummary.text,places.accessibilityOptions"
 }
 
@@ -32,9 +32,12 @@ export const getCity = (city) => {
     })
 }
 
+
+
 export const getAttractions = (longitude, latitude, radius) => {
     return googlePlacesAPI.post(`/places:searchNearby`, {
-        includedTypes: [],
+        includedTypes: ["art_gallery","museum","performing_arts_theater", "casino", "national_park", "night_club", "park", "tourist_attraction", "visitor_center", "zoo", "ice_cream_shop", "spa", "church", "hindu_temple", "mosque" , "synagogue", "cemetery", "gift_shop", "department_store",  "shopping_mall", "market", "book_store", "athletic_field", "fitness_center","golf_course", "gym", "playground", "ski_resort", "sports_club", "sports_complex", "stadium", "swimming_pool", "amusement_center","amusement_park","aquarium", "bowling_alley", "convention_center", "cultural_center", "dog_park", "hiking_area","historical_landmark", "marina", "movie_theater"
+    ],
         maxResultCount: 20,
         locationRestriction: {
           circle: {
@@ -50,3 +53,22 @@ export const getAttractions = (longitude, latitude, radius) => {
   throw err
 })
 }
+
+export const getPhoto =(photoReference, maxHeightPx, maxWidthPx)=>{
+    let url = `/${photoReference}/media?key=INSERTKEYHERE`;
+    if (maxHeightPx) {
+        url += `&maxHeightPx=${maxHeightPx}`;
+    }
+    if (maxWidthPx) {
+        url += `&maxWidthPx=${maxWidthPx}`;
+    }
+    url+= `&skipHttpRedirect=true`;
+    return googlePlacesAPI.get(url)
+    .then((response) => {
+        return response.data.photoUri})
+    .catch(err => {
+        console.error('Error fetching place photo:', err);
+        throw err;
+    });
+  }
+  
