@@ -74,9 +74,30 @@ export const getPhoto =(photoReference, maxHeightPx, maxWidthPx)=>{
     return googlePlacesAPI.get(url)
     .then((response) => {
         return response.data.photoUri})
-    .catch(err => {
+    .catch((err) => {
         console.error('Error fetching place photo:', err);
         throw err;
     });
   }
   
+  export const getBucketListItemsByUser = (username, cityName) => {
+    return cityExplorerAPI.get(`/bucket_list/${username}`, {params: {city_name: cityName}})
+    .then((response) => {
+      return response.data
+    })
+    .catch((err) => {
+      throw err
+    })
+  }
+
+  export const postBucketListItem = (attraction, username, cityName) => {
+    return cityExplorerAPI.post(`/bucket_list`, {place_displayname: attraction.displayName.text, place_json: attraction, city_name: cityName, username: username})
+    .then((response) => {
+      if(!response.data){throw new Error("Invalid response structure")}
+      return response.data
+    })
+    .catch((err) => {
+      console.error(err)
+      throw err
+    })
+  }
