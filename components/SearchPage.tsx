@@ -10,15 +10,15 @@ import { getAttractions, getCities, getCity } from "@/app/api";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-export default function SearchPage() { 
-const [city, setCity] = useState("London")
+export default function SearchPage({navigation}) { 
+const [cityName, setCityName] = useState("London")
 const [attractions, setAttractions] = useState([])
 useEffect(()=>{
-        getCity(city).then((response)=>{
+        getCity(cityName).then((response)=>{
         getAttractions(response.city.city_longitude, response.city.city_latitude, response.city.city_radius)
         .then((response)=>{setAttractions(response.data.places)})
     }).catch((err) => {console.log(err)})
-},[city])
+},[cityName])
 return (
    
     <ParallaxScrollView
@@ -32,8 +32,8 @@ return (
           Welcome! This is where the map and search feature will be:
         </ThemedText>
       </ThemedView>
-      <CityDropdown setCity={setCity} city={city}/>
-      <AttractionsList city={city} attractions={attractions}/>
+      <CityDropdown setCityName={setCityName} cityName={cityName}/>
+      <AttractionsList cityName={cityName} attractions={attractions} navigation={navigation}/>
     </ParallaxScrollView>
  
   );
