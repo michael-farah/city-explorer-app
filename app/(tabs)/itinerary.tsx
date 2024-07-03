@@ -1,11 +1,12 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, Image, Platform } from "react-native";
-
+import { StyleSheet, Platform } from "react-native";
 import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import MapComponent from "@/components/Map";
+import WebMapComponent from "@/components/WebMap";
+import { View } from "react-native";
 
 export default function ItineraryScreen() {
   return (
@@ -22,6 +23,9 @@ export default function ItineraryScreen() {
       <Collapsible title="Filtering">
         <ThemedText>Users can filter through the list here!</ThemedText>
       </Collapsible>
+      <View style={{ height: 500 }}>
+        {Platform.OS === "web" ? <WebMapComponent /> : <MapComponent />}
+      </View>
     </ParallaxScrollView>
   );
 }
