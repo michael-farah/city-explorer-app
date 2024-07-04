@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet , Text} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -13,10 +13,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 export default function SearchPage({navigation}) { 
 const [cityName, setCityName] = useState("London")
 const [attractions, setAttractions] = useState([])
+const [attractionsListIsLoading, setAttractionsListIsLoading] = useState(true);
+
 useEffect(()=>{
         getCity(cityName).then((response)=>{
         getAttractions(response.city.city_longitude, response.city.city_latitude, response.city.city_radius)
-        .then((response)=>{setAttractions(response.data.places)})
+        .then((response)=>{
+          setAttractionsListIsLoading(false)
+          setAttractions(response.data.places)})
     }).catch((err) => {console.log(err)})
 },[cityName])
 return (
@@ -32,8 +36,8 @@ return (
         Welcome! Please select your city and browse the wonderful attractions on offer.
         </ThemedText>
       </ThemedView>
-      <CityDropdown setCityName={setCityName}/>
-      <AttractionsList cityName={cityName} attractions={attractions} navigation={navigation}/>
+      <CityDropdown setCityName={setCityName} />
+      {attractionsListIsLoading? <Text>Attractions list is loading ...</Text>: <AttractionsList cityName={cityName} attractions={attractions} navigation={navigation}/>}
     </ParallaxScrollView>
  
   );
