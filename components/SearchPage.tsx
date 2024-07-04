@@ -5,14 +5,16 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import CityDropdown from "@/components/CityDropdown";
 import AttractionsList from "@/components/AttractionsList";
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { getAttractions, getCities, getCity } from "@/app/api";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { CityContext } from "@/app/CityContext";
 import { checkIfConfigIsValid } from "react-native-reanimated/lib/typescript/reanimated2/animation/springUtils";
 
 export default function SearchPage({navigation}) { 
-const [cityName, setCityName] = useState("London")
+const { cityName, setCityName } = useContext(CityContext);
+
 const [attractions, setAttractions] = useState([])
 const [attractionsListIsLoading, setAttractionsListIsLoading] = useState(true);
 const [accessibleOnly, setAccessibleOnly] = useState(false)
@@ -57,7 +59,7 @@ return (
         Welcome! Please select your city and browse the wonderful attractions on offer.
         </ThemedText>
       </ThemedView>
-      <CityDropdown setCityName={setCityName} />
+      <CityDropdown />
       <View style={styles.accessibilityCheckboxContainer}>
       <CheckBox
           value={accessibleOnly}
@@ -93,4 +95,3 @@ const styles = StyleSheet.create({
       alignSelf: 'center',
     }
   });
-  
