@@ -3,12 +3,13 @@ import { Text, View, FlatList, Image, ScrollView, StyleSheet } from 'react-nativ
 import AttractionCard from './AttractionCard';
 
 export default function AttractionsList({navigation, cityName, attractions}){
+    
 
     return (
         <View style={styles.container}>
             <ScrollView>
                 <View>
-                <Text>Attractions for {cityName}:</Text>
+                <Text>Showing attractions for {cityName}:</Text>
                     <View>{attractions.map((attraction)=>{return <View style={styles.attractionCard} key={attraction.id}>
                         <AttractionCard navigation={navigation} cityName={cityName} attraction={attraction}/>
                     </View>})}
