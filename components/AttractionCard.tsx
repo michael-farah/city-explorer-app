@@ -20,7 +20,6 @@ export default function AttractionCard({navigation, cityName, attraction}) {
     const bucketListClick=({attraction})=>{
         postBucketListItem(attraction, user.username, cityName)
         // add a way to show the user that they have clicked the button and its working/complete/failed
-        console.log("item added to bucket list")
     }
 
     return (

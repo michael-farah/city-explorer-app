@@ -20,9 +20,6 @@ export default function BucketListScreen() {
         <ThemedText type="title">Bucket List</ThemedText>
       </ThemedView>
       <ThemedText>Welcome to the Bucket List:</ThemedText>
-      <Collapsible title="Cities">
-        <ThemedText>The cities will be here!</ThemedText>
-      </Collapsible>
       <BucketListPage/>
     </ParallaxScrollView>
   );
