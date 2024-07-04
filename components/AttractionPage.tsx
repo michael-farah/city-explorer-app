@@ -58,7 +58,7 @@ export default function AttractionPage({ route, navigation }) {
           {attraction.reviews
             ? attraction.reviews.map((review) => {
                 return (
-                  <View style={styles.review}>
+                  <View key={review.name} style={styles.review}>
                     <Text style={styles.user}>
                       {review.authorAttribution.displayName} visited on{" "}
                       {review.publishTime.slice(0, 10)}
