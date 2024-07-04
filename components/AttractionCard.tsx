@@ -1,11 +1,19 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, Image } from "react-native";
 import { Linking } from 'react-native';
 import { UserContext } from '../app/UserContext';
-import { useContext, useState } from 'react';
+import { useContext, useState , useEffect } from 'react';
 import { postBucketListItem } from '@/app/api';
+import { getPhoto } from "@/app/api";
 
 export default function AttractionCard({navigation, cityName, attraction}) {
     const {user, setUser} = useContext(UserContext)
+    const [photo, setPhoto] = useState("");
+
+    useEffect(() => {
+      getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
+        setPhoto(response);
+      });
+    }, []);
     const seeMoreClick=({attraction})=>{
         navigation.navigate("Attraction", {attraction})
     }
@@ -17,7 +25,8 @@ export default function AttractionCard({navigation, cityName, attraction}) {
 
     return (
     <View>
-      <Text>{attraction.displayName.text}</Text>
+      <Text style={styles.attractionTitle}>{attraction.displayName.text}</Text>
+      <Image style={styles.image} source={{ uri: photo }} />
       <Text>
         Average rating {attraction.rating} according to{" "}
         {attraction.userRatingCount} reviewers
@@ -48,5 +57,13 @@ export default function AttractionCard({navigation, cityName, attraction}) {
 }
 
 const styles = StyleSheet.create({
-    attractionCard: {margin: 10},
+    attractionCard: {margin: 10},    image: {
+      width: 150,
+      height:150,
+      margin: 20,
+      alignSelf: "center"
+    },
+    attractionTitle: {
+      fontWeight: "bold"
+    }
 })

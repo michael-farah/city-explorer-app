@@ -4,7 +4,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import { StyleSheet } from "react-native";
 import { getCities } from "@/app/api";
 
-export default function CityDropdown({setCityName, cityName}){
+export default function CityDropdown({setCityName}){
     const [citiesList, setCitiesList] = useState([])
 
     useEffect(()=>{
@@ -18,7 +18,7 @@ export default function CityDropdown({setCityName, cityName}){
     }
     return (<View>
         <Dropdown style={styles.background} placeholder="Select a City" data={citiesList} labelField="label" valueField="value" onChange={handleDropdownChange}/>
-        <Text style={styles.background}>Your city is {cityName}</Text>
+
     </View>)
 }
 

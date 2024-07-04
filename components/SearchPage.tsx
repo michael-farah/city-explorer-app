@@ -29,10 +29,10 @@ return (
     >
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">
-          Welcome! This is where the map and search feature will be:
+        Welcome! Please select your city and browse the wonderful attractions on offer.
         </ThemedText>
       </ThemedView>
-      <CityDropdown setCityName={setCityName} cityName={cityName}/>
+      <CityDropdown setCityName={setCityName}/>
       <AttractionsList cityName={cityName} attractions={attractions} navigation={navigation}/>
     </ParallaxScrollView>
  
