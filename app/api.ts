@@ -101,3 +101,21 @@ export const getPhoto =(photoReference, maxHeightPx, maxWidthPx)=>{
       throw err
     })
   }
+
+  export const deleteBucketListItem = (attraction, username, cityName) => {
+    getBucketListItemsByUser(username, cityName).then((response)=>{
+      const bucketListItems = response.bucketList
+      let bucketListId;
+      for(let i = 0;i<bucketListItems.length;i++){
+        if(bucketListItems[i].place_json.id === attraction.id){
+          bucketListId = Number(bucketListItems[i].bucket_list_id)
+        }
+      }
+      return cityExplorerAPI.delete(`bucket_list/${bucketListId}`)
+      .catch((err) => {
+        console.error(err)
+        throw err
+      })
+    })
+
+  }

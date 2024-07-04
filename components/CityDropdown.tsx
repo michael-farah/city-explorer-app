@@ -1,10 +1,13 @@
 import { Text, View } from "react-native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { StyleSheet } from "react-native";
 import { getCities } from "@/app/api";
+import { CityContext } from "@/app/CityContext";
 
-export default function CityDropdown({setCityName, cityListIsLoading}){
+export default function CityDropdown(){
+    const { cityName, setCityName } = useContext(CityContext);
+
     const [citiesList, setCitiesList] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -27,7 +30,7 @@ if(isLoading){
 }
 
     return (<View>
-        <Dropdown style={styles.background} placeholder="Select City" data={citiesList} labelField="label" valueField="value" onChange={handleDropdownChange}/>
+        <Dropdown style={styles.background} placeholder="Select City" data={citiesList} labelField="label" valueField="value" value={cityName} onChange={handleDropdownChange}/>
 
     </View>)
 }

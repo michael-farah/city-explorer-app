@@ -2,30 +2,29 @@ import { View, Text, Button, StyleSheet, Image } from "react-native";
 import { Linking } from "react-native";
 import { UserContext } from "../app/UserContext";
 import { useContext, useState, useEffect } from "react";
-import { postBucketListItem } from "@/app/api";
+import { deleteBucketListItem, postBucketListItem } from "@/app/api";
 import { getPhoto } from "@/app/api";
 import { RotateInDownLeft } from "react-native-reanimated";
+import { CityContext } from "@/app/CityContext";
 
-export default function AttractionCard({ navigation, cityName, attraction }) {
+export default function AttractionCard({ navigation, attraction }) {
   const { user, setUser } = useContext(UserContext);
+  const { cityName, setCityName } = useContext(CityContext);
+
   const [photo, setPhoto] = useState("");
 const [attractionType, setAttractionType] = useState()
-
   useEffect(() => {
+    console.log("useEffect")
     getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
       setPhoto(response);
-      console.log(attraction, 'attraction')
-if (attraction.primaryTypeDisplayName){
-  console.log(attraction.primaryTypeDisplayName, 'attraction.primaryTypeDisplayName')
-  setAttractionType(attraction.primaryTypeDisplayName.text)
-}
-else{
-    const attractionType0 = attraction.types[0]
-    console.log(attractionType0)
-    setAttractionType(attractionType0)
-}
+      if (attraction.primaryTypeDisplayName){
+        setAttractionType(attraction.primaryTypeDisplayName.text)
+      }else{
+        const attractionType0 = attraction.types[0]
+        setAttractionType(attractionType0)
+      }
     });
-  }, []);
+  }, [cityName]);
 
 
   const seeMoreClick = ({ attraction }) => {
@@ -34,7 +33,12 @@ else{
   const bucketListClick = ({ attraction }) => {
     postBucketListItem(attraction, user.username, cityName);
   };
+  const removeFromBucketListClick = ({attraction}) => {
+    deleteBucketListItem(attraction, user.username, cityName);
+  }
 
+  const { routes, index } = navigation.getState();
+  const currentRoute = routes[index].name;
 
   return (
     <View style={styles.container}>
@@ -56,7 +60,7 @@ else{
           </Text>
           {/* <Text>Categories: {attraction.types.join(", ")}</Text>
            */}
-<Text style={styles.category}>Category: {attractionType}</Text>
+        <Text style={styles.category}>Category: {attractionType}</Text>
           <View style={styles.buttonContainer}>
         <View style={styles.button}>
           <Button
@@ -66,11 +70,15 @@ else{
           />
         </View>
         <View style={styles.button}>
-          <Button
+          {currentRoute === "BucketList" ? <Button
+            title="Delete from Bucket List"
+            onPress={() => removeFromBucketListClick({ attraction })}
+            disabled={false}
+          /> : <Button 
             title="Add to Bucket List"
             onPress={() => bucketListClick({ attraction })}
             disabled={false}
-          />
+          />}
         </View>
       </View>
       </View>

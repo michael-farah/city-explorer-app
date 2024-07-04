@@ -5,13 +5,15 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import CityDropdown from "@/components/CityDropdown";
 import AttractionsList from "@/components/AttractionsList";
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { getAttractions, getCities, getCity } from "@/app/api";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { CityContext } from "@/app/CityContext";
 
 export default function SearchPage({navigation}) { 
-const [cityName, setCityName] = useState("London")
+const { cityName, setCityName } = useContext(CityContext);
+
 const [attractions, setAttractions] = useState([])
 const [attractionsListIsLoading, setAttractionsListIsLoading] = useState(true);
 
@@ -36,7 +38,7 @@ return (
         Welcome! Please select your city and browse the wonderful attractions on offer.
         </ThemedText>
       </ThemedView>
-      <CityDropdown setCityName={setCityName} />
+      <CityDropdown />
       {attractionsListIsLoading? <Text>Attractions list is loading ...</Text>: <AttractionsList cityName={cityName} attractions={attractions} navigation={navigation}/>}
     </ParallaxScrollView>
  
