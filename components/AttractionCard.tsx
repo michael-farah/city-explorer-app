@@ -10,19 +10,18 @@ export default function AttractionCard({ navigation, cityName, attraction }) {
   const { user, setUser } = useContext(UserContext);
   const [photo, setPhoto] = useState("");
 
-  useEffect(() => {
-    getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
-      setPhoto(response);
-    });
-  }, []);
-  const seeMoreClick = ({ attraction }) => {
-    navigation.navigate("Attraction", { attraction });
-  };
-  const bucketListClick = ({ attraction }) => {
-    postBucketListItem(attraction, user.username, cityName);
-    // add a way to show the user that they have clicked the button and its working/complete/failed
-    console.log("item added to bucket list");
-  };
+    useEffect(() => {
+      getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
+        setPhoto(response);
+      });
+    }, []);
+    const seeMoreClick=({attraction})=>{
+        navigation.navigate("Attraction", {attraction})
+    }
+    const bucketListClick=({attraction})=>{
+        postBucketListItem(attraction, user.username, cityName)
+        // add a way to show the user that they have clicked the button and its working/complete/failed
+    }
 
   return (
     <View style={styles.container}>
