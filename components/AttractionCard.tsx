@@ -30,17 +30,16 @@ export default function AttractionCard({ navigation, cityName, attraction }) {
         <Text style={styles.titleText}>{attraction.displayName.text}</Text>
       </View>
       <View style={styles.mainBody}>
-        <View>
+        <View style={styles.imageBox}>
           <Image style={styles.image} source={{ uri: photo }} />
         </View>
-        <View>
-          <Text>
-            Average rating {attraction.rating} according to{" "}
+        <View style={styles.textBody}>
+          <Text style={styles.rating}>
+            Average rating of {attraction.rating} according to{" "}
             {attraction.userRatingCount} reviewers
           </Text>
-          {/* put photo here */}
           {attraction.editorialSummary ? (
-            <Text>{attraction.editorialSummary.text}</Text>
+            <Text style={styles.editorialSummary}>{attraction.editorialSummary.text}</Text>
           ) : null}
           <Text
             style={{ color: "blue" }}
@@ -65,7 +64,7 @@ export default function AttractionCard({ navigation, cityName, attraction }) {
           />
         </View>
       </View>
-        </View>
+      </View>
       </View>
       
     </View>
@@ -79,24 +78,43 @@ const styles = StyleSheet.create({
     borderWidth: 5},
   image: {
     width: 150,
-    height: 150
+    height: 150,
+    borderRadius: 10
   },
   attractionTitle: {
-    flex: 1,
   },
   titleText: {
     fontWeight: "bold",
     borderWidth: 3,
-    borderColor: "green"
+    borderColor: "green",
+    padding:10
   },
   mainBody: {
-    flex: 1,
     flexDirection: "row",
     borderWidth: 3,
     borderColor: "red"
   },
+  textBody:{
+    flex:1,
+    flexWrap: "wrap",
+    borderWidth: 3,
+    borderColor: "purple",
+    padding: 10
+  }
+  ,
   buttonContainer: {
     flex: 1,
     flexDirection: "row",
   },
+  editorialSummary: {
+    flex:1,
+    marginVertical: 10
+  },
+  imageBox: {
+    padding: 10,
+   
+  },
+  rating: {
+    marginBottom: 10
+  }
 });
