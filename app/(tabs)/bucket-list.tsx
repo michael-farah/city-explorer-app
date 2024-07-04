@@ -6,6 +6,7 @@ import { ExternalLink } from "@/components/ExternalLink";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import BucketListPage from "@/components/BucketListPage"
 
 export default function BucketListScreen() {
   return (
@@ -22,6 +23,7 @@ export default function BucketListScreen() {
       <Collapsible title="Cities">
         <ThemedText>The cities will be here!</ThemedText>
       </Collapsible>
+      <BucketListPage/>
     </ParallaxScrollView>
   );
 }

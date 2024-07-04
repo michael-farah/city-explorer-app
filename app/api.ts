@@ -63,7 +63,7 @@ export const getAttractions = (longitude, latitude, radius) => {
 }
 
 export const getPhoto =(photoReference, maxHeightPx, maxWidthPx)=>{
-    let url = `/${photoReference}/media?key=INSERTKEYHERE`;
+    let url = `/${photoReference}/media?key=${googleMapsApiKey}`;
     if (maxHeightPx) {
         url += `&maxHeightPx=${maxHeightPx}`;
     }

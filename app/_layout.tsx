@@ -8,7 +8,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
+import { CityProvider } from "./CityContext";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { UserProvider } from "./UserContext";
 
@@ -32,6 +32,7 @@ export default function RootLayout() {
   }
 
   return (
+    <CityProvider>
     <UserProvider>
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
@@ -40,5 +41,6 @@ export default function RootLayout() {
       </Stack>
     </ThemeProvider>
     </UserProvider>
+    </CityProvider>
   );
 }
