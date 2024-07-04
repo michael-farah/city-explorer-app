@@ -35,6 +35,7 @@ else{
     postBucketListItem(attraction, user.username, cityName);
   };
 
+
   return (
     <View style={styles.container}>
       <View style={styles.attractionTitle}>
