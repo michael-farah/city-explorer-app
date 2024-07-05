@@ -2,11 +2,11 @@ import { View, Text, StyleSheet , TextInput} from 'react-native'
 import { useEffect, useContext, useState } from 'react'
 import React from 'react'
 import { getCity, getSearchPlaces } from '@/app/api'
-import { CityContext } from '@/app/CityContext'
+import { AppContext } from '@/app/AppContext'
 import { ThemedText } from './ThemedText'
 
 export default function AttractionSearchByName ({setAttractions})  {
-const { cityName, setCityName } = useContext(CityContext);
+const { cityName, setCityName } = useContext(AppContext);
 const [text, setText] = useState("")
 const[searchTerm, setSearchTerm] = useState("")
 const [gobbledigook, setGobbledigook] = useState(false)
