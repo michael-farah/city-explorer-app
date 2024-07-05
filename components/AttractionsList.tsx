@@ -1,4 +1,5 @@
 import { Text, View, FlatList, Image, ScrollView, StyleSheet } from 'react-native';
+import { useEffect } from 'react';
 
 import AttractionCard from './AttractionCard';
 
@@ -9,7 +10,7 @@ export default function AttractionsList({navigation, cityName, attractions}){
         <View style={styles.container}>
             <ScrollView>
                 <View>
-                <Text>Showing attractions for {cityName}:</Text>
+                <Text>Showing {attractions.length} attractions for {cityName}:</Text>
                     <View>{attractions.map((attraction)=>{return <View style={styles.attractionCard} key={attraction.id}>
                         <AttractionCard navigation={navigation} cityName={cityName} attraction={attraction}/>
                     </View>})}

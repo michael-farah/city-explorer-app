@@ -21,6 +21,8 @@ const [accessibleOnly, setAccessibleOnly] = useState(false)
 const [fullCityList, setFullCityList] = useState([])
 
 useEffect(()=>{
+  setAttractionsListIsLoading(true)
+  setAccessibleOnly(false)
         getCity(cityName).then((response)=>{
         getAttractions(response.city.city_longitude, response.city.city_latitude, response.city.city_radius)
         .then((response)=>{
@@ -34,10 +36,10 @@ useEffect(()=>{
 if(accessibleOnly){
   setAttractions((attractions)=>{
 const copyAttractions = [...attractions]
-const filteredAttrations = copyAttractions.filter((attraction)=>{ 
-  return attraction.accessibilityOptions.wheelchairAccessibleEntrance && attraction.accessibilityOptions.wheelchairAccessibleRestroom 
+const filteredAttractions = copyAttractions.filter((attraction)=>{ 
+  return attraction.accessibilityOptions && attraction.accessibilityOptions.wheelchairAccessibleEntrance===true && attraction.accessibilityOptions.wheelchairAccessibleRestroom===true
 })
-return filteredAttrations
+return filteredAttractions
   })
 }
 else{
