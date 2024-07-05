@@ -9,14 +9,18 @@ import { CityContext } from "@/app/CityContext";
 import { ThemedText } from "./ThemedText";
 
 export default function AttractionCard({ navigation, attraction }) {
-
-  const { cityName, setCityName, user, setUser  } = useContext(AppContext);
-
+  const { cityName, setCityName, user, setUser, bucketListAttractions, setBucketListAttractions } = useContext(AppContext);
   const [photo, setPhoto] = useState("");
   const [attractionType, setAttractionType] = useState();
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([])
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [seeMoreClicked, setSeeMoreClicked] = useState(false)
+  const [isAdding, setIsAdding] = useState(false)
 
   useEffect(() => {
+    setIsDeleting(false)
+    setIsAdding(false)
+    setSeeMoreClicked(false)
     if(attraction.accessibilityOptions){
   setAccessibilityFeatures((features)=>{
  const accessibilityKeys = Object.keys(attraction.accessibilityOptions)
@@ -70,16 +74,25 @@ else{
 
   const seeMoreClick = ({ attraction }) => {
     navigation.navigate("Attraction", { attraction });
+    setSeeMoreClicked(true)
   };
   const bucketListClick = ({ attraction }) => {
-    postBucketListItem(attraction, user.username, cityName);
+    setIsAdding(true)
+    postBucketListItem(attraction, user.username, cityName)
+    .then(({addedPlace})=>{
+      setBucketListAttractions((currAttractions)=> [addedPlace.place_json, ...currAttractions])
+    })
   };
   const removeFromBucketListClick = ({ attraction }) => {
-    deleteBucketListItem(attraction, user.username, cityName);
+    setIsDeleting(true)
+    deleteBucketListItem(attraction, user.username, cityName)
+    setBucketListAttractions((currAttractions)=> currAttractions.filter((item)=> item.id !== attraction.id))
   };
 
   const { routes, index } = navigation.getState();
   const currentRoute = routes[index].name;
+
+  const isItemInBucketList = bucketListAttractions.map((item)=> item.id).includes(attraction.id)
 
   return (
     <View style={styles.container}>
@@ -122,7 +135,7 @@ else{
               <Button
                 title="See more details"
                 onPress={() => seeMoreClick({ attraction })}
-                disabled={false}
+                disabled={seeMoreClicked?true:false}
               />
             </View>
         
@@ -131,13 +144,13 @@ else{
                 <Button
                   title="Delete from Bucket List"
                   onPress={() => removeFromBucketListClick({ attraction })}
-                  disabled={false}
+                  disabled={isDeleting?true:false}
                 />
               ) : (
                 <Button
-                  title="Add to Bucket List"
+                  title={isItemInBucketList ? "Added to Bucket List" : "Add to Bucket List"}
                   onPress={() => bucketListClick({ attraction })}
-                  disabled={false}
+                  disabled={isItemInBucketList||isAdding?true:false}
                 />
               )}
             </View>

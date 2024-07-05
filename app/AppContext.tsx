@@ -32,7 +32,7 @@ export const AppProvider = ({ children }) => {
   const bucketListMemo = useMemo(() => bucketListAttractions,[bucketListAttractions])
 
   return (
-    <AppContext.Provider value={{ user, setUser, cityName, setCityName, setBucketListAttractions, bucketListMemo}}>
+    <AppContext.Provider value={{ user, setUser, cityName, setCityName, bucketListAttractions, setBucketListAttractions, bucketListMemo}}>
       {children}
     </AppContext.Provider>
   );
