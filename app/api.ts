@@ -185,3 +185,27 @@ export const postBucketListItem = (
       })
     })
   }
+
+  export const getSearchPlaces = (latitude, longitude, radius , text)=>{
+    return googlePlacesAPI.post(`/places:searchText`, {
+      textQuery: `${text}`,
+     
+      locationBias: {
+        circle: {
+          center: {
+            latitude: `${latitude}`
+            ,
+            longitude: `${longitude}`
+  
+          },
+          radius: `${radius}`
+        }
+      },
+      maxResultCount: 20,
+    }, {headers: getAttractionsHeaders}
+  )
+  .catch((err) => {
+    console.error(err)
+    throw err
+  })
+  }
