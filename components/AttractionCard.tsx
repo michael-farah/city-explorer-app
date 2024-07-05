@@ -5,12 +5,14 @@ import { deleteBucketListItem, postBucketListItem } from "@/app/api";
 import { getPhoto } from "@/app/api";
 import { RotateInDownLeft } from "react-native-reanimated";
 import { AppContext } from "@/app/AppContext";
+import { CityContext } from "@/app/CityContext";
+import { ThemedText } from "./ThemedText";
 
 export default function AttractionCard({ navigation, attraction }) {
   const { cityName, setCityName, user, setUser, bucketListAttractions, setBucketListAttractions } = useContext(AppContext);
-
   const [photo, setPhoto] = useState("");
   const [attractionType, setAttractionType] = useState();
+  const [accessibilityFeatures, setAccessibilityFeatures] = useState([])
   const [isDeleting, setIsDeleting] = useState(false)
   const [seeMoreClicked, setSeeMoreClicked] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
@@ -19,6 +21,27 @@ export default function AttractionCard({ navigation, attraction }) {
     setIsDeleting(false)
     setIsAdding(false)
     setSeeMoreClicked(false)
+    if(attraction.accessibilityOptions){
+  setAccessibilityFeatures((features)=>{
+ const accessibilityKeys = Object.keys(attraction.accessibilityOptions)
+  const trueAccessibilityKeys = accessibilityKeys.filter((key)=>{
+   return attraction.accessibilityOptions[key] === true
+  })
+  const spacedTrueAccessibilityKeys = trueAccessibilityKeys.map((key)=>{
+    const result = key.replace(/([A-Z])/g, ' $1')
+    return result.charAt(0).toUpperCase() + result. slice(1).toLowerCase()
+  })
+  const anglicisedSpacedTrueAccessibilityKeys = spacedTrueAccessibilityKeys.map((key)=>{
+if(key ==="Wheelchair accessible restroom"){
+  return "Wheelchair accessible toilet"
+}
+else{ 
+  return key
+}
+  })
+ return anglicisedSpacedTrueAccessibilityKeys
+    }  )
+  }
     if (attraction.photos) {
       getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
         setPhoto(response);
@@ -76,27 +99,38 @@ export default function AttractionCard({ navigation, attraction }) {
       <View style={styles.attractionTitle}>
         <View>
           {" "}
-          <Text style={styles.titleText}>{attraction.displayName.text}</Text>
+          <ThemedText style={styles.titleText}>{attraction.displayName.text}</ThemedText>
         </View>
       </View>
       <View style={styles.mainBody}>
         <View style={styles.imageBox}>
           <Image style={styles.image} source={{ uri: photo }} />
         </View>
-        <View style={styles.textBody}>
+        <View style={styles.textAndButtonsBody}>
+          <View style={styles.textBody}> 
           {attraction.editorialSummary ? (
-            <Text style={styles.editorialSummary}>
+            <View><ThemedText style={styles.editorialSummary}>
               {attraction.editorialSummary.text}
-            </Text>
+            </ThemedText></View>
           ) : null}
+           <View><ThemedText>Address: {attraction.formattedAddress}</ThemedText></View>
+           <View><ThemedText style={styles.category}>Primary category: {attractionType}</ThemedText></View>
+<View>
+<ThemedText>{accessibilityFeatures.length? (<ThemedText>Wheelchair facilities: {accessibilityFeatures.join(", ")}</ThemedText> ): null}</ThemedText>
+</View>
+
           {attraction.rating ? (
-            <Text style={styles.rating}>
+            <View><ThemedText style={styles.rating}>
               Average rating of {attraction.rating} according to{" "}
-              {attraction.userRatingCount} reviewers
-            </Text>
+{attraction.userRatingCount>1? ( `${attraction.userRatingCount.toLocaleString('en-US')} reviewers`): (`${attraction.userRatingCount.toLocaleString('en-US')} reviewer`)}
+
+              
+            </ThemedText></View>
           ) : null}
-          <Text style={styles.category}>Category: {attractionType}</Text>
+
+              </View>
           <View style={styles.buttonContainer}>
+            </View>
             <View style={styles.button}>
               <Button
                 title="See more details"
@@ -104,6 +138,7 @@ export default function AttractionCard({ navigation, attraction }) {
                 disabled={seeMoreClicked?true:false}
               />
             </View>
+        
             <View style={styles.button}>
               {currentRoute === "BucketList" ? (
                 <Button
@@ -119,7 +154,7 @@ export default function AttractionCard({ navigation, attraction }) {
                 />
               )}
             </View>
-          </View>
+    
         </View>
       </View>
     </View>
@@ -130,7 +165,6 @@ const styles = StyleSheet.create({
   container: {
     margin: 10,
     flex: 1,
-    borderWidth: 5,
     padding: 10,
   },
   image: {
@@ -149,13 +183,15 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     flex: 1,
   },
-  textBody: {
+  textAndButtonsBody: {
     flex: 3,
     flexWrap: "wrap",
     paddingHorizontal: 20,
     minWidth: 200,
-    height: "auto"
-  },
+    height: "auto",
+    justifyContent: "space-between",
+  }
+  ,
   buttonContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -165,8 +201,8 @@ const styles = StyleSheet.create({
   },
   editorialSummary: {
     flex: 1,
-    marginTop: 10,
     width: "100%",
+   fontWeight: "bold"
   },
   imageBox: {
     justifyContent: "center",

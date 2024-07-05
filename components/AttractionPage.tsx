@@ -6,19 +6,43 @@ import { Linking } from "react-native";
 import { useEffect } from "react";
 import { getPhoto } from "@/app/api";
 import { useState } from "react";
+import { ThemedText } from "./ThemedText";
 
 export default function AttractionPage({ route, navigation }) {
   const { attraction } = route.params;
   const [photo, setPhoto] = useState("");
+
+  const [accessibilityFeatures, setAccessibilityFeatures] = useState([])
 
   //add in accessibility options
   //render photos (carousel?)
   //add in types??
 
   useEffect(() => {
+    if(attraction.accessibilityOptions){
+      setAccessibilityFeatures((features)=>{
+     const accessibilityKeys = Object.keys(attraction.accessibilityOptions)
+      const trueAccessibilityKeys = accessibilityKeys.filter((key)=>{
+       return attraction.accessibilityOptions[key] === true
+      })
+      const spacedTrueAccessibilityKeys = trueAccessibilityKeys.map((key)=>{
+        const result = key.replace(/([A-Z])/g, ' $1')
+        return result.charAt(0).toUpperCase() + result. slice(1).toLowerCase()
+      })
+      const anglicisedSpacedTrueAccessibilityKeys = spacedTrueAccessibilityKeys.map((key)=>{
+    if(key ==="Wheelchair accessible restroom"){
+      return "Wheelchair accessible toilet"
+    }
+    else{ 
+      return key
+    }
+      })
+     return anglicisedSpacedTrueAccessibilityKeys
+        }  )
+      }
     if(attraction.photos){
     getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
-      setPhoto(response);
+      setPhoto(response)
     })}
   }, []);
 
@@ -31,41 +55,42 @@ export default function AttractionPage({ route, navigation }) {
     >
       <View style={styles.container}>
         <View >
-        <Text style={styles.boldText}>{attraction.displayName.text}</Text>
+        <ThemedText type="title" style={styles.boldText}>{attraction.displayName.text}</ThemedText>
         {photo ? (<Image style={styles.image} source={{ uri: photo }} />): null}
-        <Text style={styles.textBlock}>
+        <ThemedText type="default" style={styles.textBlock}>
           {attraction.editorialSummary && attraction.editorialSummary.text
             ? attraction.editorialSummary.text
-            : ""} </Text>
+            : ""} </ThemedText>
+            <ThemedText></ThemedText>
 
-          <Text style={styles.address}>Address: {attraction.formattedAddress} {attraction.nationalPhoneNumber
-            ? `              Phone number: ${attraction.nationalPhoneNumber}`
-            : ""}</Text>
-        <Text>
+          <ThemedText style={styles.address}>Address: {attraction.formattedAddress} {attraction.nationalPhoneNumber
+            ? `\n\nPhone number: ${attraction.nationalPhoneNumber}`
+            : ""}</ThemedText>
           {attraction.regularOpeningHours
-            ? `Opening hours: ${attraction.regularOpeningHours.weekdayDescriptions}`
-            : ""}
-        </Text>
-        {attraction.websiteUri ?(<Text
+            ? (<ThemedText>Opening hours:{'\n\n'}{attraction.regularOpeningHours.weekdayDescriptions.join("\n")}</ThemedText>): null}
+       <View>
+<ThemedText>{accessibilityFeatures.length? (<ThemedText>{`\nWheelchair facilities: ${accessibilityFeatures.join(", ")}`}</ThemedText> ): null}</ThemedText>
+</View>
+        {attraction.websiteUri ?(<ThemedText
           style={{ color: "blue", marginVertical:20 }}
           onPress={() => Linking.openURL(attraction.websiteUri)}
         >Visit official site
-        </Text>): null}
+        </ThemedText>): null}
         </View>
         {attraction.rating? (<View style={styles.reviewBox}>
-          <Text style={styles.boldText}>Reviews:</Text>
-          <Text style={styles.rating}>Average user rating: {attraction.rating} from{" "}
-          {attraction.userRatingCount} users</Text>
+          <ThemedText type="subtitle" style={styles.boldThemedText}>Reviews:</ThemedText>
+          <ThemedText style={styles.rating}>Average user rating: {attraction.rating} from{" "}
+          {attraction.userRatingCount.toLocaleString('en-US')} users</ThemedText>
           {attraction.reviews
             ? attraction.reviews.map((review) => {
                 return (
                   <View key={review.name} style={styles.review}>
-                    <Text style={styles.user}>
+                    <ThemedText style={styles.user}>
                       {review.authorAttribution.displayName} visited on{" "}
                       {review.publishTime.slice(0, 10)}
-                    </Text>
-                    <Text style={styles.reviewText}>{review.text.text}</Text>
-                    <Text>Rating:{review.rating}/5 </Text>
+                    </ThemedText>
+                    <ThemedText style={styles.reviewText}>{review.text.text}</ThemedText>
+                    <ThemedText>Rating:{review.rating}/5 </ThemedText>
                   </View>
                 );
               })
@@ -79,9 +104,7 @@ export default function AttractionPage({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+    height: "100%",    padding: 40
   },
   headerImage: {
     color: "#FF4D4D",
@@ -106,10 +129,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   review: {
-    margin: 20,
-    padding: 10,
-    backgroundColor: "#fbe3e8",
-    borderRadius: 10,
+    marginTop: 20,
   },
 
   image: {
