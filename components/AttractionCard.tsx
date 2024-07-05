@@ -14,7 +14,7 @@ export default function AttractionCard({ navigation, attraction }) {
   const [photo, setPhoto] = useState("");
 const [attractionType, setAttractionType] = useState()
   useEffect(() => {
-    console.log("useEffect")
+    if(attraction.photos){
     getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
       setPhoto(response);
       if (attraction.primaryTypeDisplayName){
@@ -23,7 +23,16 @@ const [attractionType, setAttractionType] = useState()
         const attractionType0 = attraction.types[0]
         setAttractionType(attractionType0)
       }
-    });
+    })
+  }
+  else{
+    if (attraction.primaryTypeDisplayName){
+      setAttractionType(attraction.primaryTypeDisplayName.text)
+    }else{
+      const attractionType0 = attraction.types[0]
+      setAttractionType(attractionType0)
+    }
+  }
   }, [cityName]);
 
 
