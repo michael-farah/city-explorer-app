@@ -4,19 +4,35 @@ import { Dropdown } from "react-native-element-dropdown";
 import { StyleSheet } from "react-native";
 import { getCities } from "@/app/api";
 import { CityContext } from "@/app/CityContext";
+import { UserContext } from '../app/UserContext';
 
-export default function CityDropdown(){
+export default function CityDropdown({navigation}){
     const { cityName, setCityName } = useContext(CityContext);
+    const {user, setUser} = useContext(UserContext)
 
     const [citiesList, setCitiesList] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
+    const { routes, index } = navigation.getState();
+    const currentRoute = routes[index].name;  
+
     useEffect(()=>{
-        getCities().then((response) => {
-            setIsLoading(false)
-            const data = response.cities.map((city)=> {return {label: city.city_name, value: city.city_name}})
-            setCitiesList(data)
-        }).catch((err)=>{console.log(err)})
+        if(currentRoute === "Home"){
+            getCities()
+            .then((response) => {
+                setIsLoading(false)
+                const data = response.cities.map((city)=> {return {label: city.city_name, value: city.city_name}})
+                setCitiesList(data)
+            }).catch((err)=>{console.log(err)})
+        } else {
+            const username = user.username
+            getCities(username)
+            .then((response) => {
+                setIsLoading(false)
+                const data = response.cities.map((city)=> {return {label: city.city_name, value: city.city_name}})
+                setCitiesList(data)
+            }).catch((err)=>{console.log(err)})
+        }
     }, [])
     const handleDropdownChange = (event) => {
         setCityName(event.value)

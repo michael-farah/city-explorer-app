@@ -49,7 +49,6 @@ else{
 , [accessibleOnly])
 
 return (
-   
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={
@@ -61,7 +60,7 @@ return (
         Welcome! Please select your city and browse the wonderful attractions on offer.
         </ThemedText>
       </ThemedView>
-      <CityDropdown />
+      <CityDropdown  navigation={navigation}/>
       <View style={styles.accessibilityCheckboxContainer}>
       <CheckBox
           value={accessibleOnly}

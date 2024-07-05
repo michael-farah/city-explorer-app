@@ -11,21 +11,20 @@ import { ThemedView } from "@/components/ThemedView";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function BucketListPage({navigation}){
-    const {user, setUser} = useContext(UserContext)
-    const { cityName, setCityName } = useContext(CityContext);
+    const { user } = useContext(UserContext)
+    const { username } = user;
+    const { cityName } = useContext(CityContext);
     const [bucketListAttractions, setBucketListAttractions] = useState([])
     useEffect(()=>{
-        // getCity(cityName).then((response)=>{
-        getBucketListItemsByUser(user.username, cityName)
+        getBucketListItemsByUser(username, cityName)
         .then(({bucketList})=>{
             if(!bucketList.length){
                 setBucketListAttractions([])
             } else {
                 setBucketListAttractions(bucketList.map((item)=> {return item.place_json}))
             }
-        // })
     }).catch((err) => {console.log(err)})
-    },[cityName])
+    },[cityName, username])
 
     return (
         <ParallaxScrollView
@@ -38,8 +37,8 @@ export default function BucketListPage({navigation}){
           <ThemedText type="title">Bucket List</ThemedText>
         </ThemedView>
         <ThemedText>Welcome to the Bucket List:</ThemedText>
-        <CityDropdown setCityName={setCityName}/>
-        {bucketListAttractions.length ? <AttractionsList cityName={cityName} attractions={bucketListAttractions} navigation={navigation}/> : <Text>No attractions in your bucket list for {cityName}, go to the home page to add some!</Text>}
+        <CityDropdown navigation={navigation}/>
+        {bucketListAttractions.length ? <AttractionsList cityName={cityName} attractions={bucketListAttractions} navigation={navigation}/> : <Text>No attractions in your bucket list for {cityName}, go to the home page to add some or choose another city!</Text>}
       </ParallaxScrollView>)
 }
 
