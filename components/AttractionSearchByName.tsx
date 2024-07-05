@@ -19,7 +19,8 @@ useEffect(()=>{
         setGobbledigook(false)
         setIsSearchTerm(true)
         getCity(cityName).then(({city})=>{
-           return getSearchPlaces(city.city_latitude, city.city_longitude, city.city_radius, searchTerm)
+          console.log(city.city_rectangle, 'city_rectangle')
+           return getSearchPlaces(city.city_rectangle, searchTerm)
         }).then(({data})=>{
             console.log(data)
             if(data.places){

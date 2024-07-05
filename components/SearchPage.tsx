@@ -28,6 +28,7 @@ export default function SearchPage({ navigation }) {
     setAccessibleOnly(false);
     getCity(cityName)
       .then((response) => {
+        console.log(response.city, 'city')
         getAttractions(
           response.city.city_longitude,
           response.city.city_latitude,

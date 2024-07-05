@@ -186,20 +186,12 @@ export const postBucketListItem = (
     })
   }
 
-  export const getSearchPlaces = (latitude, longitude, radius , text)=>{
+  export const getSearchPlaces = (rectangle, text)=>{
     return googlePlacesAPI.post(`/places:searchText`, {
       textQuery: `${text}`,
      
-      locationBias: {
-        circle: {
-          center: {
-            latitude: `${latitude}`
-            ,
-            longitude: `${longitude}`
-  
-          },
-          radius: `${radius}`
-        }
+      locationRestriction: {
+        rectangle: rectangle
       },
       maxResultCount: 20,
     }, {headers: getAttractionsHeaders}
