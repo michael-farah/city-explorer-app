@@ -73,8 +73,9 @@ else{
   }, [cityName]);
 
   const seeMoreClick = ({ attraction }) => {
-    navigation.navigate("Attraction", { attraction });
     setSeeMoreClicked(true)
+    navigation.navigate("Attraction", { attraction });
+    setSeeMoreClicked(false)
   };
   const bucketListClick = ({ attraction }) => {
     setIsAdding(true)
