@@ -60,7 +60,8 @@ export default function SearchPage({ navigation }) {
       setAttractions(fullCityList);
     }
   }, [accessibleOnly]);
-
+  
+return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={
