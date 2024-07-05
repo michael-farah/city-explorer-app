@@ -8,16 +8,15 @@ import { View } from "react-native";
 import { getBucketListItemsByUser } from "../api";
 import BucketCityDropdown from "@/components/BucketCityDropdown";
 import { useEffect, useState, useContext } from "react";
-import { UserContext } from "../UserContext";
+import { AppContext } from "../AppContext";
 
 export default function ItineraryScreen() {
-  const [city, setCity] = useState("Liverpool");
   const [bucketList, setBucketList] = useState<Location[]>([]);
-  const { user } = useContext(UserContext);
+  const { user, cityName, setCityName } = useContext(AppContext);
   const { username } = user;
 
   useEffect(() => {
-    getBucketListItemsByUser(username, city)
+    getBucketListItemsByUser(username, cityName)
       .then(({ bucketList }) => {
         const locations = bucketList.map(({ place_json: place }) => {
           const { location, displayName } = place;
@@ -29,7 +28,7 @@ export default function ItineraryScreen() {
         setBucketList(locations);
       })
       .catch((error) => console.error("Error fetching bucket list:", error));
-  }, [city, username]);
+  }, [cityName, username]);
 
   return (
     <ParallaxScrollView
@@ -42,9 +41,9 @@ export default function ItineraryScreen() {
         <ThemedText type="title">Itinerary</ThemedText>
       </ThemedView>
       <ThemedText>Welcome to the Itinerary planner:</ThemedText>
-      <BucketCityDropdown username={username} setCity={setCity} city={city} />
+      <BucketCityDropdown username={username} setCity={setCityName} city={cityName} />
       <View style={{ height: 500 }}>
-        <MapComponent city={city} locations={bucketList} />
+        <MapComponent city={cityName} locations={bucketList} />
       </View>
     </ParallaxScrollView>
   );
