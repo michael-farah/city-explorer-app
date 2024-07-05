@@ -4,16 +4,18 @@ import React from 'react'
 import { getCity, getSearchPlaces } from '@/app/api'
 import { CityContext } from '@/app/CityContext'
 import { ThemedText } from './ThemedText'
+import { getAttractions } from '@/app/api'
 
-export default function AttractionSearchByName ({setAttractions})  {
+export default function AttractionSearchByName ({setAttractions, setIsSearchTerm})  {
 const { cityName, setCityName } = useContext(CityContext);
 const [text, setText] = useState("")
 const[searchTerm, setSearchTerm] = useState("")
 const [gobbledigook, setGobbledigook] = useState(false)
 
 useEffect(()=>{
-    if(searchTerm){
+  if(searchTerm){
         setGobbledigook(false)
+        setIsSearchTerm(true)
         getCity(cityName).then(({city})=>{
            return getSearchPlaces(city.city_latitude, city.city_longitude, city.city_radius, searchTerm)
         }).then(({data})=>{
@@ -21,11 +23,22 @@ useEffect(()=>{
             if(data.places){
             setAttractions(data.places)}
 else { setGobbledigook(true)}
-// setAttractions([])
         })
+    }
+    else{
+      setIsSearchTerm(false)
     }
 }, [searchTerm]
 )
+
+useEffect(()=>{
+  if(text===""){
+    setIsSearchTerm(false)
+    setSearchTerm("")
+  }
+}, [text])
+
+
 
 useEffect(()=>{
 if(gobbledigook){
@@ -40,7 +53,7 @@ if(gobbledigook){
         <ThemedText type="defaultSemiBold" >Not sure where to start?</ThemedText><ThemedText type="default">Leave the search box below blank for a surprise list of popular attractions in your chosen city.
         </ThemedText></View>
 <View style = {styles.question}><ThemedText type="defaultSemiBold">OR...already know where you're going?</ThemedText>
-<ThemedText type="default">Search for it by name or type below and hit enter!
+<ThemedText type="default">Search for it below and hit enter!
         </ThemedText>
         </View>
         </View>

@@ -20,8 +20,10 @@ export default function SearchPage({ navigation }) {
     useState(true);
   const [accessibleOnly, setAccessibleOnly] = useState(false);
   const [fullCityList, setFullCityList] = useState([]);
+  const[isSearchTerm, setIsSearchTerm] = useState(false)
 
   useEffect(() => {
+    if(!isSearchTerm){
     setAttractionsListIsLoading(true);
     setAccessibleOnly(false);
     getCity(cityName)
@@ -39,7 +41,16 @@ export default function SearchPage({ navigation }) {
       .catch((err) => {
         console.log(err);
       });
-  }, [cityName]);
+}
+}, [cityName]);
+
+
+useEffect(()=>{
+  if(!isSearchTerm){ 
+    setAccessibleOnly(false);
+    setAttractions(fullCityList)
+  }
+}, [isSearchTerm])
 
   useEffect(() => {
     if (accessibleOnly) {
@@ -76,7 +87,7 @@ return (
         </ThemedText>
       </ThemedView>
       <CityDropdown navigation={navigation} />
-     <AttractionSearchByName setAttractions={setAttractions}/>
+     <AttractionSearchByName setAttractions={setAttractions} setIsSearchTerm={setIsSearchTerm}/>
       <View style={styles.accessibilityCheckboxContainer}>
         <CheckBox
           value={accessibleOnly}
