@@ -61,7 +61,6 @@ export default function SearchPage({ navigation }) {
     }
   }, [accessibleOnly]);
 
-  return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={
@@ -75,7 +74,7 @@ export default function SearchPage({ navigation }) {
         Select your city from the dropdown menu and get ready to start planning your next adventure.
         </ThemedText>
       </ThemedView>
-      <CityDropdown />
+      <CityDropdown navigation={navigation} />
      <AttractionSearchByName setAttractions={setAttractions}/>
       <View style={styles.accessibilityCheckboxContainer}>
         <CheckBox
