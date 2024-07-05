@@ -1,15 +1,13 @@
 import { View, Text, Button, StyleSheet, Image } from "react-native";
 import { Linking } from "react-native";
-import { UserContext } from "../app/UserContext";
 import { useContext, useState, useEffect } from "react";
 import { deleteBucketListItem, postBucketListItem } from "@/app/api";
 import { getPhoto } from "@/app/api";
 import { RotateInDownLeft } from "react-native-reanimated";
-import { CityContext } from "@/app/CityContext";
+import { AppContext } from "@/app/AppContext";
 
 export default function AttractionCard({ navigation, attraction }) {
-  const { user, setUser } = useContext(UserContext);
-  const { cityName, setCityName } = useContext(CityContext);
+  const { cityName, setCityName, user, setUser  } = useContext(AppContext);
 
   const [photo, setPhoto] = useState("");
   const [attractionType, setAttractionType] = useState();

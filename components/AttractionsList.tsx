@@ -4,8 +4,6 @@ import { useEffect } from 'react';
 import AttractionCard from './AttractionCard';
 
 export default function AttractionsList({navigation, cityName, attractions}){
-    
-
     return (
         <View style={styles.container}>
             <ScrollView>

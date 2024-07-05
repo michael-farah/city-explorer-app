@@ -3,12 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { StyleSheet } from "react-native";
 import { getCities } from "@/app/api";
-import { CityContext } from "@/app/CityContext";
-import { UserContext } from '../app/UserContext';
+import { AppContext } from "@/app/AppContext";
 
 export default function CityDropdown({navigation}){
-    const { cityName, setCityName } = useContext(CityContext);
-    const {user, setUser} = useContext(UserContext)
+    const { cityName, setCityName, user, setUser } = useContext(AppContext);
 
     const [citiesList, setCitiesList] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -33,7 +31,7 @@ export default function CityDropdown({navigation}){
                 setCitiesList(data)
             }).catch((err)=>{console.log(err)})
         }
-    }, [])
+    }, [user])
     const handleDropdownChange = (event) => {
         setCityName(event.value)
     }

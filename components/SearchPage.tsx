@@ -9,12 +9,12 @@ import { useContext, useState, useEffect } from "react";
 import { getAttractions, getCities, getCity } from "@/app/api";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { CityContext } from "@/app/CityContext";
+import { AppContext } from "@/app/AppContext";
 import { checkIfConfigIsValid } from "react-native-reanimated/lib/typescript/reanimated2/animation/springUtils";
 import AttractionSearchByName from "./AttractionSearchByName";
 
 export default function SearchPage({ navigation }) {
-  const { cityName, setCityName } = useContext(CityContext);
+  const { cityName, setCityName } = useContext(AppContext);
   const [attractions, setAttractions] = useState([]);
   const [attractionsListIsLoading, setAttractionsListIsLoading] =
     useState(true);
