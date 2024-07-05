@@ -12,29 +12,37 @@ export default function AttractionCard({ navigation, attraction }) {
   const { cityName, setCityName } = useContext(CityContext);
 
   const [photo, setPhoto] = useState("");
-const [attractionType, setAttractionType] = useState()
+  const [attractionType, setAttractionType] = useState();
   useEffect(() => {
-    if(attraction.photos){
-    getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
-      setPhoto(response);
-      if (attraction.primaryTypeDisplayName){
-        setAttractionType(attraction.primaryTypeDisplayName.text)
-      }else{
-        const attractionType0 = attraction.types[0]
-        setAttractionType(attractionType0)
+    if (attraction.photos) {
+      getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
+        setPhoto(response);
+        if (attraction.primaryTypeDisplayName) {
+          setAttractionType(attraction.primaryTypeDisplayName.text);
+        } else {
+          const attractionType0 = attraction.types[0];
+          const capitalisedAttractionType =
+            attractionType0.charAt(0).toUpperCase() + attractionType0.slice(1);
+          const spacedAttractionType = capitalisedAttractionType
+            .split("_")
+            .join(" ");
+          setAttractionType(spacedAttractionType);
+        }
+      });
+    } else {
+      if (attraction.primaryTypeDisplayName) {
+        setAttractionType(attraction.primaryTypeDisplayName.text);
+      } else {
+        const attractionType0 = attraction.types[0];
+        const capitalisedAttractionType =
+          attractionType0.charAt(0).toUpperCase() + attractionType0.slice(1);
+        const spacedAttractionType = capitalisedAttractionType
+          .split("_")
+          .join(" ");
+        setAttractionType(spacedAttractionType);
       }
-    })
-  }
-  else{
-    if (attraction.primaryTypeDisplayName){
-      setAttractionType(attraction.primaryTypeDisplayName.text)
-    }else{
-      const attractionType0 = attraction.types[0]
-      setAttractionType(attractionType0)
     }
-  }
   }, [cityName]);
-
 
   const seeMoreClick = ({ attraction }) => {
     navigation.navigate("Attraction", { attraction });
@@ -42,9 +50,9 @@ const [attractionType, setAttractionType] = useState()
   const bucketListClick = ({ attraction }) => {
     postBucketListItem(attraction, user.username, cityName);
   };
-  const removeFromBucketListClick = ({attraction}) => {
+  const removeFromBucketListClick = ({ attraction }) => {
     deleteBucketListItem(attraction, user.username, cityName);
-  }
+  };
 
   const { routes, index } = navigation.getState();
   const currentRoute = routes[index].name;
@@ -52,116 +60,115 @@ const [attractionType, setAttractionType] = useState()
   return (
     <View style={styles.container}>
       <View style={styles.attractionTitle}>
-        <View> <Text style={styles.titleText}>{attraction.displayName.text}</Text></View>
-    
+        <View>
+          {" "}
+          <Text style={styles.titleText}>{attraction.displayName.text}</Text>
+        </View>
       </View>
       <View style={styles.mainBody}>
         <View style={styles.imageBox}>
           <Image style={styles.image} source={{ uri: photo }} />
         </View>
         <View style={styles.textBody}>
-        {attraction.editorialSummary ? (
-            <Text style={styles.editorialSummary}>{attraction.editorialSummary.text}</Text>
+          {attraction.editorialSummary ? (
+            <Text style={styles.editorialSummary}>
+              {attraction.editorialSummary.text}
+            </Text>
           ) : null}
-          <Text style={styles.rating}>
-            Average rating of {attraction.rating} according to{" "}
-            {attraction.userRatingCount} reviewers
-          </Text>
-          {/* <Text>Categories: {attraction.types.join(", ")}</Text>
-           */}
-        <Text style={styles.category}>Category: {attractionType}</Text>
+          {attraction.rating ? (
+            <Text style={styles.rating}>
+              Average rating of {attraction.rating} according to{" "}
+              {attraction.userRatingCount} reviewers
+            </Text>
+          ) : null}
+          <Text style={styles.category}>Category: {attractionType}</Text>
           <View style={styles.buttonContainer}>
-        <View style={styles.button}>
-          <Button
-            title="See more details"
-            onPress={() => seeMoreClick({ attraction })}
-            disabled={false}
-          />
+            <View style={styles.button}>
+              <Button
+                title="See more details"
+                onPress={() => seeMoreClick({ attraction })}
+                disabled={false}
+              />
+            </View>
+            <View style={styles.button}>
+              {currentRoute === "BucketList" ? (
+                <Button
+                  title="Delete from Bucket List"
+                  onPress={() => removeFromBucketListClick({ attraction })}
+                  disabled={false}
+                />
+              ) : (
+                <Button
+                  title="Add to Bucket List"
+                  onPress={() => bucketListClick({ attraction })}
+                  disabled={false}
+                />
+              )}
+            </View>
+          </View>
         </View>
-        <View style={styles.button}>
-          {currentRoute === "BucketList" ? <Button
-            title="Delete from Bucket List"
-            onPress={() => removeFromBucketListClick({ attraction })}
-            disabled={false}
-          /> : <Button 
-            title="Add to Bucket List"
-            onPress={() => bucketListClick({ attraction })}
-            disabled={false}
-          />}
-        </View>
       </View>
-      </View>
-      </View>
-      
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { 
+  container: {
     margin: 10,
-     flex: 1 ,
+    flex: 1,
     borderWidth: 5,
-    padding: 10
+    padding: 10,
   },
   image: {
     width: 150,
     height: 150,
-    borderRadius: 10
+    borderRadius: 10,
   },
- 
+
   titleText: {
     fontWeight: "bold",
     fontSize: 20,
-    marginBottom: 10
- 
+    marginBottom: 10,
   },
   mainBody: {
     flexDirection: "row",
-    // borderWidth: 3,
-    // borderColor: "red",
     flexWrap: "wrap",
-    flex:1
+    flex: 1,
   },
-  textBody:{
-    flex:3,
+  textBody: {
+    flex: 3,
     flexWrap: "wrap",
-    // borderWidth: 3,
-    // borderColor: "purple",
-    paddingHorizontal: 20, 
+    paddingHorizontal: 20,
     minWidth: 200,
-    height: "auto", 
-
-  }
-  ,
+    height: "auto"
+  },
   buttonContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     marginTop: 10,
     justifyContent: "flex-start",
-    alignContent: "flex-end"
+    alignContent: "flex-end",
   },
   editorialSummary: {
-    flex:1,
-    marginVertical: 10,
-    width: "100%"
+    flex: 1,
+    marginTop: 10,
+    width: "100%",
   },
   imageBox: {
-    // padding: 10,
     justifyContent: "center",
-    
     flex: 1,
-    height: "auto"
+    height: "auto",
   },
   rating: {
-    marginBottom: 10,
-    width: "100%"
+    flex: 1,
+    width: "100%",
   },
-  category:{
-    width: "100%"
+  category: {
+    flex: 1,
+    width: "100%",
   },
-  button:{
+  button: {
     margin: 3,
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });

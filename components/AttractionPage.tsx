@@ -16,9 +16,10 @@ export default function AttractionPage({ route, navigation }) {
   //add in types??
 
   useEffect(() => {
+    if(attraction.photos){
     getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
       setPhoto(response);
-    });
+    })}
   }, []);
 
   return (
@@ -31,7 +32,7 @@ export default function AttractionPage({ route, navigation }) {
       <View style={styles.container}>
         <View >
         <Text style={styles.boldText}>{attraction.displayName.text}</Text>
-        <Image style={styles.image} source={{ uri: photo }} />
+        {photo ? (<Image style={styles.image} source={{ uri: photo }} />): null}
         <Text style={styles.textBlock}>
           {attraction.editorialSummary && attraction.editorialSummary.text
             ? attraction.editorialSummary.text
@@ -45,13 +46,13 @@ export default function AttractionPage({ route, navigation }) {
             ? `Opening hours: ${attraction.regularOpeningHours.weekdayDescriptions}`
             : ""}
         </Text>
-        <Text
+        {attraction.websiteUri ?(<Text
           style={{ color: "blue", marginVertical:20 }}
           onPress={() => Linking.openURL(attraction.websiteUri)}
         >Visit official site
-        </Text>
+        </Text>): null}
         </View>
-        <View style={styles.reviewBox}>
+        {attraction.rating? (<View style={styles.reviewBox}>
           <Text style={styles.boldText}>Reviews:</Text>
           <Text style={styles.rating}>Average user rating: {attraction.rating} from{" "}
           {attraction.userRatingCount} users</Text>
@@ -69,7 +70,7 @@ export default function AttractionPage({ route, navigation }) {
                 );
               })
             : "none available"}{" "}
-        </View>
+        </View>): null}
       </View>
     </ParallaxScrollView>
   );
