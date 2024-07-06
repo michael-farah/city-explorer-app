@@ -9,7 +9,7 @@ import { CityContext } from "@/app/CityContext";
 import { ThemedText } from "./ThemedText";
 
 export default function AttractionCard({ navigation, attraction }) {
-  const { cityName, setCityName, user, setUser, bucketListAttractions, setBucketListAttractions } = useContext(AppContext);
+  const { cityName, user, bucketListMemo, setBucketListAttractions } = useContext(AppContext);
   const [photo, setPhoto] = useState("");
   const [attractionType, setAttractionType] = useState();
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([])
@@ -82,18 +82,20 @@ else{
     postBucketListItem(attraction, user.username, cityName)
     .then(({addedPlace})=>{
       setBucketListAttractions((currAttractions)=> [addedPlace.place_json, ...currAttractions])
+      setIsAdding(false)
     })
   };
   const removeFromBucketListClick = ({ attraction }) => {
     setIsDeleting(true)
     deleteBucketListItem(attraction, user.username, cityName)
     setBucketListAttractions((currAttractions)=> currAttractions.filter((item)=> item.id !== attraction.id))
+    setIsDeleting(false)
   };
 
   const { routes, index } = navigation.getState();
   const currentRoute = routes[index].name;
 
-  const isItemInBucketList = bucketListAttractions.map((item)=> item.id).includes(attraction.id)
+  const isItemInBucketList = bucketListMemo.map((item)=> item.id).includes(attraction.id)
 
   return (
     <View style={styles.container}>
@@ -149,7 +151,7 @@ else{
                 />
               ) : (
                 <Button
-                  title={isItemInBucketList ? "Added to Bucket List" : "Add to Bucket List"}
+                  title={isItemInBucketList ? "Added to Bucket List" : isAdding?"Adding to Bucket List":"Add to Bucket List"}
                   onPress={() => bucketListClick({ attraction })}
                   disabled={isItemInBucketList||isAdding?true:false}
                 />
