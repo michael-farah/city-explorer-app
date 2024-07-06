@@ -62,8 +62,7 @@ export default function AttractionPage({ route, navigation }) {
         <ThemedText type="default" style={styles.textBlock}>
           {attraction.editorialSummary && attraction.editorialSummary.text
             ? attraction.editorialSummary.text
-            : ""} </ThemedText>
-            <ThemedText></ThemedText>
+            : null} </ThemedText>
 
           <ThemedText style={styles.address}>Address: {attraction.formattedAddress} {attraction.nationalPhoneNumber
             ? `\n\nPhone number: ${attraction.nationalPhoneNumber}`
@@ -71,7 +70,7 @@ export default function AttractionPage({ route, navigation }) {
           {attraction.regularOpeningHours
             ? (<ThemedText>Opening hours:{'\n\n'}{attraction.regularOpeningHours.weekdayDescriptions.join("\n")}</ThemedText>): null}
        <View>
-<ThemedText>{accessibilityFeatures.length? (<ThemedText>{`\nWheelchair facilities: ${accessibilityFeatures.join(", ")}`}</ThemedText> ): null}</ThemedText>
+{accessibilityFeatures.length? (<ThemedText>{`\nWheelchair facilities: ${accessibilityFeatures.join(", ")}`}</ThemedText> ): null}
 </View>
         {attraction.websiteUri ?(<ThemedText
           style={{ color: "blue", marginVertical:20 }}
@@ -96,7 +95,7 @@ export default function AttractionPage({ route, navigation }) {
                   </View>
                 );
               })
-            : "none available"}{" "}
+            :<ThemedText> "none available" </ThemedText>}
         </View>): null}
       </View>
     </ParallaxScrollView>
