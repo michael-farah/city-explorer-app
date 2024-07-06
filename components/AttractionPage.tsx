@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { getPhoto } from "@/app/api";
 import { useState } from "react";
 import { ThemedText } from "./ThemedText";
+import AddToBucketListButton from "./AddToBucketListButton";
 
 export default function AttractionPage({ route, navigation }) {
   const { attraction } = route.params;
@@ -57,6 +58,7 @@ export default function AttractionPage({ route, navigation }) {
         <View >
         <ThemedText type="title" style={styles.boldText}>{attraction.displayName.text}</ThemedText>
         {photo ? (<Image style={styles.image} source={{ uri: photo }} />): null}
+        <AddToBucketListButton attraction={attraction}/>
         <ThemedText type="default" style={styles.textBlock}>
           {attraction.editorialSummary && attraction.editorialSummary.text
             ? attraction.editorialSummary.text
