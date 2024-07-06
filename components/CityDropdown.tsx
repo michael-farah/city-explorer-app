@@ -44,11 +44,19 @@ if(isLoading){
 }
 
     return (<View>
-        <Dropdown style={styles.background} placeholder="Select City" data={citiesList} labelField="label" valueField="value" value={cityName} onChange={handleDropdownChange}/>
+        <Dropdown style={styles.dropdown} placeholder="Select City" data={citiesList} labelField="label" valueField="value" value={cityName} onChange={handleDropdownChange}/>
 
     </View>)
 }
 
 const styles = StyleSheet.create({
-    background: {backgroundColor: "white"}
+    dropdown: {
+        backgroundColor: "white",
+        height: 40,
+        width: 200,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: 10
+    }
 })
