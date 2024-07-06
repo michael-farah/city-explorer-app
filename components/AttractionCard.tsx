@@ -1,25 +1,23 @@
 import { View, Text, Button, StyleSheet, Image } from "react-native";
 import { Linking } from "react-native";
 import { useContext, useState, useEffect } from "react";
-import { deleteBucketListItem, postBucketListItem } from "@/app/api";
+import { deleteBucketListItem } from "@/app/api";
 import { getPhoto } from "@/app/api";
 import { RotateInDownLeft } from "react-native-reanimated";
 import { AppContext } from "@/app/AppContext";
-import { CityContext } from "@/app/CityContext";
 import { ThemedText } from "./ThemedText";
+import AddToBucketListButton from "./AddToBucketListButton";
 
 export default function AttractionCard({ navigation, attraction }) {
-  const { cityName, user, bucketListMemo, setBucketListAttractions } = useContext(AppContext);
+  const { cityName, user, setBucketListAttractions } = useContext(AppContext);
   const [photo, setPhoto] = useState("");
   const [attractionType, setAttractionType] = useState();
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([])
   const [isDeleting, setIsDeleting] = useState(false)
   const [seeMoreClicked, setSeeMoreClicked] = useState(false)
-  const [isAdding, setIsAdding] = useState(false)
 
   useEffect(() => {
     setIsDeleting(false)
-    setIsAdding(false)
     setSeeMoreClicked(false)
     if(attraction.accessibilityOptions){
   setAccessibilityFeatures((features)=>{
@@ -77,14 +75,6 @@ else{
     navigation.navigate("Attraction", { attraction });
     setSeeMoreClicked(false)
   };
-  const bucketListClick = ({ attraction }) => {
-    setIsAdding(true)
-    postBucketListItem(attraction, user.username, cityName)
-    .then(({addedPlace})=>{
-      setBucketListAttractions((currAttractions)=> [addedPlace.place_json, ...currAttractions])
-      setIsAdding(false)
-    })
-  };
   const removeFromBucketListClick = ({ attraction }) => {
     setIsDeleting(true)
     deleteBucketListItem(attraction, user.username, cityName)
@@ -94,8 +84,6 @@ else{
 
   const { routes, index } = navigation.getState();
   const currentRoute = routes[index].name;
-
-  const isItemInBucketList = bucketListMemo.map((item)=> item.id).includes(attraction.id)
 
   return (
     <View style={styles.container}>
@@ -141,7 +129,6 @@ else{
                 disabled={seeMoreClicked?true:false}
               />
             </View>
-        
             <View style={styles.button}>
               {currentRoute === "BucketList" ? (
                 <Button
@@ -150,11 +137,7 @@ else{
                   disabled={isDeleting?true:false}
                 />
               ) : (
-                <Button
-                  title={isItemInBucketList ? "Added to Bucket List" : isAdding?"Adding to Bucket List":"Add to Bucket List"}
-                  onPress={() => bucketListClick({ attraction })}
-                  disabled={isItemInBucketList||isAdding?true:false}
-                />
+                <AddToBucketListButton attraction={attraction}/>
               )}
             </View>
     
