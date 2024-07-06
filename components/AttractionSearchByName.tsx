@@ -7,26 +7,13 @@ import { ThemedText } from './ThemedText'
 import { getAttractions } from '@/app/api'
 
 
-export default function AttractionSearchByName ({setAttractions, setIsSearchTerm})  {
+export default function AttractionSearchByName ({setAttractions, setIsSearchTerm, text, setText, searchTerm, setSearchTerm, gobbledigook, setGobbledigook})  {
 
 const { cityName, setCityName } = useContext(AppContext);
-const [text, setText] = useState("")
-const[searchTerm, setSearchTerm] = useState("")
-const [gobbledigook, setGobbledigook] = useState(false)
 
 useEffect(()=>{
   if(searchTerm){
-        setGobbledigook(false)
         setIsSearchTerm(true)
-        getCity(cityName).then(({city})=>{
-          console.log(city.city_rectangle, 'city_rectangle')
-           return getSearchPlaces(city.city_rectangle, searchTerm)
-        }).then(({data})=>{
-            console.log(data)
-            if(data.places){
-            setAttractions(data.places)}
-else { setGobbledigook(true)}
-        })
     }
     else{
       setIsSearchTerm(false)
@@ -40,8 +27,6 @@ useEffect(()=>{
     setSearchTerm("")
   }
 }, [text])
-
-
 
 useEffect(()=>{
 if(gobbledigook){

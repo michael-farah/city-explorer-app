@@ -99,7 +99,6 @@ else{
     <View style={styles.container}>
       <View style={styles.attractionTitle}>
         <View>
-          {" "}
           <ThemedText style={styles.titleText}>{attraction.displayName.text}</ThemedText>
         </View>
       </View>
