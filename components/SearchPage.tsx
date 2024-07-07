@@ -162,7 +162,7 @@ export default function SearchPage({ navigation }) {
       </View>
       </ThemedView>
       {attractionsListIsLoading ? (
-        <Text>Attractions list is loading ...</Text>
+        <ThemedText type="defaultSemiBold" style={styles.attractionsListLoading}>Attractions list is loading ...</ThemedText>
       ) : (
         <AttractionsList
           cityName={cityName}
@@ -202,4 +202,7 @@ paddingHorizontal: 20
   checkbox: {
     alignSelf: "center",
   },
+  attractionsListLoading: {
+    padding:20
+  }
 });
