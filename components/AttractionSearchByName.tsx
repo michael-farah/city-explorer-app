@@ -7,23 +7,13 @@ import { ThemedText } from './ThemedText'
 import { getAttractions } from '@/app/api'
 
 
-export default function AttractionSearchByName ({setAttractions, setIsSearchTerm, text, setText, searchTerm, setSearchTerm, gobbledigook, setGobbledigook})  {
+export default function AttractionSearchByName ({setAttractions, text, setText, searchTerm, setSearchTerm, gobbledigook, setGobbledigook})  {
 
 const { cityName, setCityName } = useContext(AppContext);
 
-useEffect(()=>{
-  if(searchTerm){
-        setIsSearchTerm(true)
-    }
-    else{
-      setIsSearchTerm(false)
-    }
-}, [searchTerm]
-)
 
 useEffect(()=>{
   if(text===""){
-    setIsSearchTerm(false)
     setSearchTerm("")
   }
 }, [text])

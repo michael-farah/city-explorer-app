@@ -217,11 +217,9 @@ export const postBucketListItem = (
     })
   }
 
-  export const getSearchPlaces = (rectangle, text, type)=>{
+  export const getSearchPlaces = (rectangle, text)=>{
     return googlePlacesAPI.post(`/places:searchText`, {
       textQuery: `${text}`,
-      includedType: type,
-     
       locationRestriction: {
         rectangle: rectangle
       },

@@ -4,7 +4,7 @@ import { ThemedText } from "./ThemedText";
 import { useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 
-export default function AttractionFilter({ type, setType }) {
+export default function AttractionFilter({ type, setText, setSearchTerm, setType }) {
   const typesList = [
     { label: "All", value: "All" },
     { label: "Museums", value: "museum" },
@@ -32,7 +32,10 @@ export default function AttractionFilter({ type, setType }) {
 
   const handleDropdownChange = (event) => {
     setType(event.value);
+    setText("")
+    setSearchTerm("")
   };
+
 
   return (
     <View>
@@ -43,7 +46,7 @@ export default function AttractionFilter({ type, setType }) {
 
       <View>
         <Dropdown
-          style={styles.background}
+          style={styles.dropdown}
           placeholder="Select attraction type"
           data={typesList}
           labelField="label"
@@ -57,5 +60,14 @@ export default function AttractionFilter({ type, setType }) {
 }
 
 const styles = StyleSheet.create({
-  background: { backgroundColor: "white", color: "black" },
+  dropdown: {
+    backgroundColor: "white",
+    height: 40,
+    width: 200,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 20
+}
 });
