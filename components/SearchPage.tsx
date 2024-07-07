@@ -49,8 +49,15 @@ export default function SearchPage({ navigation }) {
   const [type, setType] = useState("All");
 
   useEffect(() => {
-    if (!isSearchTerm) {
-      setAttractionsListIsLoading(true);
+    if (type !== "All") {
+      setText("");
+      setSearchTerm("");
+    }
+  }, [type]);
+
+  useEffect(() => {
+    setAttractionsListIsLoading(true);
+    if (searchTerm === "") {
       setText("");
       getCity(cityName)
         .then((response) => {
@@ -88,7 +95,6 @@ export default function SearchPage({ navigation }) {
           console.log(err);
         });
     } else {
-      setAttractionsListIsLoading(true);
       setGobbledigook(false);
       getCity(cityName)
         .then(({ city }) => {
@@ -103,21 +109,13 @@ export default function SearchPage({ navigation }) {
           }
         });
     }
-  }, [cityName, type, isSearchTerm]);
+  }, [cityName, type, searchTerm]);
 
   useEffect(() => {
-    if (isSearchTerm) {
+    if (searchTerm !== "") {
       setType("All");
     }
-  }, [isSearchTerm]);
-
-  useEffect(() => {
-    setText("");
-  }, [type]);
-
-  // useEffect(()=>{
-  // setText("")
-  // }, [cityName])
+  }, [searchTerm]);
 
   return (
     <ParallaxScrollView
@@ -140,12 +138,16 @@ export default function SearchPage({ navigation }) {
         gobbledigook={gobbledigook}
         setGobbledigook={setGobbledigook}
         setAttractions={setAttractions}
-        setIsSearchTerm={setIsSearchTerm}
         text={text}
         setText={setText}
       />
 
-      <AttractionFilter type={type} setType={setType} />
+      <AttractionFilter
+        type={type}
+        setType={setType}
+        setText={setText}
+        setSearchTerm={setSearchTerm}
+      />
       <View style={styles.accessibilityCheckboxContainer}>
         <CheckBox
           value={accessibleOnly}
