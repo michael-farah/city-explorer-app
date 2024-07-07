@@ -25,8 +25,7 @@ export default function SearchPage({ navigation }) {
   const [gobbledigook, setGobbledigook] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [attractions, setAttractions] = useState([]);
-  const [attractionsListIsLoading, setAttractionsListIsLoading] =
-    useState(true);
+  const [attractionsListIsLoading, setAttractionsListIsLoading] = useState(true);
   const [accessibleOnly, setAccessibleOnly] = useState(false);
   const [isSearchTerm, setIsSearchTerm] = useState(false);
   const [text, setText] = useState("");
@@ -118,19 +117,20 @@ export default function SearchPage({ navigation }) {
   }, [searchTerm]);
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
+    <ParallaxScrollView 
+      headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
       headerImage={
         <Ionicons size={310} name="home" style={styles.headerImage} />
       }
     >
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView style={styles.pageContainer}>
+        <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <ThemedText type="subtitle">
           Select your city from the dropdown menu and get ready to start
-          planning your next adventure.
+          planning your next adventure!
         </ThemedText>
-      </ThemedView>
+    
       <CityDropdown navigation={navigation} />
       <AttractionSearchByName
         searchTerm={searchTerm}
@@ -160,6 +160,7 @@ export default function SearchPage({ navigation }) {
           entrance and toilet)
         </Text>
       </View>
+      </ThemedView>
       {attractionsListIsLoading ? (
         <Text>Attractions list is loading ...</Text>
       ) : (
@@ -170,11 +171,15 @@ export default function SearchPage({ navigation }) {
           accessibleOnly={accessibleOnly}
         />
       )}
+        </ThemedView>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  pageContainer: {
+paddingHorizontal: 20
+  },
   headerImage: {
     color: "#FF4D4D",
     bottom: -90,
@@ -184,10 +189,12 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "column",
     gap: 8,
+    backgroundColor: '#FFFFFF', 
+    padding: 30,
+    borderRadius: 10
   },
   accessibilityCheckboxContainer: {
-    flexDirection: "row",
-    marginBottom: 20,
+    flexDirection: "row"
   },
   label: {
     margin: 8,

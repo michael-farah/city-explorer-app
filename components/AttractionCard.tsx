@@ -148,9 +148,12 @@ else{
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
+    marginVertical: 20,
     flex: 1,
-    padding: 10,
+    padding: 20,
+    paddingLeft: 40,
+    backgroundColor: "white",
+    borderRadius: 10
   },
   image: {
     width: 150,
