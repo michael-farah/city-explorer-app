@@ -11,6 +11,17 @@ const googlePlacesAPI = axios.create({
   baseURL: "https://places.googleapis.com/v1",
 });
 
+const googleRoutesAPI = axios.create({
+  baseURL: "https://routes.googleapis.com",
+});
+
+const getRoutesHeaders = {
+  "Content-Type": "application/json",
+  "X-Goog-Api-Key": googleMapsApiKey,
+  "X-Goog-FieldMask":
+    "routes.polyline.encodedPolyline,routes.optimizedIntermediateWaypointIndex",
+};
+
 const getAttractionsHeaders = {
   "Content-Type": "application/json",
   "X-Goog-Api-Key": googleMapsApiKey,
@@ -195,27 +206,71 @@ export const postBucketListItem = (
       return response.data;
     })
     .catch((err) => {
-      console.error(err)
-      throw err
-    })
-  }
+      console.error(err);
+      throw err;
+    });
+};
 
-  export const deleteBucketListItem = (attraction, username, cityName) => {
-    getBucketListItemsByUser(username, cityName).then((response)=>{
-      const bucketListItems = response.bucketList
-      let bucketListId;
-      for(let i = 0;i<bucketListItems.length;i++){
-        if(bucketListItems[i].place_json.id === attraction.id){
-          bucketListId = Number(bucketListItems[i].bucket_list_id)
-        }
+export const deleteBucketListItem = (attraction, username, cityName) => {
+  getBucketListItemsByUser(username, cityName).then((response) => {
+    const bucketListItems = response.bucketList;
+    let bucketListId;
+    for (let i = 0; i < bucketListItems.length; i++) {
+      if (bucketListItems[i].place_json.id === attraction.id) {
+        bucketListId = Number(bucketListItems[i].bucket_list_id);
       }
-      return cityExplorerAPI.delete(`bucket_list/${bucketListId}`)
+    }
+    return cityExplorerAPI
+      .delete(`bucket_list/${bucketListId}`)
       .catch((err) => {
         console.error(err)
         throw err
       })
     })
   }
+
+  
+  
+export const getRoutes = (
+  origin: LatLng,
+  destination: LatLng,
+  intermediates: LatLng[],
+  mode: string = "DRIVE",
+) => {
+  const intermediateWaypoints = intermediates.map((coordinate) => ({
+    location: {
+      latLng: coordinate,
+    },
+    via: false,
+  }));
+
+  return googleRoutesAPI
+    .post(
+      `/directions/v2:computeRoutes`,
+      {
+        origin: {
+          location: {
+            latLng: origin,
+          },
+        },
+        destination: {
+          location: {
+            latLng: destination,
+          },
+        },
+        intermediates: intermediateWaypoints,
+        travelMode: mode,
+        routingPreference: "TRAFFIC_UNAWARE",
+        optimizeWaypointOrder: true,
+      },
+      { headers: getRoutesHeaders },
+    )
+    .then((response) => response.data)
+    .catch((err) => {
+      console.error("Error fetching routes:", err);
+      throw err;
+    });
+};
 
   export const getSearchPlaces = (rectangle, text)=>{
     return googlePlacesAPI.post(`/places:searchText`, {
