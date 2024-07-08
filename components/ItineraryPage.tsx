@@ -74,17 +74,20 @@ export default function ItineraryPage({navigation}){
       };
     
       return (
-        <ParallaxScrollView
+        <ParallaxScrollView 
         headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
           headerImage={
             <Ionicons size={310} name="calendar" style={styles.headerImage} />
           }
         >
-          <ThemedView style={styles.titleContainer}>
+          <View style={styles.overallContainer}>
+          <View style={styles.titleContainer}>
             <ThemedText type="title">Itinerary</ThemedText>
-          </ThemedView>
-          <ThemedText>Welcome to the Itinerary planner:</ThemedText>
-          <CityDropdown navigation={navigation}/>
+          </View>
+          <View>
+          <ThemedText>How to use the itinerary page:{"\n\n"}1. Use the dropdown to choose your city. {"\n\n"}2. See your bucket list places for that city on the map. {"\n\n"}3. Select your preferred start and end points by clicking on the places and selecting 'Set as start' or 'Set as end'.{"\n\n"}4. Hit 'Show me the route' to see your route!{"\n\n"}5. Go and hve fun seeing everything on your bucket list!</ThemedText></View>
+          <View style= {styles.buttons}><CityDropdown navigation={navigation}/> <Button title="Show me the route" onPress={renderRoute} /></View>
+      
           <View style={{ height: 500 }}>
             <MapComponent
               city={cityName}
@@ -97,7 +100,8 @@ export default function ItineraryPage({navigation}){
               setDestinationMarker={setDestinationMarker}
             />
           </View>
-          <Button title="Render Route" onPress={renderRoute} />
+      
+          </View>
         </ParallaxScrollView>
       );
 }
@@ -109,9 +113,19 @@ const styles = StyleSheet.create({
       left: -35,
       position: "absolute",
     },
-    titleContainer: {
-      flexDirection: "row",
-      gap: 8,
+    overallContainer: {backgroundColor: "white",
+      padding: "5%",
+      borderRadius:10,
+      gap: 15
     },
+    titleContainer: {
+      flex: 1,
+      flexDirection: "row"
+    },
+    buttons: {
+      flex: 1,
+      flexDirection: "row", 
+      justifyContent: "space-evenly"
+    }
   });
   

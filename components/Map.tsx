@@ -3,6 +3,7 @@ import {
   Platform,
   StyleSheet,
   View,
+  Button,
   Text,
   TouchableOpacity,
   Alert,
@@ -22,6 +23,7 @@ import {
   InfoWindow,
   Polyline as WebPolyline,
 } from "@react-google-maps/api";
+import { ThemedText } from "./ThemedText";
 import Constants from "expo-constants";
 import { getCity } from "../app/api";
 
@@ -157,9 +159,29 @@ const MapComponent = ({
             >
               {selectedPlace === location && (
                 <InfoWindow onCloseClick={() => setSelectedPlace(null)}>
-                  <div>
-                    <Text>{location.name}</Text>
-                    <button
+                  <View style={styles.buttonsAndName}>
+                    <View>
+                    <ThemedText type="defaultSemiBold">{location.name}</ThemedText></View>
+                    <Button
+                    title="Set as Start"
+                      onPress={() =>
+                        handleSetOriginMarker({
+                          latitude: location.position.lat,
+                          longitude: location.position.lng,
+                        })
+                      }
+                    />
+                    <Button
+                      title="Set as End"
+                      onPress={() =>
+                        handleSetDestinationMarker({
+                          latitude: location.position.lat,
+                          longitude: location.position.lng,
+                        })
+                      }
+                    />
+                 
+                    {/* <button
                       style={webStyles.button}
                       onClick={() =>
                         handleSetOriginMarker({
@@ -168,7 +190,7 @@ const MapComponent = ({
                         })
                       }
                     >
-                      Set Origin
+                      Set as Start
                     </button>
                     <button
                       style={webStyles.button}
@@ -179,9 +201,9 @@ const MapComponent = ({
                         })
                       }
                     >
-                      Set Destination
-                    </button>
-                  </div>
+                      Set as End
+                    </button> */}
+                  </View>
                 </InfoWindow>
               )}
             </WebMarker>
@@ -222,7 +244,7 @@ const MapComponent = ({
           >
             <Callout>
               <View>
-                <Text>{location.name}</Text>
+                <ThemedText type="defaultSemiBold">{location.name}</ThemedText>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() =>
@@ -269,6 +291,9 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  buttonsAndName: {
+    gap: 5
   },
   button: {
     backgroundColor: "#2196F3",

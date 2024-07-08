@@ -178,9 +178,7 @@ export default function SearchPage({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  pageContainer: {
-paddingHorizontal: "3%"
-  },
+
   headerImage: {
     color: "#FF4D4D",
     bottom: -90,
