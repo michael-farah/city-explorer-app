@@ -97,7 +97,7 @@ export default function AttractionCard({ navigation, attraction }) {
       </View>
       <View style={styles.mainBody}>
         <View style={styles.imageBox}>
-          {attraction.photos?  <Image style={styles.image} source={{ uri: photo }}/> : <Icon name="photo" size={170} color="#B8E2F2"/>}
+          {attraction.photos?  <Image style={styles.image} source={photo ? {uri: photo } : null}/> : <Icon name="photo" size={170} color="#B8E2F2"/>}
          
         </View>
         <View style={styles.textAndButtonsBody}>

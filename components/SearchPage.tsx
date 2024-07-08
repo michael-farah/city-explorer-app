@@ -1,4 +1,5 @@
-import { StyleSheet, Text, CheckBox, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import CheckBox from "expo-checkbox"
 import { Ionicons } from "@expo/vector-icons";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
