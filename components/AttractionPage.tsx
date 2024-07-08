@@ -8,6 +8,8 @@ import { getPhoto } from "@/app/api";
 import { useState } from "react";
 import { ThemedText } from "./ThemedText";
 import AddToBucketListButton from "./AddToBucketListButton";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 export default function AttractionPage({ route, navigation }) {
   const { attraction } = route.params;
@@ -57,7 +59,7 @@ export default function AttractionPage({ route, navigation }) {
       <View style={styles.container}>
         <View >
         <ThemedText type="title" style={styles.boldText}>{attraction.displayName.text}</ThemedText>
-        {photo ? (<Image style={styles.image} source={{ uri: photo }} />): null}
+        {photo ? (<Image style={styles.image} source={{ uri: photo }} />): <Icon style={styles.image} name="photo" size={350} color="#B8E2F2"/>}
         <AddToBucketListButton attraction={attraction}/>
         <ThemedText type="default" style={styles.textBlock}>
           {attraction.editorialSummary && attraction.editorialSummary.text
@@ -82,7 +84,7 @@ export default function AttractionPage({ route, navigation }) {
           <ThemedText type="subtitle" style={styles.boldThemedText}>Reviews:</ThemedText>
           <ThemedText style={styles.rating}>Average user rating: {attraction.rating} from{" "}
           {attraction.userRatingCount.toLocaleString('en-US')} users</ThemedText>
-          {attraction.reviews
+          {attraction.reviews 
             ? attraction.reviews.map((review) => {
                 return (
                   <View key={review.name} style={styles.review}>
@@ -90,8 +92,8 @@ export default function AttractionPage({ route, navigation }) {
                       {review.authorAttribution.displayName} visited on{" "}
                       {review.publishTime.slice(0, 10)}
                     </ThemedText>
-                    <ThemedText style={styles.reviewText}>{review.text.text}</ThemedText>
-                    <ThemedText>Rating:{review.rating}/5 </ThemedText>
+                    {review.text ? <ThemedText style={styles.reviewText}>{review.text.text}</ThemedText>: null}
+                    <ThemedText>Rating: {review.rating}/5 </ThemedText>
                   </View>
                 );
               })
