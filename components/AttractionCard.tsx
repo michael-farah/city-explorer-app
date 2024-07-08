@@ -7,39 +7,40 @@ import { RotateInDownLeft } from "react-native-reanimated";
 import { AppContext } from "@/app/AppContext";
 import { ThemedText } from "./ThemedText";
 import AddToBucketListButton from "./AddToBucketListButton";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function AttractionCard({ navigation, attraction }) {
   const { cityName, user, setBucketListAttractions } = useContext(AppContext);
   const [photo, setPhoto] = useState("");
   const [attractionType, setAttractionType] = useState();
-  const [accessibilityFeatures, setAccessibilityFeatures] = useState([])
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [seeMoreClicked, setSeeMoreClicked] = useState(false)
+  const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [seeMoreClicked, setSeeMoreClicked] = useState(false);
 
   useEffect(() => {
-    setIsDeleting(false)
-    setSeeMoreClicked(false)
-    if(attraction.accessibilityOptions){
-  setAccessibilityFeatures((features)=>{
- const accessibilityKeys = Object.keys(attraction.accessibilityOptions)
-  const trueAccessibilityKeys = accessibilityKeys.filter((key)=>{
-   return attraction.accessibilityOptions[key] === true
-  })
-  const spacedTrueAccessibilityKeys = trueAccessibilityKeys.map((key)=>{
-    const result = key.replace(/([A-Z])/g, ' $1')
-    return result.charAt(0).toUpperCase() + result. slice(1).toLowerCase()
-  })
-  const anglicisedSpacedTrueAccessibilityKeys = spacedTrueAccessibilityKeys.map((key)=>{
-if(key ==="Wheelchair accessible restroom"){
-  return "Wheelchair accessible toilet"
-}
-else{ 
-  return key
-}
-  })
- return anglicisedSpacedTrueAccessibilityKeys
-    }  )
-  }
+    setIsDeleting(false);
+    setSeeMoreClicked(false);
+    if (attraction.accessibilityOptions) {
+      setAccessibilityFeatures((features) => {
+        const accessibilityKeys = Object.keys(attraction.accessibilityOptions);
+        const trueAccessibilityKeys = accessibilityKeys.filter((key) => {
+          return attraction.accessibilityOptions[key] === true;
+        });
+        const spacedTrueAccessibilityKeys = trueAccessibilityKeys.map((key) => {
+          const result = key.replace(/([A-Z])/g, " $1");
+          return result.charAt(0).toUpperCase() + result.slice(1).toLowerCase();
+        });
+        const anglicisedSpacedTrueAccessibilityKeys =
+          spacedTrueAccessibilityKeys.map((key) => {
+            if (key === "Wheelchair accessible restroom") {
+              return "Wheelchair accessible toilet";
+            } else {
+              return key;
+            }
+          });
+        return anglicisedSpacedTrueAccessibilityKeys;
+      });
+    }
     if (attraction.photos) {
       getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
         setPhoto(response);
@@ -71,15 +72,17 @@ else{
   }, [cityName]);
 
   const seeMoreClick = ({ attraction }) => {
-    setSeeMoreClicked(true)
+    setSeeMoreClicked(true);
     navigation.navigate("Attraction", { attraction });
-    setSeeMoreClicked(false)
+    setSeeMoreClicked(false);
   };
   const removeFromBucketListClick = ({ attraction }) => {
-    setIsDeleting(true)
-    deleteBucketListItem(attraction, user.username, cityName)
-    setBucketListAttractions((currAttractions)=> currAttractions.filter((item)=> item.id !== attraction.id))
-    setIsDeleting(false)
+    setIsDeleting(true);
+    deleteBucketListItem(attraction, user.username, cityName);
+    setBucketListAttractions((currAttractions) =>
+      currAttractions.filter((item) => item.id !== attraction.id)
+    );
+    setIsDeleting(false);
   };
 
   const { routes, index } = navigation.getState();
@@ -88,58 +91,78 @@ else{
   return (
     <View style={styles.container}>
       <View style={styles.attractionTitle}>
-        <View>
-          <ThemedText style={styles.titleText}>{attraction.displayName.text}</ThemedText>
-        </View>
+          <ThemedText style={styles.titleText}>
+            {attraction.displayName.text}
+          </ThemedText>
       </View>
       <View style={styles.mainBody}>
         <View style={styles.imageBox}>
-          <Image style={styles.image} source={{ uri: photo }} />
+          {attraction.photos?  <Image style={styles.image} source={{ uri: photo }}/> : <Icon name="photo" size={170} color="#B8E2F2"/>}
+         
         </View>
         <View style={styles.textAndButtonsBody}>
-          <View style={styles.textBody}> 
-          {attraction.editorialSummary ? (
-            <View><ThemedText style={styles.editorialSummary}>
-              {attraction.editorialSummary.text}
-            </ThemedText></View>
-          ) : null}
-           <View><ThemedText>Address: {attraction.formattedAddress}</ThemedText></View>
-           <View><ThemedText style={styles.category}>Primary category: {attractionType}</ThemedText></View>
-<View>
-<ThemedText>{accessibilityFeatures.length? (<ThemedText>Wheelchair facilities: {accessibilityFeatures.join(", ")}</ThemedText> ): null}</ThemedText>
-</View>
-
-          {attraction.rating ? (
-            <View><ThemedText style={styles.rating}>
-              Average rating of {attraction.rating} according to{" "}
-{attraction.userRatingCount>1? ( `${attraction.userRatingCount.toLocaleString('en-US')} reviewers`): (`${attraction.userRatingCount.toLocaleString('en-US')} reviewer`)}
-
-              
-            </ThemedText></View>
-          ) : null}
-
+          <View style={styles.textBody}>
+            {attraction.editorialSummary ? (
+              <View>
+                <ThemedText style={styles.editorialSummary}>
+                  {attraction.editorialSummary.text}
+                </ThemedText>
               </View>
+            ) : null}
+            <View style={styles.details}>
+            <View>
+              <ThemedText><ThemedText type="defaultSemiBold">Address: </ThemedText>{attraction.formattedAddress}</ThemedText>
+            </View>
+            <View>
+              <ThemedText style={styles.category}>
+                <ThemedText type="defaultSemiBold">Primary category: </ThemedText>{attractionType}
+              </ThemedText>
+            </View>
+            <View>
+              <ThemedText>
+                {accessibilityFeatures.length ? (
+                  <ThemedText>
+                   <ThemedText type="defaultSemiBold">Wheelchair facilities:</ThemedText> {accessibilityFeatures.join(", ")}
+                  </ThemedText>
+                ) : null}
+              </ThemedText>
+            </View>
+            {attraction.rating ? (
+              <View>
+                <ThemedText style={styles.rating}>
+                  <ThemedText type="defaultSemiBold">Average rating:</ThemedText> {attraction.rating} according to{" "}
+                  {attraction.userRatingCount > 1
+                    ? `${attraction.userRatingCount.toLocaleString(
+                        "en-US"
+                      )} reviewers`
+                    : `${attraction.userRatingCount.toLocaleString(
+                        "en-US"
+                      )} reviewer`}
+                </ThemedText>
+              </View>
+            ) : null}
+          </View>
           <View style={styles.buttonContainer}>
-            </View>
-            <View style={styles.button}>
+          <View style={styles.button}>
+            <Button
+              title="See more details"
+              onPress={() => seeMoreClick({ attraction })}
+              disabled={seeMoreClicked ? true : false}
+            />
+          </View>
+          <View style={styles.button}>
+            {currentRoute === "BucketList" ? (
               <Button
-                title="See more details"
-                onPress={() => seeMoreClick({ attraction })}
-                disabled={seeMoreClicked?true:false}
+                title="Delete from Bucket List"
+                onPress={() => removeFromBucketListClick({ attraction })}
+                disabled={isDeleting ? true : false}
               />
-            </View>
-            <View style={styles.button}>
-              {currentRoute === "BucketList" ? (
-                <Button
-                  title="Delete from Bucket List"
-                  onPress={() => removeFromBucketListClick({ attraction })}
-                  disabled={isDeleting?true:false}
-                />
-              ) : (
-                <AddToBucketListButton attraction={attraction}/>
-              )}
-            </View>
-    
+            ) : (
+              <AddToBucketListButton attraction={attraction} />
+            )}
+          </View>
+          </View>
+        </View>
         </View>
       </View>
     </View>
@@ -147,20 +170,29 @@ else{
 }
 
 const styles = StyleSheet.create({
+ 
   container: {
     marginVertical: 20,
     flex: 1,
-    padding: 20,
-    paddingLeft: 40,
+    padding: 40,
     backgroundColor: "white",
-    borderRadius: 10
+    borderRadius: 10,
+    gap:10
+  },
+  attractionTitle:{
+ 
   },
   image: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
   },
+  textBody: {
+    display: "flex",
+    gap: 30
 
+  }
+,
   titleText: {
     fontWeight: "bold",
     fontSize: 20,
@@ -170,32 +202,41 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     flex: 1,
+    gap: 30
   },
   textAndButtonsBody: {
     flex: 3,
     flexWrap: "wrap",
-    paddingHorizontal: 20,
-    minWidth: 200,
+    flexBasis: 300,
+    minWidth: 400,
     height: "auto",
-    justifyContent: "space-between",
-  }
-  ,
+    justifyContent: "space-between"
+  },
+  details: {
+    // marginHorizontal: 50,
+    display: "flex",
+    gap: 10
+
+  },
   buttonContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     marginTop: 10,
     justifyContent: "flex-start",
-    alignContent: "flex-end",
+    gap: 15,
+    // marginHorizontal: 50
   },
   editorialSummary: {
     flex: 1,
     width: "100%",
-   fontWeight: "bold"
+    fontWeight: "bold",
   },
   imageBox: {
     justifyContent: "center",
+    alignItems: "center",
     flex: 1,
     height: "auto",
+    flexBasis: 200,
   },
   rating: {
     flex: 1,
@@ -206,7 +247,5 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    margin: 3,
     justifyContent: "center",
-  },
-});
+  }});

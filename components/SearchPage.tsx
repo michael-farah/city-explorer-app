@@ -191,7 +191,7 @@ paddingHorizontal: 20
     gap: 8,
     backgroundColor: '#FFFFFF', 
     padding: 30,
-    borderRadius: 10
+    borderRadius: 10,
   },
   accessibilityCheckboxContainer: {
     flexDirection: "row"
