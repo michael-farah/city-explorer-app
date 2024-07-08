@@ -45,7 +45,6 @@ if(isLoading){
 
     return (<View>
         <Dropdown style={styles.dropdown} placeholder="Select City" data={citiesList} labelField="label" valueField="value" value={cityName} onChange={handleDropdownChange}/>
-
     </View>)
 }
 
