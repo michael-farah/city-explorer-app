@@ -17,8 +17,10 @@
   },
   "dependencies": {
     "@expo/config": "~9.0.0",
+    "@expo/html-elements": "^0.10.1",
     "@expo/metro-config": "~0.18.1",
     "@expo/vector-icons": "^14.0.2",
+    "@googlemaps/polyline-codec": "^1.0.28",
     "@react-google-maps/api": "^2.19.3",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",

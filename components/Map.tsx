@@ -1,11 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Platform, StyleSheet, View, Text } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
+import {
+  Platform,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import MapView, {
+  PROVIDER_GOOGLE,
+  Marker,
+  Callout,
+  Polyline,
+  LatLng,
+  Region,
+} from "react-native-maps";
 import {
   GoogleMap,
   LoadScript,
   Marker as WebMarker,
   InfoWindow,
+  Polyline as WebPolyline,
 } from "@react-google-maps/api";
 import Constants from "expo-constants";
 import { getCity } from "../app/api";
@@ -18,6 +33,12 @@ interface Location {
 interface MapComponentProps {
   city: string;
   locations: Location[];
+  onMarkerPress: (coordinate: LatLng) => void;
+  routeCoordinates: LatLng[];
+  origin: LatLng | null;
+  destination: LatLng | null;
+  setOriginMarker: (coordinate: LatLng) => void;
+  setDestinationMarker: (coordinate: LatLng) => void;
 }
 
 const containerStyle = {
@@ -32,15 +53,17 @@ const defaultRegion = {
   longitudeDelta: 0.08,
 };
 
-const MapComponent = ({ city, locations }: MapComponentProps) => {
+const MapComponent = ({
+  city,
+  locations,
+  onMarkerPress,
+  routeCoordinates,
+  setOriginMarker,
+  setDestinationMarker,
+}: MapComponentProps) => {
   const googleMapsApiKey = Constants.expoConfig.extra.googleMapsApiKey;
   const mapRef = useRef<MapView | null>(null);
-  const [region, setRegion] = useState<{
-    latitude: number;
-    longitude: number;
-    latitudeDelta: number;
-    longitudeDelta: number;
-  } | null>(defaultRegion);
+  const [region, setRegion] = useState<Region>(defaultRegion);
   const [selectedPlace, setSelectedPlace] = useState<Location | null>(null);
 
   useEffect(() => {
@@ -53,12 +76,16 @@ const MapComponent = ({ city, locations }: MapComponentProps) => {
           typeof cityData.city_latitude === "number" &&
           typeof cityData.city_longitude === "number"
         ) {
-          setRegion({
+          const newRegion = {
             latitude: cityData.city_latitude,
             longitude: cityData.city_longitude,
             latitudeDelta: 0.08,
             longitudeDelta: 0.08,
-          });
+          };
+          setRegion(newRegion);
+          if (Platform.OS !== "web" && mapRef.current) {
+            mapRef.current.animateToRegion(newRegion, 1000);
+          }
         } else {
           console.error("Invalid city data:", response);
           setRegion(defaultRegion);
@@ -70,8 +97,8 @@ const MapComponent = ({ city, locations }: MapComponentProps) => {
     })();
   }, [city]);
 
-  useEffect(() => {
-    if (Platform.OS !== "web" && mapRef.current && locations.length > 0) {
+  const setMapReady = () => {
+    if (mapRef.current) {
       mapRef.current.fitToSuppliedMarkers(
         locations.map((_, index) => index.toString()),
         {
@@ -79,6 +106,12 @@ const MapComponent = ({ city, locations }: MapComponentProps) => {
           animated: true,
         },
       );
+    }
+  };
+
+  useEffect(() => {
+    if (Platform.OS !== "web" && mapRef.current && locations.length > 0) {
+      setMapReady();
     }
   }, [locations]);
 
@@ -90,41 +123,77 @@ const MapComponent = ({ city, locations }: MapComponentProps) => {
     );
   }
 
+  const onMarkerClick = (location: Location) => {
+    setSelectedPlace(location);
+    onMarkerPress({
+      latitude: location.position.lat,
+      longitude: location.position.lng,
+    });
+  };
+
+  const handleSetOriginMarker = (coordinate: LatLng) => {
+    setOriginMarker(coordinate);
+    Alert.alert("Confirmation", "Origin has been set.");
+  };
+
+  const handleSetDestinationMarker = (coordinate: LatLng) => {
+    setDestinationMarker(coordinate);
+    Alert.alert("Confirmation", "Destination has been set.");
+  };
+
   if (Platform.OS === "web") {
     return (
-      <LoadScript
-        googleMapsApiKey={googleMapsApiKey}
-        loadingElement={
-          <View style={styles.container}>
-            <Text>Loading...</Text>
-          </View>
-        }
-      >
+      <LoadScript googleMapsApiKey={googleMapsApiKey}>
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={{ lat: region.latitude, lng: region.longitude }}
-          zoom={13}
+          zoom={12}
         >
-          {locations.map((place, index) => (
+          {locations.map((location, index) => (
             <WebMarker
               key={index}
-              position={place.position}
-              onClick={() => setSelectedPlace(place)}
-            />
-          ))}
-
-          {selectedPlace && (
-            <InfoWindow
-              position={selectedPlace.position}
-              onCloseClick={() => setSelectedPlace(null)}
+              position={location.position}
+              onClick={() => onMarkerClick(location)}
             >
-              <div>
-                <h4>{selectedPlace.name}</h4>
-                <button onClick={() => console.log("Remove from bucket list")}>
-                  Remove
-                </button>
-              </div>
-            </InfoWindow>
+              {selectedPlace === location && (
+                <InfoWindow onCloseClick={() => setSelectedPlace(null)}>
+                  <div>
+                    <Text>{location.name}</Text>
+                    <button
+                      style={webStyles.button}
+                      onClick={() =>
+                        handleSetOriginMarker({
+                          latitude: location.position.lat,
+                          longitude: location.position.lng,
+                        })
+                      }
+                    >
+                      Set Origin
+                    </button>
+                    <button
+                      style={webStyles.button}
+                      onClick={() =>
+                        handleSetDestinationMarker({
+                          latitude: location.position.lat,
+                          longitude: location.position.lng,
+                        })
+                      }
+                    >
+                      Set Destination
+                    </button>
+                  </div>
+                </InfoWindow>
+              )}
+            </WebMarker>
+          ))}
+          {routeCoordinates.length > 0 && (
+            <WebPolyline
+              path={routeCoordinates.map((coord) => ({
+                lat: coord.latitude,
+                lng: coord.longitude,
+              }))}
+              options={{ strokeColor: "#000", strokeWeight: 6 }}
+            />
           )}
         </GoogleMap>
       </LoadScript>
@@ -132,62 +201,98 @@ const MapComponent = ({ city, locations }: MapComponentProps) => {
   }
 
   return (
-    <MapView
-      ref={mapRef}
-      provider={PROVIDER_GOOGLE}
-      style={styles.map}
-      region={region}
-      apikey={googleMapsApiKey}
-    >
-      {locations.map((place, index) => {
-        const isValidCoordinate =
-          typeof place.position.lat === "number" &&
-          typeof place.position.lng === "number" &&
-          !isNaN(place.position.lat) &&
-          !isNaN(place.position.lng);
-
-        if (!isValidCoordinate) {
-          console.error(
-            `Invalid coordinates for marker: ${place.name}`,
-            place.position,
-          );
-          return null;
-        }
-
-        return (
+    <View style={styles.container}>
+      <MapView
+        ref={mapRef}
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        region={region}
+        onMapReady={setMapReady}
+        onRegionChangeComplete={setRegion}
+      >
+        {locations.map((location, index) => (
           <Marker
             key={index}
-            identifier={index.toString()}
             coordinate={{
-              latitude: place.position.lat,
-              longitude: place.position.lng,
+              latitude: location.position.lat,
+              longitude: location.position.lng,
             }}
+            identifier={index.toString()}
+            onPress={() => onMarkerClick(location)}
           >
             <Callout>
               <View>
-                <Text>{place.name}</Text>
-                <Text onPress={() => console.log("Remove from bucket list")}>
-                  Remove
-                </Text>
+                <Text>{location.name}</Text>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() =>
+                    handleSetOriginMarker({
+                      latitude: location.position.lat,
+                      longitude: location.position.lng,
+                    })
+                  }
+                >
+                  <Text style={styles.buttonText}>Set Origin</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() =>
+                    handleSetDestinationMarker({
+                      latitude: location.position.lat,
+                      longitude: location.position.lng,
+                    })
+                  }
+                >
+                  <Text style={styles.buttonText}>Set Destination</Text>
+                </TouchableOpacity>
               </View>
             </Callout>
           </Marker>
-        );
-      })}
-    </MapView>
+        ))}
+        {routeCoordinates.length > 0 && (
+          <Polyline
+            coordinates={routeCoordinates}
+            strokeColor="#000"
+            strokeWidth={6}
+          />
+        )}
+      </MapView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  map: {
-    width: "100%",
-    height: "100%",
-  },
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  button: {
+    backgroundColor: "#2196F3",
+    padding: 10,
+    marginTop: 5,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
 });
+
+const webStyles = {
+  button: {
+    backgroundColor: "#2196F3",
+    padding: "10px",
+    marginTop: "5px",
+    borderRadius: "5px",
+    color: "#fff",
+    textAlign: "center",
+    cursor: "pointer",
+  },
+};
 
 export default MapComponent;
