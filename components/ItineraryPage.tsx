@@ -19,14 +19,11 @@ export default function ItineraryPage({navigation}){
     const [destination, setDestination] = useState<LatLng | null>(null);
     const [routeCoordinates, setRouteCoordinates] = useState<LatLng[]>([]);
   
-    const { user, cityName } = useContext(AppContext);
+    const { user, cityName, bucketListMemo } = useContext(AppContext);
     const { username } = user;
-
+ 
     useEffect(() => {
-        getBucketListItemsByUser(username, cityName)
-          .then(({ bucketList }) => {
-            const locations = bucketList.map(({ place_json: place }) => {
-              const { location, displayName } = place;
+            const locations = bucketListMemo.map(({location, displayName}) => {
               return {
                 position: { lat: location.latitude, lng: location.longitude },
                 name: displayName.text,
@@ -35,9 +32,7 @@ export default function ItineraryPage({navigation}){
             setBucketList(locations);
             setOrigin(null);
             setDestination(null);
-          })
-          .catch((error) => console.error("Error fetching bucket list:", error));
-      }, [cityName, username]);
+      }, [cityName, username, bucketListMemo]);
     
       const handleMarkerPress = (coordinate: LatLng) => {
         if (!origin) {

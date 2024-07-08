@@ -10,8 +10,10 @@ export const AppProvider = ({ children }) => {
   })
   const [cityName, setCityName] = useState("London")
   const [bucketListAttractions, setBucketListAttractions] = useState([])
+  const [isBucketListLoading, setIsBucketListLoading] = useState(false)
 
   useEffect(()=>{
+    setIsBucketListLoading(true)
     let isMounted = true;
     getBucketListItemsByUser(user.username, cityName).then(({bucketList})=>{
         if(isMounted){
@@ -25,14 +27,16 @@ export const AppProvider = ({ children }) => {
         if(isMounted){
             console.log(err)
         }
-    }) 
+    }).finally(()=>{
+      setIsBucketListLoading(false)
+    })
     return()=>{isMounted = false}
   }, [user.username, cityName])
 
   const bucketListMemo = useMemo(() => bucketListAttractions,[bucketListAttractions])
 
   return (
-    <AppContext.Provider value={{ user, setUser, cityName, setCityName, bucketListAttractions, setBucketListAttractions, bucketListMemo}}>
+    <AppContext.Provider value={{ user, setUser, cityName, setCityName, bucketListAttractions, setBucketListAttractions, bucketListMemo, isBucketListLoading}}>
       {children}
     </AppContext.Provider>
   );

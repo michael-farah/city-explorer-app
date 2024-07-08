@@ -10,7 +10,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { AppContext } from "@/app/AppContext";
 
 export default function BucketListPage({navigation}){
-    const { user, cityName, bucketListMemo } = useContext(AppContext)
+    const { user, cityName, bucketListMemo, isBucketListLoading } = useContext(AppContext)
     const { username } = user;
 
     return (
@@ -25,9 +25,10 @@ export default function BucketListPage({navigation}){
         </ThemedView>
         <ThemedText>Welcome to the Bucket List:</ThemedText>
         <CityDropdown navigation={navigation}/>
-        <Suspense fallback={<p>loading...</p>}>
+        {isBucketListLoading? <Text>Loading...</Text> : 
+        <Suspense fallback={<Text>Loading...</Text>}>
           {bucketListMemo.length ? <AttractionsList cityName={cityName} attractions={bucketListMemo} navigation={navigation}/> : <Text>No attractions in your bucket list for {cityName}, go to the home page to add some or choose another city!</Text>}
-        </Suspense>
+        </Suspense>}
       </ParallaxScrollView>)
 }
 
