@@ -266,7 +266,6 @@ export const getRoutes = (
       { headers: getRoutesHeaders },
     )
     .then((response) => {
-      console.log(response, 'response from routes')
       return response.data})
     .catch((err) => {
       console.error("Error fetching routes:", err);
