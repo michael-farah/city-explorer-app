@@ -214,7 +214,7 @@ const MapComponent = ({
                 lat: coord.latitude,
                 lng: coord.longitude,
               }))}
-              options={{ strokeColor: "#000", strokeWeight: 6 }}
+              options={{ strokeColor: "#000", strokeWeight: 4 }}
             />
           )}
         </GoogleMap>
@@ -275,7 +275,7 @@ const MapComponent = ({
           <Polyline
             coordinates={routeCoordinates}
             strokeColor="#000"
-            strokeWidth={6}
+            strokeWidth={4}
           />
         )}
       </MapView>
