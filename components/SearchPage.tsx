@@ -178,7 +178,7 @@ export default function SearchPage({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContainer: {
-paddingHorizontal: 20
+paddingHorizontal: "3%"
   },
   headerImage: {
     color: "#FF4D4D",
@@ -190,7 +190,7 @@ paddingHorizontal: 20
     flexDirection: "column",
     gap: 8,
     backgroundColor: '#FFFFFF', 
-    padding: 30,
+    padding: "5%",
     borderRadius: 10,
   },
   accessibilityCheckboxContainer: {
