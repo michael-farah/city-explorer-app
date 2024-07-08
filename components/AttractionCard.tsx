@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
     flex: 1,
-    padding: "7.5%",
+    padding: "5%",
     backgroundColor: "white",
     borderRadius: 10,
     gap:10
