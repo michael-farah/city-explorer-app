@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 import React from "react";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { Ionicons } from "@expo/vector-icons";
@@ -45,6 +45,7 @@ export default function AttractionPage({ route, navigation }) {
     }
   }, []);
 
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
@@ -58,72 +59,103 @@ export default function AttractionPage({ route, navigation }) {
             <ThemedText type="title" style={styles.boldText}>
               {attraction.displayName.text}
             </ThemedText>
-            {photo ? (
-              <Image style={styles.image} source={{ uri: photo }} />
-            ) : (
-              <Icon
-                style={styles.image}
-                name="photo"
-                size={350}
-                color="#B8E2F2"
-              />
-            )}
-<View style={styles.mainTextBody}>
-            <ThemedText type="defaultSemiBold" style={styles.summaryBlock}>
-              {attraction.editorialSummary && attraction.editorialSummary.text
-                ? attraction.editorialSummary.text
-                : null}{" "}
-            </ThemedText>
-            <View style={styles.addressAndphone}>
-              <View style={styles.address}>
-                <ThemedText type = "defaultSemiBold" style={styles.address}>
-                  Address: <ThemedText style={styles.regularText}> {attraction.formattedAddress}</ThemedText></ThemedText>
-                  
+            <View style={styles.imageAndText}>
+              <View
+                style={[
+                  styles.imageContainer
+                ]}
+              >
+                {photo ? (
+                  <Image style={styles.image} source={{ uri: photo }} />
+                ) : (
+                  <Icon
+          
+                    name="photo"
+                    size={"1000%"}
+                    color="#B8E2F2"
+                  />
+                )}
+              </View>
+              <View style={styles.mainTextBody}>
+                    {attraction.editorialSummary &&
+                    attraction.editorialSummary.text
+                      ? <View style={styles.summaryBlock}><ThemedText type="defaultSemiBold">
+                   {attraction.editorialSummary.text}
+                   </ThemedText>
+                </View> : null}
+                 
+                <View style={styles.addressAndphone}>
+                  <View style={styles.address}>
+                    <ThemedText type="defaultSemiBold">
+                      Address:
+                      <ThemedText style={styles.regularText}>
+                        {" "}
+                        {attraction.formattedAddress}
+                      </ThemedText>
+                    </ThemedText>
+                  </View>
+                  <View style={styles.phone}>
+                    {attraction.nationalPhoneNumber ? (
+                      <ThemedText type="defaultSemiBold">
+                        Phone number:
+                        <ThemedText style={styles.regularText}>
+                          {" "}
+                          {attraction.nationalPhoneNumber}
+                        </ThemedText>
+                      </ThemedText>
+                    ) : null}{" "}
+                  </View>
+                </View>
+                {attraction.regularOpeningHours ? (
+                  <View style={styles.openingHours}>
+                    <ThemedText type="defaultSemiBold">
+                      Opening hours:{"\n"}
+                      <ThemedText style={styles.regularText}>
+                        {attraction.regularOpeningHours.weekdayDescriptions.join(
+                          "\n"
+                        )}
+                      </ThemedText>
+                    </ThemedText>
+                  </View>
+                ) : null}
+              
+                  {accessibilityFeatures.length ? (  <View style={styles.accessibility}>
+                    <ThemedText type="defaultSemiBold">
+                      Wheelchair facilities:{" "}
+                      <ThemedText style={styles.regularText}>
+                        {accessibilityFeatures.join(", ")}
+                      </ThemedText>
+                    </ThemedText>
+                    </View>) : null}
                
               </View>
-              <View style={styles.phone}>
-                {" "}
-                {attraction.nationalPhoneNumber ? (
-                  <ThemedText type = "defaultSemiBold">
-                    Phone number:<ThemedText style={styles.regularText}>  {attraction.nationalPhoneNumber}</ThemedText>
-                  </ThemedText>
-                ) : null}{" "}
+              <View style={styles.websiteAndButton}>
+                {attraction.websiteUri ? (
+                  <View style={styles.website}>
+                    <ThemedText
+                      type="defaultSemiBold"
+                      style={{ color: "blue" }}
+                      onPress={() => Linking.openURL(attraction.websiteUri)}
+                    >
+                      Visit official site
+                    </ThemedText>
+                  </View>
+                ) : null}
+                <AddToBucketListButton attraction={attraction} />
               </View>
             </View>
-            {attraction.regularOpeningHours ? (
-              <ThemedText type="defaultSemiBold">
-                Opening hours:{"\n"}<ThemedText style={styles.regularText}>{attraction.regularOpeningHours.weekdayDescriptions.join("\n")}
-                </ThemedText>
-              </ThemedText>
-            ) : null}
-            <View>
-              {accessibilityFeatures.length ? (
-                <ThemedText type="defaultSemiBold">Wheelchair facilities: <ThemedText style={styles.regularText}>{accessibilityFeatures.join(
-                  ", "
-                )}</ThemedText></ThemedText>
-              ) : null}
-            </View>
-            <View style={styles.websiteAndButton}>
-            {attraction.websiteUri ? (<View style={styles.website}>
-              <ThemedText type="defaultSemiBold"
-                style={{ color: "blue"}}
-                onPress={() => Linking.openURL(attraction.websiteUri)}
-              >
-                Visit official site
-              </ThemedText></View>
-            ) : null}
-            <AddToBucketListButton attraction={attraction} />
-          </View>
-          </View>
           </View>
           {attraction.rating ? (
             <View style={styles.reviewBox}>
               <ThemedText type="title" style={styles.boldThemedText}>
                 Reviews
               </ThemedText>
-              <ThemedText  type="defaultSemiBold">
-                Average user rating: {attraction.rating} <ThemedText style={styles.regularText}>from{" "}
-                {attraction.userRatingCount.toLocaleString("en-US")} users</ThemedText>
+              <ThemedText type="defaultSemiBold">
+                Average user rating: {attraction.rating}{" "}
+                <ThemedText style={styles.regularText}>
+                  from {attraction.userRatingCount.toLocaleString("en-US")}{" "}
+                  users
+                </ThemedText>
               </ThemedText>
               {attraction.reviews ? (
                 attraction.reviews.map((review) => {
@@ -137,8 +169,10 @@ export default function AttractionPage({ route, navigation }) {
                         <ThemedText style={styles.reviewText}>
                           {review.text.text}
                         </ThemedText>
-                     )  : null}
-                      <ThemedText type="defaultSemiBold">Rating: {review.rating}/5 </ThemedText>
+                      ) : null}
+                      <ThemedText type="defaultSemiBold">
+                        Rating: {review.rating}/5{" "}
+                      </ThemedText>
                     </View>
                   );
                 })
@@ -156,63 +190,87 @@ export default function AttractionPage({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
-    height: "100%",
     padding: "3%",
+    height: "100%",
     minWidth: 310,
+  },
+  mainTextBody: {
+    gap: 20,
   },
   mainBlock: {
     backgroundColor: "white",
     borderRadius: 10,
-    padding: "10%",
+    padding: "7%",
   },
-mainTextBody: {
-gap: 20,
-},
+  imageAndText: {
+    flexDirection: "column",
+    gap: 10,
+  },
   headerImage: {
     color: "#FF4D4D",
     bottom: -90,
     left: -35,
     position: "absolute",
   },
+  openingHours: {
+    flex: 1
+  },
   boldText: {
     fontWeight: "bold",
-    fontSize: "200%",
-    lineHeight: 50
+    fontSize: 50,
+    lineHeight: 50,
   },
- address: {
-  flex: 1,
-  flexBasis: 50,
-  flexWrap: "wrap"}, 
+  summaryBlock: {
+borderWidth: 2,
+flex: 1
+  },
+  address: {
+    flex: 1,
+    flexBasis: "auto",
+    flexShrink: 1,
+    flexWrap: "wrap",
+  },
   phone: {
     flex: 1,
-    flexBasis: 50,
-    flexWrap: "wrap"
+    flexBasis: "auto",
+    flexShrink: 1,
+    flexWrap: "wrap",
   },
 
   addressAndphone: {
-    flex: 1,
+   display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     flexWrap: "wrap",
-    gap: 20
+    gap: 20,
+
   },
   regularText: {
-    fontWeight: "normal"
+    fontWeight: "normal",
   },
   reviewBox: {
     backgroundColor: "#FFFFF",
-    marginTop: "7%",
+    margin: "3%",
+    marginTop: "5%",
     borderWidth: 10,
     borderRadius: 30,
     padding: "5%",
-    borderColor: "#89CFF0"
+    borderColor: "#89CFF0",
   },
+  imageContainer: { alignSelf: "center",
+  borderRadius: 5,
+  padding: "4%",
+  minHeight: 150, 
+  width: "80%",
+marginVertical: "5%",
+
+},
 
   image: {
-    minWidth: 200,
-    minHeight: 200,
-    margin: "10%",
-    alignSelf: "center",
+    width: "100%",
+    height: "100%",
+    aspectRatio: 1,
+    borderRadius: 5,
   },
   user: {
     fontWeight: "bold",
@@ -221,17 +279,16 @@ gap: 20,
     backgroundColor: "#89CFF0",
     padding: "3%",
     borderRadius: 10,
-    marginBottom: "5%"
+    margin: 10,
   },
   websiteAndButton: {
     display: "flex",
     flexDirection: "row",
     marginTop: "5%",
-    flexWrap: "wrap"
-  ,
-  justifyContent: "space-around"
+    flexWrap: "wrap",
+    justifyContent: "space-around",
   },
   review: {
-    marginVertical: "2.5%"
-  }
+    marginVertical: "5%",
+  },
 });
