@@ -7,22 +7,24 @@ import MapComponent from "@/components/Map";
 import { getBucketListItemsByUser } from "../api";
 import BucketCityDropdown from "@/components/BucketCityDropdown";
 import { useEffect, useState, useContext } from "react";
-import { UserContext } from "../UserContext";
+
+import { AppContext } from "../AppContext";
 import { getRoutes } from "../api";
 import { decodeRoutesPolyline } from "@/utils/decoder";
 import { LatLng } from "react-native-maps";
 
+
 export default function ItineraryScreen() {
-  const [city, setCity] = useState("Liverpool");
   const [bucketList, setBucketList] = useState<Location[]>([]);
   const [origin, setOrigin] = useState<LatLng | null>(null);
   const [destination, setDestination] = useState<LatLng | null>(null);
   const [routeCoordinates, setRouteCoordinates] = useState<LatLng[]>([]);
-  const { user } = useContext(UserContext);
+
+  const { user, cityName, setCityName } = useContext(AppContext);
   const { username } = user;
 
   useEffect(() => {
-    getBucketListItemsByUser(username, city)
+    getBucketListItemsByUser(username, cityName)
       .then(({ bucketList }) => {
         const locations = bucketList.map(({ place_json: place }) => {
           const { location, displayName } = place;
@@ -36,7 +38,7 @@ export default function ItineraryScreen() {
         setDestination(null);
       })
       .catch((error) => console.error("Error fetching bucket list:", error));
-  }, [city, username]);
+  }, [cityName, username]);
 
   const handleMarkerPress = (coordinate: LatLng) => {
     if (!origin) {
@@ -88,10 +90,10 @@ export default function ItineraryScreen() {
         <ThemedText type="title">Itinerary</ThemedText>
       </ThemedView>
       <ThemedText>Welcome to the Itinerary planner:</ThemedText>
-      <BucketCityDropdown username={username} setCity={setCity} city={city} />
+      <BucketCityDropdown username={username} setCity={setCityName} city={cityName} />
       <View style={{ height: 500 }}>
         <MapComponent
-          city={city}
+          city={cityName}
           locations={bucketList}
           onMarkerPress={handleMarkerPress}
           routeCoordinates={routeCoordinates}
@@ -100,6 +102,7 @@ export default function ItineraryScreen() {
           setOriginMarker={setOriginMarker}
           setDestinationMarker={setDestinationMarker}
         />
+
       </View>
       <Button title="Render Route" onPress={renderRoute} />
     </ParallaxScrollView>

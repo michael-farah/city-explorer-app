@@ -1,31 +1,17 @@
 import { Text, StyleSheet } from "react-native";
 import CityDropdown from "./CityDropdown";
 import AttractionsList from "./AttractionsList";
-import { useContext, useEffect, useState } from "react";
-import { getBucketListItemsByUser, getCity } from "@/app/api";
-import { UserContext } from '../app/UserContext';
-import { CityContext } from "@/app/CityContext";
+import { Suspense, useContext, useEffect, useState } from "react";
+import { getBucketListItemsByUser } from "@/app/api";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { AppContext } from "@/app/AppContext";
 
 export default function BucketListPage({navigation}){
-    const {user, setUser} = useContext(UserContext)
-    const { cityName, setCityName } = useContext(CityContext);
-    const [bucketListAttractions, setBucketListAttractions] = useState([])
-    useEffect(()=>{
-        // getCity(cityName).then((response)=>{
-        getBucketListItemsByUser(user.username, cityName)
-        .then(({bucketList})=>{
-            if(!bucketList.length){
-                setBucketListAttractions([])
-            } else {
-                setBucketListAttractions(bucketList.map((item)=> {return item.place_json}))
-            }
-        // })
-    }).catch((err) => {console.log(err)})
-    },[cityName])
+    const { user, cityName, bucketListMemo } = useContext(AppContext)
+    const { username } = user;
 
     return (
         <ParallaxScrollView
@@ -38,8 +24,10 @@ export default function BucketListPage({navigation}){
           <ThemedText type="title">Bucket List</ThemedText>
         </ThemedView>
         <ThemedText>Welcome to the Bucket List:</ThemedText>
-        <CityDropdown setCityName={setCityName}/>
-        {bucketListAttractions.length ? <AttractionsList cityName={cityName} attractions={bucketListAttractions} navigation={navigation}/> : <Text>No attractions in your bucket list for {cityName}, go to the home page to add some!</Text>}
+        <CityDropdown navigation={navigation}/>
+        <Suspense fallback={<p>loading...</p>}>
+          {bucketListMemo.length ? <AttractionsList cityName={cityName} attractions={bucketListMemo} navigation={navigation}/> : <Text>No attractions in your bucket list for {cityName}, go to the home page to add some or choose another city!</Text>}
+        </Suspense>
       </ParallaxScrollView>)
 }
 

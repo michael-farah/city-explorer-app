@@ -52,7 +52,7 @@ export const getCity = (city: string) => {
 export const getAttractions = (
   longitude: number,
   latitude: number,
-  radius: number,
+  radius: number
 ) => {
   return googlePlacesAPI
     .post(
@@ -79,7 +79,6 @@ export const getAttractions = (
           "gift_shop",
           "department_store",
           "shopping_mall",
-          "market",
           "book_store",
           "athletic_field",
           "fitness_center",
@@ -101,8 +100,7 @@ export const getAttractions = (
           "hiking_area",
           "historical_landmark",
           "marina",
-          "movie_theater",
-        ],
+          "movie_theater"],
         maxResultCount: 20,
         locationRestriction: {
           circle: {
@@ -121,6 +119,39 @@ export const getAttractions = (
       throw err;
     });
 };
+
+export const getAttractionsWithType = (
+  longitude: number,
+  latitude: number,
+  radius: number,
+  type: Array<string> 
+) => {
+  return googlePlacesAPI
+    .post(
+      `/places:searchNearby`,
+      {
+        includedPrimaryTypes: type,
+        maxResultCount: 20,
+        locationRestriction: {
+          circle: {
+            center: {
+              latitude: latitude,
+              longitude: longitude,
+            },
+            radius: radius,
+          },
+        },
+      },
+      { headers: getAttractionsHeaders },
+    )
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+
+
 
 export const getPhoto = (
   photoReference: string,
@@ -192,12 +223,14 @@ export const deleteBucketListItem = (attraction, username, cityName) => {
     return cityExplorerAPI
       .delete(`bucket_list/${bucketListId}`)
       .catch((err) => {
-        console.error(err);
-        throw err;
-      });
-  });
-};
+        console.error(err)
+        throw err
+      })
+    })
+  }
 
+  
+  
 export const getRoutes = (
   origin: LatLng,
   destination: LatLng,
@@ -238,3 +271,18 @@ export const getRoutes = (
       throw err;
     });
 };
+
+  export const getSearchPlaces = (rectangle, text)=>{
+    return googlePlacesAPI.post(`/places:searchText`, {
+      textQuery: `${text}`,
+      locationRestriction: {
+        rectangle: rectangle
+      },
+      maxResultCount: 20,
+    }, {headers: getAttractionsHeaders}
+  )
+  .catch((err) => {
+    console.error(err)
+    throw err
+  })
+  }
