@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import CheckBox from "expo-checkbox"
+import CheckBox from "expo-checkbox";
 import { Ionicons } from "@expo/vector-icons";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -26,7 +26,8 @@ export default function SearchPage({ navigation }) {
   const [gobbledigook, setGobbledigook] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [attractions, setAttractions] = useState([]);
-  const [attractionsListIsLoading, setAttractionsListIsLoading] = useState(true);
+  const [attractionsListIsLoading, setAttractionsListIsLoading] =
+    useState(true);
   const [accessibleOnly, setAccessibleOnly] = useState(false);
   const [isSearchTerm, setIsSearchTerm] = useState(false);
   const [text, setText] = useState("");
@@ -118,69 +119,75 @@ export default function SearchPage({ navigation }) {
   }, [searchTerm]);
 
   return (
-    <ParallaxScrollView 
+    <ParallaxScrollView
       headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
       headerImage={
         <Ionicons size={310} name="home" style={styles.headerImage} />
       }
     >
-      <ThemedView style={styles.pageContainer}>
+      <View style={styles.pageContainer}>
         <ThemedView style={styles.borderBox}>
-        <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <ThemedText type="subtitle">
-          Select your city from the dropdown menu and get ready to start
-          planning your next adventure!
-        </ThemedText>
-    
-      <CityDropdown navigation={navigation} />
-      <AttractionSearchByName
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        gobbledigook={gobbledigook}
-        setGobbledigook={setGobbledigook}
-        setAttractions={setAttractions}
-        text={text}
-        setText={setText}
-      />
+          <View style={styles.titleContainer}>
+            <ThemedText type="title">Welcome!</ThemedText>
+            <ThemedText type="subtitle">
+              Select your city from the dropdown menu and get ready to start
+              planning your next adventure!
+            </ThemedText>
 
-      <AttractionFilter
-        type={type}
-        setType={setType}
-        setText={setText}
-        setSearchTerm={setSearchTerm}
-      />
-      <View style={styles.accessibilityCheckboxContainer}>
-        <CheckBox
-          value={accessibleOnly}
-          onValueChange={setAccessibleOnly}
-          style={styles.checkbox}
-        />
+            <CityDropdown navigation={navigation} />
+            <AttractionSearchByName
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              gobbledigook={gobbledigook}
+              setGobbledigook={setGobbledigook}
+              setAttractions={setAttractions}
+              text={text}
+              setText={setText}
+            />
 
-        <ThemedText style={styles.label}>
-          Wheelchair-accessible attractions only (has a wheelchair-accessible
-          entrance and toilet)
-        </ThemedText>
+            <AttractionFilter
+              type={type}
+              setType={setType}
+              setText={setText}
+              setSearchTerm={setSearchTerm}
+            />
+            <View style={styles.accessibilityCheckboxContainer}>
+              <CheckBox
+                value={accessibleOnly}
+                onValueChange={setAccessibleOnly}
+                style={styles.checkbox}
+              />
+
+              <ThemedText style={styles.label}>
+                Wheelchair-accessible attractions only (has a
+                wheelchair-accessible entrance and toilet)
+              </ThemedText>
+            </View>
+          </View>
+          {attractionsListIsLoading ? (
+            <ThemedView>
+              <ThemedText
+                type="defaultSemiBold"
+                style={styles.attractionsListLoading}
+              >
+                Attractions list is loading ...
+              </ThemedText>
+            </ThemedView>
+          ) : (
+            <AttractionsList
+              cityName={cityName}
+              attractions={attractions}
+              navigation={navigation}
+              accessibleOnly={accessibleOnly}
+            />
+          )}
+        </ThemedView>
       </View>
-      </ThemedView>
-      {attractionsListIsLoading ? (
-        <ThemedView><ThemedText type="defaultSemiBold" style={styles.attractionsListLoading}>Attractions list is loading ...</ThemedText></ThemedView>
-      ) : (
-        <AttractionsList
-          cityName={cityName}
-          attractions={attractions}
-          navigation={navigation}
-          accessibleOnly={accessibleOnly}
-        />
-      )}
-        </ThemedView>
-        </ThemedView>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-
   headerImage: {
     color: "#89CFF0",
     bottom: -90,
@@ -191,16 +198,17 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderWidth: 8,
     borderColor: "#89CFF0",
-    padding: 8
+    padding: "5%",
+    // backgroundColor: "#353636",
   },
   titleContainer: {
     flexDirection: "column",
+    // backgroundColor: "green",
     gap: 8,
-    padding: "5%",
- 
+   
   },
   accessibilityCheckboxContainer: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   label: {
     margin: 8,
@@ -209,6 +217,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   attractionsListLoading: {
-    padding:20
-  }
+    padding: 20,
+  },
 });

@@ -1,6 +1,7 @@
 import { Text, View, FlatList, Image, ScrollView, StyleSheet } from 'react-native';
 import { useEffect , useState} from 'react';
 import { ThemedText } from './ThemedText';
+import { ReverseThemedText } from './ReverseThemedText';
 import AttractionCard from './AttractionCard';
 
 

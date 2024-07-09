@@ -135,7 +135,7 @@ export default function AttractionPage({ route, navigation }) {
                   <View style={styles.website}>
                     <ThemedText
                       type="defaultSemiBold"
-                      style={{ color: "blue" }}
+                      style={{ color: "white" }}
                       onPress={() => Linking.openURL(attraction.websiteUri)}
                     >
                       Visit official site
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     minWidth: 310,
     borderWidth: 8,
     borderRadius: 30,
-    borderColor: "#FBAED2"
+    borderColor: "yellow"
   },
   mainBlock: {
     borderRadius: 10,
@@ -279,20 +279,22 @@ const styles = StyleSheet.create({
   user: {
     fontWeight: "bold",
   },
-  website: {
-    backgroundColor: "#89CFF0",
-    padding: 12,
-    borderRadius: 10,
-    margin: 10,
-    borderColor: "blue",
-    borderWidth: 2
-  },
+ 
   websiteAndButton: {
     display: "flex",
     flexDirection: "row",
     marginTop: "5%",
     flexWrap: "wrap",
     justifyContent: "space-around",
+    alignItems: "center"
+  },
+  website: {
+    backgroundColor: "#89CFF0",
+    padding: 6,
+    borderRadius: 10,
+  height: 45,
+    borderColor: "yellow",
+    borderWidth: 5
   },
   review: {
     marginVertical: "5%",

@@ -1,4 +1,4 @@
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
 import CityDropdown from "./CityDropdown";
 import AttractionsList from "./AttractionsList";
 import { Suspense, useContext, useEffect, useState } from "react";
@@ -20,7 +20,7 @@ export default function BucketListPage({navigation}){
           <Ionicons size={310} name="star" style={styles.headerImage} />
         }
       >
-        <ThemedView>
+        <View >
           <ThemedView style={styles.borderBox}>
           <ThemedView style={styles.top}>
 
@@ -31,12 +31,12 @@ export default function BucketListPage({navigation}){
         </ThemedView>
       
         
-        {isBucketListLoading? <Text>Loading...</Text> : 
-        <Suspense fallback={<Text>Loading...</Text>}>
-          {bucketListMemo.length ? <AttractionsList cityName={cityName} attractions={bucketListMemo} navigation={navigation}/> : <Text>No attractions in your bucket list for {cityName}, go to the home page to add some or choose another city!</Text>}
+        {isBucketListLoading? <ThemedText>Loading...</ThemedText> : 
+        <Suspense fallback={<ThemedText>Loading...</ThemedText>}>
+          {bucketListMemo.length ? <AttractionsList cityName={cityName} attractions={bucketListMemo} navigation={navigation}/> : <ThemedText>No attractions in your bucket list for {cityName}, go to the home page to add some or choose another city!</ThemedText>}
         </Suspense>}
         </ThemedView>
-        </ThemedView>
+        </View>
       </ParallaxScrollView>)
 }
 
@@ -51,13 +51,10 @@ const styles = StyleSheet.create({
       borderWidth: 8,
       borderColor: 	"#D580FF",
       borderRadius: 30,
-      padding: 8
+      padding: "5%"
     },
 
     top:{
       gap: 30
-    ,
-   
-    padding: "3%"
     }
   });
