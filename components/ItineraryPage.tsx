@@ -98,7 +98,7 @@ export default function ItineraryPage({navigation}){
           <View style= {styles.buttons}><CityDropdown navigation={navigation}/> 
            <Dropdown style={styles.dropdown} placeholder="Select mode of transport" data={data} labelField="label" valueField="value" value={transport} onChange={handleDropdownChange}/>
         </View>
-        <Button title="Show me the route" onPress={renderRoute} />
+        <View><Button title="Show me the route" onPress={renderRoute} /></View>
           <ThemedView style={styles.routePointsContainer}>
             {originName ? <ThemedText style={styles.startPointText}>Start Point: {originName}</ThemedText> : null}
             {destinationName ? <ThemedText style={styles.endPointText}>End Point: {destinationName}</ThemedText> : null}
@@ -128,15 +128,16 @@ export default function ItineraryPage({navigation}){
 
 const styles = StyleSheet.create({
     headerImage: {
-      color: "#89CFF0",
+      color: "#56bf52",
       bottom: -90,
       left: -35,
       position: "absolute",
     },
     overallContainer: {
-      // backgroundColor: "white",
+      borderWidth: 8,
+      borderColor: "#56bf52",
       padding: "5%",
-      borderRadius:10,
+      borderRadius:30,
       gap: 15
     },
     titleContainer: {
@@ -145,18 +146,20 @@ const styles = StyleSheet.create({
     },
     routePointsContainer: {
       flexDirection: "row",
-      justifyContent: "center"
+      justifyContent: "center",
+      gap: 10
     },
     startPointText: {
-      flex: 1,
+      flex: 1
     },
     endPointText: {
-      flex: 2,
+      flex: 1
     },
     buttons: {
-      flex: 1,
       flexDirection: "row", 
-      justifyContent: "space-evenly"
+      justifyContent: "space-evenly",
+      flexWrap: "wrap",
+      gap: 20,
     } ,
     dropdown: {
       backgroundColor: "white",

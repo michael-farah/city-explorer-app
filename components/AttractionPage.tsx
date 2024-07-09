@@ -199,6 +199,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     height: "100%",
     minWidth: 310,
+    borderWidth: 8,
+    borderRadius: 30,
+    borderColor: "#FBAED2"
   },
   mainBlock: {
     borderRadius: 10,
@@ -252,7 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFF",
     margin: "3%",
     marginTop: "5%",
-    borderWidth: 10,
+    borderWidth: 8,
     borderRadius: 30,
     padding: "5%",
     borderColor: "#89CFF0",
