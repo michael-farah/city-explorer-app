@@ -41,6 +41,10 @@ interface MapComponentProps {
   destination: LatLng | null;
   setOriginMarker: (coordinate: LatLng) => void;
   setDestinationMarker: (coordinate: LatLng) => void;
+  originName: string;
+  SetOriginName: (name: string) => void;
+  destinationName: string;
+  SetDestinationName: (name: string) => void;
 }
 
 const containerStyle = {
@@ -60,14 +64,20 @@ const MapComponent = ({
   locations,
   onMarkerPress,
   routeCoordinates,
+  origin,
+  destination,
   setOriginMarker,
   setDestinationMarker,
+  originName,
+  setOriginName,
+  destinationName,
+  setDestinationName
 }: MapComponentProps) => {
   const googleMapsApiKey = Constants.expoConfig.extra.googleMapsApiKey;
   const mapRef = useRef<MapView | null>(null);
   const [region, setRegion] = useState<Region>(defaultRegion);
   const [selectedPlace, setSelectedPlace] = useState<Location | null>(null);
-
+  
   useEffect(() => {
     (async () => {
       try {
@@ -133,14 +143,22 @@ const MapComponent = ({
     });
   };
 
-  const handleSetOriginMarker = (coordinate: LatLng) => {
-    setOriginMarker(coordinate);
+  const handleSetOriginMarker = (location) => {
+    setOriginMarker({
+      latitude: location.position.lat,
+      longitude: location.position.lng,
+    });
     Alert.alert("Confirmation", "Origin has been set.");
+    setOriginName(location.name)
   };
 
-  const handleSetDestinationMarker = (coordinate: LatLng) => {
-    setDestinationMarker(coordinate);
+  const handleSetDestinationMarker = (location) => {
+    setDestinationMarker({
+      latitude: location.position.lat,
+      longitude: location.position.lng,
+    });
     Alert.alert("Confirmation", "Destination has been set.");
+    setDestinationName(location.name)
   };
 
   if (Platform.OS === "web") {
@@ -159,10 +177,14 @@ const MapComponent = ({
             >
               {selectedPlace === location && (
                 <InfoWindow onCloseClick={() => setSelectedPlace(null)}>
+
                   <View style={styles.buttonsAndName}>
                     <View>
-                    <ThemedText type="defaultSemiBold">{location.name}</ThemedText></View>
-                    <Button
+                      <ThemedText type="defaultSemiBold">{location.name}</ThemedText>
+                      <Text>Current Start Point: {originName}</Text>
+                      <Text>Current End Point: {destinationName}</Text>
+                    </View>
+                    {originName === location.name ? null : <Button
                     title="Set as Start"
                       onPress={() =>
                         handleSetOriginMarker({
@@ -170,7 +192,9 @@ const MapComponent = ({
                           longitude: location.position.lng,
                         })
                       }
-                    />
+                     disabled={originName === location.name ? true : false}
+                    />}
+                    {destinationName === location.name ? null :
                     <Button
                       title="Set as End"
                       onPress={() =>
@@ -179,30 +203,8 @@ const MapComponent = ({
                           longitude: location.position.lng,
                         })
                       }
-                    />
-                 
-                    {/* <button
-                      style={webStyles.button}
-                      onClick={() =>
-                        handleSetOriginMarker({
-                          latitude: location.position.lat,
-                          longitude: location.position.lng,
-                        })
-                      }
-                    >
-                      Set as Start
-                    </button>
-                    <button
-                      style={webStyles.button}
-                      onClick={() =>
-                        handleSetDestinationMarker({
-                          latitude: location.position.lat,
-                          longitude: location.position.lng,
-                        })
-                      }
-                    >
-                      Set as End
-                    </button> */}
+                    disabled={destinationName === location.name ? true : false}
+                      />}
                   </View>
                 </InfoWindow>
               )}

@@ -19,10 +19,11 @@ export default function ItineraryPage({navigation}){
     const [origin, setOrigin] = useState<LatLng | null>(null);
     const [destination, setDestination] = useState<LatLng | null>(null);
     const [routeCoordinates, setRouteCoordinates] = useState<LatLng[]>([]);
+    const [originName, setOriginName] = useState<string>("No origin selected yet");
+    const [destinationName, setDestinationName] = useState<string>("No destination selected yet");
     const [transport, setTransport] = useState("WALK")
     const { user, cityName, bucketListMemo } = useContext(AppContext);
     const { username } = user;
-   
  
     useEffect(() => {
             const locations = bucketListMemo.map(({location, displayName}) => {
@@ -58,7 +59,7 @@ export default function ItineraryPage({navigation}){
     
       const renderRoute = async () => {
         try {
-          const coordinates = bucketList.map((location) => ({
+          const coordinates = bucketListMemo.map((location) => ({
             latitude: location.position.lat,
             longitude: location.position.lng,
           }));
@@ -97,7 +98,11 @@ export default function ItineraryPage({navigation}){
            <Dropdown style={styles.dropdown} placeholder="Select mode of transport" data={data} labelField="label" valueField="value" value={transport} onChange={handleDropdownChange}/>
         </View>
         <Button title="Show me the route" onPress={renderRoute} />
-          <View style={{ height: 500 }}>
+          <ThemedView style={styles.routePointsContainer}>
+            {originName ? <ThemedText style={styles.startPointText}>Start Point: {originName}</ThemedText> : null}
+            {destinationName ? <ThemedText style={styles.endPointText}>End Point: {destinationName}</ThemedText> : null}
+          </ThemedView>    
+          <View style={{ height: 400 }}>
             <MapComponent
               city={cityName}
               locations={bucketList}
@@ -107,9 +112,12 @@ export default function ItineraryPage({navigation}){
               destination={destination}
               setOriginMarker={setOriginMarker}
               setDestinationMarker={setDestinationMarker}
+              originName={originName}
+              setOriginName={setOriginName}
+              destinationName={destinationName}
+              setDestinationName={setDestinationName}
             />
           </View>
-      
           </View>
         </ParallaxScrollView>
       );
@@ -131,6 +139,18 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: "row"
     },
+    routePointsContainer: {
+      flexDirection: "row",
+      justifyContent: "center"
+    },
+    startPointText: {
+      flex: 1,
+      borderWidth: 1
+    },
+    endPointText: {
+      flex: 2,
+      borderWidth: 1
+    },
     buttons: {
       flex: 1,
       flexDirection: "row", 
@@ -144,6 +164,6 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderRadius: 10,
       padding: 10
-  }
+    }
   });
   
