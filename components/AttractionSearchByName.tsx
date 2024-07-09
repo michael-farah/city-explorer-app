@@ -38,7 +38,7 @@ if(gobbledigook){
         </View>
         </View>
         
-      <ThemedTextInput style={styles.input} onChangeText= {(value)=>setText(value)} onSubmitEditing={(value)=> setSearchTerm(value.nativeEvent.text)} value={text} placeholder="Search here..."/>
+      <TextInput style={styles.input} onChangeText= {(value)=>setText(value)} onSubmitEditing={(value)=> setSearchTerm(value.nativeEvent.text)} value={text} placeholder="Search here..."/>
       <View>
         {gobbledigook ? (<ThemedText>Sorry, we can't find a place matching that search, please try something else.</ThemedText>): null}
       </View>
@@ -50,6 +50,7 @@ if(gobbledigook){
 const styles = StyleSheet.create(
   {input: {
     borderColor: "gray",
+    backgroundColor: "white",
     width: "100%",
     borderWidth: 1,
     borderRadius: 10,

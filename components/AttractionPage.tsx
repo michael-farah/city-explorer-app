@@ -56,7 +56,7 @@ export default function AttractionPage({ route, navigation }) {
     >
       <ThemedView style={styles.container}>
         <View style={styles.mainBlock}>
-          <View>
+          <View style={styles.mystery}>
             <ThemedText type="title" style={styles.boldText}>
               {attraction.displayName.text}
             </ThemedText>
@@ -189,39 +189,48 @@ export default function AttractionPage({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-    height: "100%",
-    minWidth: 310,
-  },
-  mainTextBody: {
-    gap: 20,
-  },
-  mainBlock: {
-    borderRadius: 10,
-    padding: "7%",
-  },
-  imageAndText: {
-    flexDirection: "column",
-    gap: 10,
-  },
   headerImage: {
     color: "#89CFF0",
     bottom: -90,
     left: -35,
     position: "absolute",
   },
-  openingHours: {
-    flex: 1
+  container: {
+    flexDirection: "column",
+    height: "100%",
+    minWidth: 310,
   },
+  mainBlock: {
+    borderRadius: 10,
+    padding: "7%",
+  },
+
+  imageAndText: {
+    flexDirection: "column",
+  },
+  
+  mainTextBody: {
+    gap: 20,
+  },
+  
   boldText: {
     fontWeight: "bold",
     fontSize: 50,
     lineHeight: 50,
   },
   summaryBlock: {
-borderWidth: 2,
-flex: 1
+  },
+  addressAndphone: {
+    display: "flex",
+     flexDirection: "row",
+     justifyContent: "space-between",
+     flexWrap: "wrap",
+     gap: 20,
+ 
+   },
+   openingHours: {
+  },
+  accessibility: {
   },
   address: {
     flex: 1,
@@ -236,14 +245,6 @@ flex: 1
     flexWrap: "wrap",
   },
 
-  addressAndphone: {
-   display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    gap: 20,
-
-  },
   regularText: {
     fontWeight: "normal",
   },
@@ -256,15 +257,16 @@ flex: 1
     padding: "5%",
     borderColor: "#89CFF0",
   },
-  imageContainer: { alignSelf: "center",
+  imageContainer: 
+  { alignSelf: "center",
   borderRadius: 5,
-  padding: "4%",
   minHeight: 150, 
+  maxWidth: 400,
   width: "80%",
-marginVertical: "5%",
+  marginVertical: "8%"
+
 
 },
-
   image: {
     width: "100%",
     height: "100%",
@@ -276,9 +278,11 @@ marginVertical: "5%",
   },
   website: {
     backgroundColor: "#89CFF0",
-    padding: "3%",
+    padding: 12,
     borderRadius: 10,
     margin: 10,
+    borderColor: "blue",
+    borderWidth: 2
   },
   websiteAndButton: {
     display: "flex",
