@@ -36,7 +36,7 @@ if(gobbledigook){
         </View>
         </View>
         
-      <TextInput style={styles.input} onChangeText= {(value)=>setText(value)} onSubmitEditing={(value)=> setSearchTerm(value.nativeEvent.text)} value={text} placeholder="Search for places by name or type..."/>
+      <TextInput style={styles.input} onChangeText= {(value)=>setText(value)} onSubmitEditing={(value)=> setSearchTerm(value.nativeEvent.text)} value={text} placeholder="Search here..."/>
       <View>
         {gobbledigook ? (<Text>Sorry, we can't find a place matching that search, please try something else.</Text>): null}
       </View>

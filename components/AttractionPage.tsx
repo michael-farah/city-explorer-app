@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 import React from "react";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,97 +8,180 @@ import { getPhoto } from "@/app/api";
 import { useState } from "react";
 import { ThemedText } from "./ThemedText";
 import AddToBucketListButton from "./AddToBucketListButton";
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function AttractionPage({ route, navigation }) {
   const { attraction } = route.params;
   const [photo, setPhoto] = useState("");
 
-  const [accessibilityFeatures, setAccessibilityFeatures] = useState([])
-
-  //add in accessibility options
-  //render photos (carousel?)
-  //add in types??
+  const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
 
   useEffect(() => {
-    if(attraction.accessibilityOptions){
-      setAccessibilityFeatures((features)=>{
-     const accessibilityKeys = Object.keys(attraction.accessibilityOptions)
-      const trueAccessibilityKeys = accessibilityKeys.filter((key)=>{
-       return attraction.accessibilityOptions[key] === true
-      })
-      const spacedTrueAccessibilityKeys = trueAccessibilityKeys.map((key)=>{
-        const result = key.replace(/([A-Z])/g, ' $1')
-        return result.charAt(0).toUpperCase() + result. slice(1).toLowerCase()
-      })
-      const anglicisedSpacedTrueAccessibilityKeys = spacedTrueAccessibilityKeys.map((key)=>{
-    if(key ==="Wheelchair accessible restroom"){
-      return "Wheelchair accessible toilet"
+    if (attraction.accessibilityOptions) {
+      setAccessibilityFeatures((features) => {
+        const accessibilityKeys = Object.keys(attraction.accessibilityOptions);
+        const trueAccessibilityKeys = accessibilityKeys.filter((key) => {
+          return attraction.accessibilityOptions[key] === true;
+        });
+        const spacedTrueAccessibilityKeys = trueAccessibilityKeys.map((key) => {
+          const result = key.replace(/([A-Z])/g, " $1");
+          return result.charAt(0).toUpperCase() + result.slice(1).toLowerCase();
+        });
+        const anglicisedSpacedTrueAccessibilityKeys =
+          spacedTrueAccessibilityKeys.map((key) => {
+            if (key === "Wheelchair accessible restroom") {
+              return "Wheelchair accessible toilet";
+            } else {
+              return key;
+            }
+          });
+        return anglicisedSpacedTrueAccessibilityKeys;
+      });
     }
-    else{ 
-      return key
+    if (attraction.photos) {
+      getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
+        setPhoto(response);
+      });
     }
-      })
-     return anglicisedSpacedTrueAccessibilityKeys
-        }  )
-      }
-    if(attraction.photos){
-    getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
-      setPhoto(response)
-    })}
   }, []);
+
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
+      headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
       headerImage={
         <Ionicons size={310} name="home" style={styles.headerImage} />
       }
     >
       <View style={styles.container}>
-        <View >
-        <ThemedText type="title" style={styles.boldText}>{attraction.displayName.text}</ThemedText>
-        {photo ? (<Image style={styles.image} source={{ uri: photo }} />): <Icon style={styles.image} name="photo" size={350} color="#B8E2F2"/>}
-        <AddToBucketListButton attraction={attraction}/>
-        <ThemedText type="default" style={styles.textBlock}>
-          {attraction.editorialSummary && attraction.editorialSummary.text
-            ? attraction.editorialSummary.text
-            : null} </ThemedText>
-
-          <ThemedText style={styles.address}>Address: {attraction.formattedAddress} {attraction.nationalPhoneNumber
-            ? `\n\nPhone number: ${attraction.nationalPhoneNumber}`
-            : ""}</ThemedText>
-          {attraction.regularOpeningHours
-            ? (<ThemedText>Opening hours:{'\n\n'}{attraction.regularOpeningHours.weekdayDescriptions.join("\n")}</ThemedText>): null}
-       <View>
-{accessibilityFeatures.length? (<ThemedText>{`\nWheelchair facilities: ${accessibilityFeatures.join(", ")}`}</ThemedText> ): null}
-</View>
-        {attraction.websiteUri ?(<ThemedText
-          style={{ color: "blue", marginVertical:20 }}
-          onPress={() => Linking.openURL(attraction.websiteUri)}
-        >Visit official site
-        </ThemedText>): null}
-        </View>
-        {attraction.rating? (<View style={styles.reviewBox}>
-          <ThemedText type="subtitle" style={styles.boldThemedText}>Reviews:</ThemedText>
-          <ThemedText style={styles.rating}>Average user rating: {attraction.rating} from{" "}
-          {attraction.userRatingCount.toLocaleString('en-US')} users</ThemedText>
-          {attraction.reviews 
-            ? attraction.reviews.map((review) => {
-                return (
-                  <View key={review.name} style={styles.review}>
-                    <ThemedText style={styles.user}>
-                      {review.authorAttribution.displayName} visited on{" "}
-                      {review.publishTime.slice(0, 10)}
+        <View style={styles.mainBlock}>
+          <View>
+            <ThemedText type="title" style={styles.boldText}>
+              {attraction.displayName.text}
+            </ThemedText>
+            <View style={styles.imageAndText}>
+              <View
+                style={[
+                  styles.imageContainer
+                ]}
+              >
+                {photo ? (
+                  <Image style={styles.image} source={{ uri: photo }} />
+                ) : (
+                  <Icon
+          
+                    name="photo"
+                    size={"1000%"}
+                    color="#B8E2F2"
+                  />
+                )}
+              </View>
+              <View style={styles.mainTextBody}>
+                    {attraction.editorialSummary &&
+                    attraction.editorialSummary.text
+                      ? <View style={styles.summaryBlock}><ThemedText type="defaultSemiBold">
+                   {attraction.editorialSummary.text}
+                   </ThemedText>
+                </View> : null}
+                 
+                <View style={styles.addressAndphone}>
+                  <View style={styles.address}>
+                    <ThemedText type="defaultSemiBold">
+                      Address:
+                      <ThemedText style={styles.regularText}>
+                        {" "}
+                        {attraction.formattedAddress}
+                      </ThemedText>
                     </ThemedText>
-                    {review.text ? <ThemedText style={styles.reviewText}>{review.text.text}</ThemedText>: null}
-                    <ThemedText>Rating: {review.rating}/5 </ThemedText>
                   </View>
-                );
-              })
-            :<ThemedText> "none available" </ThemedText>}
-        </View>): null}
+                  <View style={styles.phone}>
+                    {attraction.nationalPhoneNumber ? (
+                      <ThemedText type="defaultSemiBold">
+                        Phone number:
+                        <ThemedText style={styles.regularText}>
+                          {" "}
+                          {attraction.nationalPhoneNumber}
+                        </ThemedText>
+                      </ThemedText>
+                    ) : null}{" "}
+                  </View>
+                </View>
+                {attraction.regularOpeningHours ? (
+                  <View style={styles.openingHours}>
+                    <ThemedText type="defaultSemiBold">
+                      Opening hours:{"\n"}
+                      <ThemedText style={styles.regularText}>
+                        {attraction.regularOpeningHours.weekdayDescriptions.join(
+                          "\n"
+                        )}
+                      </ThemedText>
+                    </ThemedText>
+                  </View>
+                ) : null}
+              
+                  {accessibilityFeatures.length ? (  <View style={styles.accessibility}>
+                    <ThemedText type="defaultSemiBold">
+                      Wheelchair facilities:{" "}
+                      <ThemedText style={styles.regularText}>
+                        {accessibilityFeatures.join(", ")}
+                      </ThemedText>
+                    </ThemedText>
+                    </View>) : null}
+               
+              </View>
+              <View style={styles.websiteAndButton}>
+                {attraction.websiteUri ? (
+                  <View style={styles.website}>
+                    <ThemedText
+                      type="defaultSemiBold"
+                      style={{ color: "blue" }}
+                      onPress={() => Linking.openURL(attraction.websiteUri)}
+                    >
+                      Visit official site
+                    </ThemedText>
+                  </View>
+                ) : null}
+                <AddToBucketListButton attraction={attraction} />
+              </View>
+            </View>
+          </View>
+          {attraction.rating ? (
+            <View style={styles.reviewBox}>
+              <ThemedText type="title" style={styles.boldThemedText}>
+                Reviews
+              </ThemedText>
+              <ThemedText type="defaultSemiBold">
+                Average user rating: {attraction.rating}{" "}
+                <ThemedText style={styles.regularText}>
+                  from {attraction.userRatingCount.toLocaleString("en-US")}{" "}
+                  users
+                </ThemedText>
+              </ThemedText>
+              {attraction.reviews ? (
+                attraction.reviews.map((review) => {
+                  return (
+                    <View key={review.name} style={styles.review}>
+                      <ThemedText style={styles.user}>
+                        {review.authorAttribution.displayName} visited on{" "}
+                        {review.publishTime.slice(0, 10)}
+                      </ThemedText>
+                      {review.text ? (
+                        <ThemedText style={styles.reviewText}>
+                          {review.text.text}
+                        </ThemedText>
+                      ) : null}
+                      <ThemedText type="defaultSemiBold">
+                        Rating: {review.rating}/5{" "}
+                      </ThemedText>
+                    </View>
+                  );
+                })
+              ) : (
+                <ThemedText> "none available" </ThemedText>
+              )}
+            </View>
+          ) : null}
+        </View>
       </View>
     </ParallaxScrollView>
   );
@@ -106,8 +189,22 @@ export default function AttractionPage({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
-    height: "100%",    padding: 40
+    flexDirection: "column",
+    padding: "3%",
+    height: "100%",
+    minWidth: 310,
+  },
+  mainTextBody: {
+    gap: 20,
+  },
+  mainBlock: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: "7%",
+  },
+  imageAndText: {
+    flexDirection: "column",
+    gap: 10,
   },
   headerImage: {
     color: "#FF4D4D",
@@ -115,37 +212,83 @@ const styles = StyleSheet.create({
     left: -35,
     position: "absolute",
   },
+  openingHours: {
+    flex: 1
+  },
   boldText: {
     fontWeight: "bold",
+    fontSize: 50,
+    lineHeight: 50,
   },
-  textBlock:{
-    marginVertical: 10
+  summaryBlock: {
+borderWidth: 2,
+flex: 1
   },
-  rating: {
-    marginVertical: 20
-  }, 
-  address:{
-    marginVertical: 20
+  address: {
+    flex: 1,
+    flexBasis: "auto",
+    flexShrink: 1,
+    flexWrap: "wrap",
+  },
+  phone: {
+    flex: 1,
+    flexBasis: "auto",
+    flexShrink: 1,
+    flexWrap: "wrap",
+  },
+
+  addressAndphone: {
+   display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    gap: 20,
+
+  },
+  regularText: {
+    fontWeight: "normal",
   },
   reviewBox: {
     backgroundColor: "#FFFFF",
-    paddingVertical: 10,
+    margin: "3%",
+    marginTop: "5%",
+    borderWidth: 10,
+    borderRadius: 30,
+    padding: "5%",
+    borderColor: "#89CFF0",
   },
-  review: {
-    marginTop: 20,
-  },
+  imageContainer: { alignSelf: "center",
+  borderRadius: 5,
+  padding: "4%",
+  minHeight: 150, 
+  width: "80%",
+marginVertical: "5%",
+
+},
 
   image: {
-    width: 350,
-    height: 350,
-    margin: 20,
-    alignSelf: "center"
+    width: "100%",
+    height: "100%",
+    aspectRatio: 1,
+    borderRadius: 5,
   },
   user: {
     fontWeight: "bold",
-    marginBottom: 10,
   },
-  reviewText: {
-    marginBottom: 10,
+  website: {
+    backgroundColor: "#89CFF0",
+    padding: "3%",
+    borderRadius: 10,
+    margin: 10,
+  },
+  websiteAndButton: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: "5%",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+  },
+  review: {
+    marginVertical: "5%",
   },
 });

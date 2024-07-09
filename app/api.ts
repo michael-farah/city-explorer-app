@@ -235,7 +235,7 @@ export const getRoutes = (
   origin: LatLng,
   destination: LatLng,
   intermediates: LatLng[],
-  mode: string = "DRIVE",
+  transport: string ,
 ) => {
   const intermediateWaypoints = intermediates.map((coordinate) => ({
     location: {
@@ -259,13 +259,14 @@ export const getRoutes = (
           },
         },
         intermediates: intermediateWaypoints,
-        travelMode: mode,
-        routingPreference: "TRAFFIC_UNAWARE",
+        travelMode: transport,
+        // routingPreference: "TRAFFIC_UNAWARE",
         optimizeWaypointOrder: true,
       },
       { headers: getRoutesHeaders },
     )
-    .then((response) => response.data)
+    .then((response) => {
+      return response.data})
     .catch((err) => {
       console.error("Error fetching routes:", err);
       throw err;

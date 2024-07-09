@@ -174,14 +174,12 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
     flex: 1,
-    padding: 40,
+    padding: "5%",
     backgroundColor: "white",
     borderRadius: 10,
     gap:10
   },
-  attractionTitle:{
- 
-  },
+
   image: {
     width: 200,
     height: 200,
@@ -205,10 +203,9 @@ const styles = StyleSheet.create({
     gap: 30
   },
   textAndButtonsBody: {
-    flex: 3,
+    flex: 5,
     flexWrap: "wrap",
     flexBasis: 300,
-    minWidth: 400,
     height: "auto",
     justifyContent: "space-between"
   },

@@ -3,6 +3,7 @@ import {
   Platform,
   StyleSheet,
   View,
+  Button,
   Text,
   TouchableOpacity,
   Alert,
@@ -22,6 +23,7 @@ import {
   InfoWindow,
   Polyline as WebPolyline,
 } from "@react-google-maps/api";
+import { ThemedText } from "./ThemedText";
 import Constants from "expo-constants";
 import { getCity } from "../app/api";
 
@@ -175,29 +177,35 @@ const MapComponent = ({
             >
               {selectedPlace === location && (
                 <InfoWindow onCloseClick={() => setSelectedPlace(null)}>
-                  <div>
-                    <Text>{location.name}</Text>
-                    <Text>Current Start Point: {originName}</Text>
-                    <Text>Current End Point: {destinationName}</Text>
-                    {originName === location.name ? null : <button
-                      style={webStyles.button}
-                      onClick={() =>
-                        handleSetOriginMarker(location)
+
+                  <View style={styles.buttonsAndName}>
+                    <View>
+                      <ThemedText type="defaultSemiBold">{location.name}</ThemedText>
+                      <Text>Current Start Point: {originName}</Text>
+                      <Text>Current End Point: {destinationName}</Text>
+                    </View>
+                    {originName === location.name ? null : <Button
+                    title="Set as Start"
+                      onPress={() =>
+                        handleSetOriginMarker({
+                          latitude: location.position.lat,
+                          longitude: location.position.lng,
+                        })
                       }
-                      disabled={originName === location.name ? true : false}
-                    >
-                    {originName === location.name ? "Added as Start Point" : "Set Start Point"}
-                    </button>}
-                    {destinationName === location.name ? null : <button
-                      style={webStyles.button}
-                      onClick={() =>
-                        handleSetDestinationMarker(location)
+                     disabled={originName === location.name ? true : false}
+                    />}
+                    {destinationName === location.name ? null :
+                    <Button
+                      title="Set as End"
+                      onPress={() =>
+                        handleSetDestinationMarker({
+                          latitude: location.position.lat,
+                          longitude: location.position.lng,
+                        })
                       }
-                      disabled={destinationName === location.name ? true : false}
-                    >
-                      {destinationName === location.name ? "Added as End Point" : "Set End Point"}
-                    </button>}
-                  </div>
+                    disabled={destinationName === location.name ? true : false}
+                      />}
+                  </View>
                 </InfoWindow>
               )}
             </WebMarker>
@@ -208,7 +216,7 @@ const MapComponent = ({
                 lat: coord.latitude,
                 lng: coord.longitude,
               }))}
-              options={{ strokeColor: "#000", strokeWeight: 6 }}
+              options={{ strokeColor: "#000", strokeWeight: 4 }}
             />
           )}
         </GoogleMap>
@@ -238,7 +246,7 @@ const MapComponent = ({
           >
             <Callout>
               <View>
-                <Text>{location.name}</Text>
+                <ThemedText type="defaultSemiBold">{location.name}</ThemedText>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() =>
@@ -269,7 +277,7 @@ const MapComponent = ({
           <Polyline
             coordinates={routeCoordinates}
             strokeColor="#000"
-            strokeWidth={6}
+            strokeWidth={4}
           />
         )}
       </MapView>
@@ -285,6 +293,9 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  buttonsAndName: {
+    gap: 5
   },
   button: {
     backgroundColor: "#2196F3",

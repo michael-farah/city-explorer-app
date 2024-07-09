@@ -11,6 +11,7 @@ import { AppContext } from "../app/AppContext";
 import { getRoutes } from "../app/api";
 import { decodeRoutesPolyline } from "@/utils/decoder";
 import { LatLng } from "react-native-maps";
+import { Dropdown } from "react-native-element-dropdown";
 import CityDropdown from "./CityDropdown";
 
 export default function ItineraryPage({navigation}){
@@ -20,7 +21,7 @@ export default function ItineraryPage({navigation}){
     const [routeCoordinates, setRouteCoordinates] = useState<LatLng[]>([]);
     const [originName, setOriginName] = useState<string>("No origin selected yet");
     const [destinationName, setDestinationName] = useState<string>("No destination selected yet");
-
+    const [transport, setTransport] = useState("WALK")
     const { user, cityName, bucketListMemo } = useContext(AppContext);
     const { username } = user;
  
@@ -44,6 +45,10 @@ export default function ItineraryPage({navigation}){
         }
       };
     
+      const handleDropdownChange = (event) => {
+        setTransport(event.value)
+    }
+
       const setOriginMarker = (coordinate: LatLng) => {
         setOrigin(coordinate);
       };
@@ -65,7 +70,7 @@ export default function ItineraryPage({navigation}){
           const [start, ...rest] = coordinates;
           const end = rest.pop();
     
-          const route = await getRoutes(start, end, rest, "DRIVE");
+          const route = await getRoutes(start, end, rest, transport);
           const decodedCoordinates = decodeRoutesPolyline(
             route.routes[0].polyline.encodedPolyline,
           );
@@ -75,19 +80,29 @@ export default function ItineraryPage({navigation}){
         }
       };
     
+      const data = [{label: "Walking", value: "WALK"}, {label: "Driving", value: "DRIVE"}]
       return (
-        <ParallaxScrollView
-          headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
+        <ParallaxScrollView 
+        headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
           headerImage={
             <Ionicons size={310} name="calendar" style={styles.headerImage} />
           }
         >
-          <ThemedView style={styles.titleContainer}>
+          <View style={styles.overallContainer}>
+          <View style={styles.titleContainer}>
             <ThemedText type="title">Itinerary</ThemedText>
-          </ThemedView>
-          <ThemedText>Welcome to the Itinerary planner:</ThemedText>
-          <CityDropdown navigation={navigation}/>
-          <View style={{ height: 500 }}>
+          </View>
+          <View>
+          <ThemedText>How to use the itinerary page:{"\n\n"}1. Use the dropdown to choose your city. {"\n\n"}2. See your bucket list places for that city on the map. {"\n\n"}3. Select your preferred start and end points by clicking on the places and selecting 'Set as start' or 'Set as end'.{"\n\n"}4. Hit 'Show me the route' to see your route!{"\n\n"}5. Go and hve fun seeing everything on your bucket list!</ThemedText></View>
+          <View style= {styles.buttons}><CityDropdown navigation={navigation}/> 
+           <Dropdown style={styles.dropdown} placeholder="Select mode of transport" data={data} labelField="label" valueField="value" value={transport} onChange={handleDropdownChange}/>
+        </View>
+        <Button title="Show me the route" onPress={renderRoute} />
+          <ThemedView style={styles.routePointsContainer}>
+            {originName ? <ThemedText style={styles.startPointText}>Start Point: {originName}</ThemedText> : null}
+            {destinationName ? <ThemedText style={styles.endPointText}>End Point: {destinationName}</ThemedText> : null}
+          </ThemedView>    
+          <View style={{ height: 400 }}>
             <MapComponent
               city={cityName}
               locations={bucketList}
@@ -103,11 +118,7 @@ export default function ItineraryPage({navigation}){
               setDestinationName={setDestinationName}
             />
           </View>
-          <ThemedView style={styles.routePointsContainer}>
-            {originName ? <ThemedText style={styles.startPointText}>Start Point: {originName}</ThemedText> : null}
-            {destinationName ? <ThemedText style={styles.endPointText}>End Point: {destinationName}</ThemedText> : null}
-          </ThemedView>
-          <Button title="Find Route" onPress={renderRoute} />
+          </View>
         </ParallaxScrollView>
       );
 }
@@ -119,9 +130,14 @@ const styles = StyleSheet.create({
       left: -35,
       position: "absolute",
     },
+    overallContainer: {backgroundColor: "white",
+      padding: "5%",
+      borderRadius:10,
+      gap: 15
+    },
     titleContainer: {
-      flexDirection: "row",
-      gap: 8,
+      flex: 1,
+      flexDirection: "row"
     },
     routePointsContainer: {
       flexDirection: "row",
@@ -135,5 +151,19 @@ const styles = StyleSheet.create({
       flex: 2,
       borderWidth: 1
     },
+    buttons: {
+      flex: 1,
+      flexDirection: "row", 
+      justifyContent: "space-evenly"
+    } ,
+    dropdown: {
+      backgroundColor: "white",
+      height: 40,
+      width: 250,
+      borderColor: 'gray',
+      borderWidth: 1,
+      borderRadius: 10,
+      padding: 10
+    }
   });
   
