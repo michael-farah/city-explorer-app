@@ -168,7 +168,7 @@ export const getPhoto = (
   url += `&skipHttpRedirect=true`;
   return googlePlacesAPI
     .get(url)
-    .then((response) => response.data.photoUri)
+    .then((response) =>  response.data.photoUri)
     .catch((err) => {
       console.error("Error fetching place photo:", err);
       throw err;

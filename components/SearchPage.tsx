@@ -156,14 +156,14 @@ export default function SearchPage({ navigation }) {
           style={styles.checkbox}
         />
 
-        <Text style={styles.label}>
+        <ThemedText style={styles.label}>
           Wheelchair-accessible attractions only (has a wheelchair-accessible
           entrance and toilet)
-        </Text>
+        </ThemedText>
       </View>
       </ThemedView>
       {attractionsListIsLoading ? (
-        <ThemedText type="defaultSemiBold" style={styles.attractionsListLoading}>Attractions list is loading ...</ThemedText>
+        <ThemedView><ThemedText type="defaultSemiBold" style={styles.attractionsListLoading}>Attractions list is loading ...</ThemedText></ThemedView>
       ) : (
         <AttractionsList
           cityName={cityName}
@@ -180,7 +180,7 @@ export default function SearchPage({ navigation }) {
 const styles = StyleSheet.create({
 
   headerImage: {
-    color: "#FF4D4D",
+    color: "#89CFF0",
     bottom: -90,
     left: -35,
     position: "absolute",
@@ -188,9 +188,10 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "column",
     gap: 8,
-    backgroundColor: '#FFFFFF', 
     padding: "5%",
     borderRadius: 10,
+    borderWidth: 5,
+    borderColor: "#89CFF0",
   },
   accessibilityCheckboxContainer: {
     flexDirection: "row"

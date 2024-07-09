@@ -26,7 +26,7 @@ const [wheelchairAccessibleAttractions, setWheelChairAccessibleAttractions] = us
         <View style={styles.container}>
             <ScrollView>
                 <View>
-                <ThemedText style={styles.topText} type="defaultSemiBold" >Showing { accessibleOnly ? wheelchairAccessibleAttractions.length : attractions.length} attractions for {cityName}:</ThemedText>
+                <ThemedText style={styles.topText} type="subtitle" >Showing { accessibleOnly ? wheelchairAccessibleAttractions.length : attractions.length} attractions for {cityName}:</ThemedText>
                 {/* //fix 'attraction / attractions here' */}
 {accessibleOnly? <View>{wheelchairAccessibleAttractions.map((attraction)=>{return <View style={styles.attractionCard} key={attraction.id}>
                         <AttractionCard navigation={navigation} cityName={cityName} attraction={attraction}/>
@@ -47,9 +47,6 @@ const [wheelchairAccessibleAttractions, setWheelChairAccessibleAttractions] = us
 
 const styles = StyleSheet.create({
     container: {flex:1,
-        paddingTop: 20
-    },
-    topText: {
-        paddingLeft: 20
+        padding: "5%",
     }
 })

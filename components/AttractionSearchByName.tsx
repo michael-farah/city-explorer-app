@@ -5,6 +5,8 @@ import { getCity, getSearchPlaces } from '@/app/api'
 import { AppContext } from '@/app/AppContext'
 import { ThemedText } from './ThemedText'
 import { getAttractions } from '@/app/api'
+import { ThemedView } from './ThemedView'
+import ThemedTextInput from './ThemedTextInput'
 
 
 export default function AttractionSearchByName ({setAttractions, text, setText, searchTerm, setSearchTerm, gobbledigook, setGobbledigook})  {
@@ -25,7 +27,7 @@ if(gobbledigook){
 }, [gobbledigook])
 
   return (
-    <View>
+    <ThemedView>
         <View style={styles.intro}>
         <View style = {styles.question}>
         <ThemedText type="defaultSemiBold" >Not sure where to start?</ThemedText><ThemedText type="default">Leave the search box below blank for a surprise list of popular attractions in your chosen city.
@@ -36,16 +38,17 @@ if(gobbledigook){
         </View>
         </View>
         
-      <TextInput style={styles.input} onChangeText= {(value)=>setText(value)} onSubmitEditing={(value)=> setSearchTerm(value.nativeEvent.text)} value={text} placeholder="Search here..."/>
+      <ThemedTextInput style={styles.input} onChangeText= {(value)=>setText(value)} onSubmitEditing={(value)=> setSearchTerm(value.nativeEvent.text)} value={text} placeholder="Search here..."/>
       <View>
-        {gobbledigook ? (<Text>Sorry, we can't find a place matching that search, please try something else.</Text>): null}
+        {gobbledigook ? (<ThemedText>Sorry, we can't find a place matching that search, please try something else.</ThemedText>): null}
       </View>
 
-    </View>
+    </ThemedView>
   )
 }
 
-const styles = StyleSheet.create({input: {
+const styles = StyleSheet.create(
+  {input: {
     borderColor: "gray",
     width: "100%",
     borderWidth: 1,

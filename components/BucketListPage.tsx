@@ -20,27 +20,32 @@ export default function BucketListPage({navigation}){
           <Ionicons size={310} name="star" style={styles.headerImage} />
         }
       >
-        <ThemedView style={styles.titleContainer}>
+        <ThemedView>
+          <ThemedView style={styles.top}>
+
           <ThemedText type="title">Bucket List</ThemedText>
-        </ThemedView>
-        <ThemedText>Welcome to the Bucket List:</ThemedText>
+          <ThemedText>Use the dropdown below to see the places in your bucket list for that city.</ThemedText>
+   
         <CityDropdown navigation={navigation}/>
+        </ThemedView>
+      
+        
         {isBucketListLoading? <Text>Loading...</Text> : 
         <Suspense fallback={<Text>Loading...</Text>}>
           {bucketListMemo.length ? <AttractionsList cityName={cityName} attractions={bucketListMemo} navigation={navigation}/> : <Text>No attractions in your bucket list for {cityName}, go to the home page to add some or choose another city!</Text>}
         </Suspense>}
+        </ThemedView>
       </ParallaxScrollView>)
 }
 
 const styles = StyleSheet.create({
     headerImage: {
-      color: "#FF4D4D",
+      color: "#89CFF0",
       bottom: -90,
       left: -35,
       position: "absolute",
     },
-    titleContainer: {
-      flexDirection: "row",
-      gap: 8,
-    },
+    top:{
+      gap: 30
+    }
   });

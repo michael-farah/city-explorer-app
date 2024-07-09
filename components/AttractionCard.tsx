@@ -8,6 +8,7 @@ import { AppContext } from "@/app/AppContext";
 import { ThemedText } from "./ThemedText";
 import AddToBucketListButton from "./AddToBucketListButton";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { ThemedView } from "./ThemedView";
 
 export default function AttractionCard({ navigation, attraction }) {
   const { cityName, user, setBucketListAttractions } = useContext(AppContext);
@@ -43,6 +44,7 @@ export default function AttractionCard({ navigation, attraction }) {
     }
     if (attraction.photos) {
       getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
+console.log(response, 'photo')
         setPhoto(response);
         if (attraction.primaryTypeDisplayName) {
           setAttractionType(attraction.primaryTypeDisplayName.text);
@@ -89,7 +91,7 @@ export default function AttractionCard({ navigation, attraction }) {
   const currentRoute = routes[index].name;
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <View style={styles.attractionTitle}>
           <ThemedText style={styles.titleText}>
             {attraction.displayName.text}
@@ -97,7 +99,7 @@ export default function AttractionCard({ navigation, attraction }) {
       </View>
       <View style={styles.mainBody}>
         <View style={styles.imageBox}>
-          {attraction.photos?  <Image style={styles.image} source={photo ? {uri: photo } : null}/> : <Icon name="photo" size={170} color="#B8E2F2"/>}
+          {photo?  <Image style={styles.image} source={{uri: photo }} alt={`photo of ${attraction.displayName.text}`}/> : <Icon name="photo" size={170} color="#B8E2F2"/>}
          
         </View>
         <View style={styles.textAndButtonsBody}>
@@ -165,7 +167,7 @@ export default function AttractionCard({ navigation, attraction }) {
         </View>
         </View>
       </View>
-    </View>
+    </ThemedView>
   );
 }
 
@@ -174,10 +176,12 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
     flex: 1,
-    padding: "5%",
-    backgroundColor: "white",
-    borderRadius: 10,
-    gap:10
+    padding: "3%",
+    // backgroundColor: "white",
+    borderRadius: 15,
+    gap:10,
+    borderWidth: 5,
+    borderColor: "#89CFF0",
   },
 
   image: {
