@@ -187,10 +187,7 @@ const MapComponent = ({
                     {originName === location.name ? null : <Button
                     title="Set as Start"
                       onPress={() =>
-                        handleSetOriginMarker({
-                          latitude: location.position.lat,
-                          longitude: location.position.lng,
-                        })
+                        handleSetOriginMarker(location)
                       }
                      disabled={originName === location.name ? true : false}
                     />}
@@ -198,10 +195,7 @@ const MapComponent = ({
                     <Button
                       title="Set as End"
                       onPress={() =>
-                        handleSetDestinationMarker({
-                          latitude: location.position.lat,
-                          longitude: location.position.lng,
-                        })
+                        handleSetDestinationMarker(location)
                       }
                     disabled={destinationName === location.name ? true : false}
                       />}
@@ -250,10 +244,7 @@ const MapComponent = ({
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() =>
-                    handleSetOriginMarker({
-                      latitude: location.position.lat,
-                      longitude: location.position.lng,
-                    })
+                    handleSetOriginMarker(location)
                   }
                 >
                   <Text style={styles.buttonText}>Set Origin</Text>
@@ -261,10 +252,7 @@ const MapComponent = ({
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() =>
-                    handleSetDestinationMarker({
-                      latitude: location.position.lat,
-                      longitude: location.position.lng,
-                    })
+                    handleSetDestinationMarker(location)
                   }
                 >
                   <Text style={styles.buttonText}>Set Destination</Text>

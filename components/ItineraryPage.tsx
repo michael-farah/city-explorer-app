@@ -59,7 +59,7 @@ export default function ItineraryPage({navigation}){
     
       const renderRoute = async () => {
         try {
-          const coordinates = bucketListMemo.map((location) => ({
+          const coordinates = bucketList.map((location) => ({
             latitude: location.position.lat,
             longitude: location.position.lng,
           }));
