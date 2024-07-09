@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, Button, Platform } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -19,12 +19,13 @@ export default function ItineraryPage({navigation}){
     const [origin, setOrigin] = useState<LatLng | null>(null);
     const [destination, setDestination] = useState<LatLng | null>(null);
     const [routeCoordinates, setRouteCoordinates] = useState<LatLng[]>([]);
-    const [originName, setOriginName] = useState<string>("No origin selected yet");
-    const [destinationName, setDestinationName] = useState<string>("No destination selected yet");
+    const [originName, setOriginName] = useState<string>("");
+    const [destinationName, setDestinationName] = useState<string>("");
     const [transport, setTransport] = useState("WALK")
     const { user, cityName, bucketListMemo } = useContext(AppContext);
     const { username } = user;
- 
+    const [places, setPlaces] = useState([])
+
     useEffect(() => {
             const locations = bucketListMemo.map(({location, displayName}) => {
               return {
@@ -32,6 +33,10 @@ export default function ItineraryPage({navigation}){
                 name: displayName.text,
               };
             });
+            const placeDisplayNames = bucketListMemo.map(({location, displayName}) => {
+              return {label: displayName.text, value: {name: displayName.text, position: location}};
+            })
+            setPlaces(placeDisplayNames)
             setBucketList(locations);
             setOrigin(null);
             setDestination(null);
@@ -51,13 +56,33 @@ export default function ItineraryPage({navigation}){
         setTransport(event.value)
     }
 
-      const setOriginMarker = (coordinate: LatLng) => {
-        setOrigin(coordinate);
-      };
-    
-      const setDestinationMarker = (coordinate: LatLng) => {
-        setDestination(coordinate);
-      };
+    const setOriginMarker = (coordinate: LatLng) => {
+      setOrigin(coordinate);
+    };
+
+    const setDestinationMarker = (coordinate: LatLng) => {
+      setDestination(coordinate);
+    };
+
+      const handleStartSelection = (event) => {
+        console.log(event)
+        console.log(event.value)
+        setOriginName(event.value.name)
+        setOriginMarker({
+          latitude: event.value.position.latitude,
+          longitude: event.value.position.longitude,
+        });
+      }
+
+      const handleEndSelection = (event) => {
+        console.log(event.value)
+        setDestinationName(event.value.name)
+        setDestinationMarker({
+          latitude: event.value.position.latitude,
+          longitude: event.value.position.longitude,
+        });
+      }
+
     
       const renderRoute = async () => {
         try {
@@ -101,10 +126,20 @@ export default function ItineraryPage({navigation}){
            <Dropdown style={styles.dropdown} placeholder="Select mode of transport" data={data} labelField="label" valueField="value" value={transport} onChange={handleDropdownChange}/>
         </View>
         <View><Button title="Show me the route" onPress={renderRoute} /></View>
+        {Platform.OS === "web" ?
           <ThemedView style={styles.routePointsContainer}>
             {originName ? <ThemedText style={styles.startPointText}>Start Point: {originName}</ThemedText> : null}
             {destinationName ? <ThemedText style={styles.endPointText}>End Point: {destinationName}</ThemedText> : null}
           </ThemedView>
+        : <View>  
+            <View>
+                <Dropdown style={styles.dropdown} placeholder="Select start point" data={places} labelField="label" valueField="value" value={originName} onChange={handleStartSelection}/>
+            </View>
+            <View>
+                <Dropdown style={styles.dropdown} placeholder="Select end point" data={places} labelField="label" valueField="value" value={destinationName} onChange={handleEndSelection}/>
+            </View>
+        </View>
+        }
           <View style={{ height: 400 }}>
             <MapComponent
               city={cityName}

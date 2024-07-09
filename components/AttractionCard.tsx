@@ -44,7 +44,6 @@ export default function AttractionCard({ navigation, attraction }) {
     }
     if (attraction.photos) {
       getPhoto(attraction.photos[0].name, 1000, 1000).then((response) => {
-console.log(response, 'photo')
         setPhoto(response);
         if (attraction.primaryTypeDisplayName) {
           setAttractionType(attraction.primaryTypeDisplayName.text);
