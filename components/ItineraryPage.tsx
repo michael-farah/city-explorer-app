@@ -18,7 +18,9 @@ export default function ItineraryPage({navigation}){
     const [origin, setOrigin] = useState<LatLng | null>(null);
     const [destination, setDestination] = useState<LatLng | null>(null);
     const [routeCoordinates, setRouteCoordinates] = useState<LatLng[]>([]);
-  
+    const [originName, setOriginName] = useState<string>("No origin selected yet");
+    const [destinationName, setDestinationName] = useState<string>("No destination selected yet");
+
     const { user, cityName, bucketListMemo } = useContext(AppContext);
     const { username } = user;
  
@@ -52,7 +54,7 @@ export default function ItineraryPage({navigation}){
     
       const renderRoute = async () => {
         try {
-          const coordinates = bucketList.map((location) => ({
+          const coordinates = bucketListMemo.map((location) => ({
             latitude: location.position.lat,
             longitude: location.position.lng,
           }));
@@ -95,9 +97,17 @@ export default function ItineraryPage({navigation}){
               destination={destination}
               setOriginMarker={setOriginMarker}
               setDestinationMarker={setDestinationMarker}
+              originName={originName}
+              setOriginName={setOriginName}
+              destinationName={destinationName}
+              setDestinationName={setDestinationName}
             />
           </View>
-          <Button title="Render Route" onPress={renderRoute} />
+          <ThemedView style={styles.routePointsContainer}>
+            {originName ? <ThemedText style={styles.startPointText}>Start Point: {originName}</ThemedText> : null}
+            {destinationName ? <ThemedText style={styles.endPointText}>End Point: {destinationName}</ThemedText> : null}
+          </ThemedView>
+          <Button title="Find Route" onPress={renderRoute} />
         </ParallaxScrollView>
       );
 }
@@ -112,6 +122,18 @@ const styles = StyleSheet.create({
     titleContainer: {
       flexDirection: "row",
       gap: 8,
+    },
+    routePointsContainer: {
+      flexDirection: "row",
+      justifyContent: "center"
+    },
+    startPointText: {
+      flex: 1,
+      borderWidth: 1
+    },
+    endPointText: {
+      flex: 2,
+      borderWidth: 1
     },
   });
   
