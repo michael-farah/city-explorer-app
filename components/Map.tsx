@@ -177,7 +177,7 @@ const MapComponent = ({
                 <InfoWindow onCloseClick={() => setSelectedPlace(null)}>
                   <View style={styles.buttonsAndName}>
                     <View>
-                      <ThemedText type="defaultSemiBold">{location.name}</ThemedText>
+                      <Text>{location.name}</Text>
                       <Text>Current Start Point: {originName}</Text>
                       <Text>Current End Point: {destinationName}</Text>
                     </View>
@@ -227,6 +227,7 @@ const MapComponent = ({
       >
         {locations.map((location, index) => (
           <Marker
+            title={location.name}
             key={index}
             coordinate={{
               latitude: location.position.lat,
@@ -235,27 +236,6 @@ const MapComponent = ({
             identifier={index.toString()}
             onPress={() => onMarkerClick(location)}
           >
-            <Callout>
-              <View>
-                <ThemedText type="defaultSemiBold">{location.name}</ThemedText>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() =>
-                    handleSetOriginMarker(location)
-                  }
-                >
-                  <Text style={styles.buttonText}>Set Origin</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() =>
-                    handleSetDestinationMarker(location)
-                  }
-                >
-                  <Text style={styles.buttonText}>SET AS END</Text>
-                </TouchableOpacity>
-                </View>
-            </Callout>
           </Marker>
         ))}
         {routeCoordinates.length > 0 && (
@@ -271,6 +251,13 @@ const MapComponent = ({
 };
 
 const styles = StyleSheet.create({
+  callout: {
+    flex: 1, 
+    maxHeight: "auto",
+    position: "relative"
+  },
+  calloutText: {
+  },
   container: {
     flex: 1,
     justifyContent: "flex-end",
