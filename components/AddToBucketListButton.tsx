@@ -1,4 +1,4 @@
-import { Button } from "react-native";
+import { Button , StyleSheet} from "react-native";
 import { useContext, useState } from "react";
 import { AppContext } from "@/app/AppContext";
 import { postBucketListItem } from "@/app/api";
@@ -19,10 +19,15 @@ export default function AddToBucketListButton({attraction}){
     const isItemInBucketList = bucketListMemo.map((item)=> item.id).includes(attraction.id)
 
     return (
-        <Button
+        <Button style={styles.button}
             title={isItemInBucketList ? "Added to Bucket List" : isAdding?"Adding to Bucket List":"Add to Bucket List"}
             onPress={() => bucketListClick({attraction})}
             disabled={isItemInBucketList||isAdding?true:false}
         />
     )
 } 
+
+const styles = StyleSheet.create({
+button: {
+}
+})
