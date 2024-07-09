@@ -42,9 +42,9 @@ interface MapComponentProps {
   setOriginMarker: (coordinate: LatLng) => void;
   setDestinationMarker: (coordinate: LatLng) => void;
   originName: string;
-  SetOriginName: (name: string) => void;
+  setOriginName: (name: string) => void;
   destinationName: string;
-  SetDestinationName: (name: string) => void;
+  setDestinationName: (name: string) => void;
 }
 
 const containerStyle = {
@@ -148,7 +148,6 @@ const MapComponent = ({
       latitude: location.position.lat,
       longitude: location.position.lng,
     });
-    Alert.alert("Confirmation", "Origin has been set.");
     setOriginName(location.name)
   };
 
@@ -157,7 +156,6 @@ const MapComponent = ({
       latitude: location.position.lat,
       longitude: location.position.lng,
     });
-    Alert.alert("Confirmation", "Destination has been set.");
     setDestinationName(location.name)
   };
 
@@ -177,7 +175,6 @@ const MapComponent = ({
             >
               {selectedPlace === location && (
                 <InfoWindow onCloseClick={() => setSelectedPlace(null)}>
-
                   <View style={styles.buttonsAndName}>
                     <View>
                       <ThemedText type="defaultSemiBold">{location.name}</ThemedText>
@@ -255,9 +252,9 @@ const MapComponent = ({
                     handleSetDestinationMarker(location)
                   }
                 >
-                  <Text style={styles.buttonText}>Set Destination</Text>
+                  <Text style={styles.buttonText}>SET AS END</Text>
                 </TouchableOpacity>
-              </View>
+                </View>
             </Callout>
           </Marker>
         ))}
