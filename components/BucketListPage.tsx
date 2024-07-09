@@ -21,6 +21,7 @@ export default function BucketListPage({navigation}){
         }
       >
         <ThemedView>
+          <ThemedView style={styles.borderBox}>
           <ThemedView style={styles.top}>
 
           <ThemedText type="title">Bucket List</ThemedText>
@@ -35,17 +36,28 @@ export default function BucketListPage({navigation}){
           {bucketListMemo.length ? <AttractionsList cityName={cityName} attractions={bucketListMemo} navigation={navigation}/> : <Text>No attractions in your bucket list for {cityName}, go to the home page to add some or choose another city!</Text>}
         </Suspense>}
         </ThemedView>
+        </ThemedView>
       </ParallaxScrollView>)
 }
 
 const styles = StyleSheet.create({
     headerImage: {
-      color: "#89CFF0",
+      color: "#D580FF",
       bottom: -90,
       left: -35,
       position: "absolute",
     },
+    borderBox:{
+      borderWidth: 8,
+      borderColor: 	"#D580FF",
+      borderRadius: 15,
+      padding: 2
+    },
+
     top:{
       gap: 30
+    ,
+   
+    padding: "3%"
     }
   });

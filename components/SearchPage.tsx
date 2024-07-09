@@ -125,6 +125,7 @@ export default function SearchPage({ navigation }) {
       }
     >
       <ThemedView style={styles.pageContainer}>
+        <ThemedView style={styles.borderBox}>
         <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <ThemedText type="subtitle">
@@ -173,6 +174,7 @@ export default function SearchPage({ navigation }) {
         />
       )}
         </ThemedView>
+        </ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -185,13 +187,17 @@ const styles = StyleSheet.create({
     left: -35,
     position: "absolute",
   },
+  borderBox: {
+    borderRadius: 30,
+    borderWidth: 8,
+    borderColor: "#89CFF0",
+    padding: 8
+  },
   titleContainer: {
     flexDirection: "column",
     gap: 8,
     padding: "5%",
-    borderRadius: 10,
-    borderWidth: 5,
-    borderColor: "#89CFF0",
+ 
   },
   accessibilityCheckboxContainer: {
     flexDirection: "row"

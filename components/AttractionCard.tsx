@@ -176,12 +176,11 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
     flex: 1,
-    padding: "3%",
-    // backgroundColor: "white",
-    borderRadius: 15,
+    borderRadius: 30,
+    padding: 20,
     gap:10,
-    borderWidth: 5,
-    borderColor: "#89CFF0",
+    borderWidth: 8,
+    borderColor: "#FBAED2"
   },
 
   image: {
