@@ -9,6 +9,7 @@ import { useState } from "react";
 import { ThemedText } from "./ThemedText";
 import AddToBucketListButton from "./AddToBucketListButton";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { ThemedView } from "./ThemedView";
 
 export default function AttractionPage({ route, navigation }) {
   const { attraction } = route.params;
@@ -53,7 +54,7 @@ export default function AttractionPage({ route, navigation }) {
         <Ionicons size={310} name="home" style={styles.headerImage} />
       }
     >
-      <View style={styles.container}>
+      <ThemedView style={styles.container}>
         <View style={styles.mainBlock}>
           <View>
             <ThemedText type="title" style={styles.boldText}>
@@ -66,7 +67,7 @@ export default function AttractionPage({ route, navigation }) {
                 ]}
               >
                 {photo ? (
-                  <Image style={styles.image} source={{ uri: photo }} />
+                  <Image style={styles.image} source={{ uri: photo }} alt={`photo of ${attraction.displayName.text}`} />
                 ) : (
                   <Icon
           
@@ -182,7 +183,7 @@ export default function AttractionPage({ route, navigation }) {
             </View>
           ) : null}
         </View>
-      </View>
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -190,7 +191,6 @@ export default function AttractionPage({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
-    padding: "3%",
     height: "100%",
     minWidth: 310,
   },
@@ -198,7 +198,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   mainBlock: {
-    backgroundColor: "white",
     borderRadius: 10,
     padding: "7%",
   },
@@ -207,7 +206,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   headerImage: {
-    color: "#FF4D4D",
+    color: "#89CFF0",
     bottom: -90,
     left: -35,
     position: "absolute",

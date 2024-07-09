@@ -88,7 +88,8 @@ export default function ItineraryPage({navigation}){
             <Ionicons size={310} name="calendar" style={styles.headerImage} />
           }
         >
-          <View style={styles.overallContainer}>
+        
+          <ThemedView style={styles.overallContainer}>
           <View style={styles.titleContainer}>
             <ThemedText type="title">Itinerary</ThemedText>
           </View>
@@ -118,19 +119,22 @@ export default function ItineraryPage({navigation}){
               setDestinationName={setDestinationName}
             />
           </View>
-          </View>
+      
+          </ThemedView>
+
         </ParallaxScrollView>
       );
 }
 
 const styles = StyleSheet.create({
     headerImage: {
-      color: "#FF4D4D",
+      color: "#89CFF0",
       bottom: -90,
       left: -35,
       position: "absolute",
     },
-    overallContainer: {backgroundColor: "white",
+    overallContainer: {
+      // backgroundColor: "white",
       padding: "5%",
       borderRadius:10,
       gap: 15

@@ -3,6 +3,7 @@ import React from "react";
 import { ThemedText } from "./ThemedText";
 import { useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
+import { ThemedView } from "./ThemedView";
 
 export default function AttractionFilter({ type, setText, setSearchTerm, setType }) {
   const typesList = [
@@ -38,13 +39,13 @@ export default function AttractionFilter({ type, setText, setSearchTerm, setType
 
 
   return (
-    <View>
+    <ThemedView>
       <ThemedText type="subtitle">Attraction Filter</ThemedText>
       <ThemedText type="default">
         Filter your results by type to save time scrolling!
       </ThemedText>
 
-      <View>
+      <ThemedView>
         <Dropdown
           style={styles.dropdown}
           placeholder="Select attraction type"
@@ -54,8 +55,8 @@ export default function AttractionFilter({ type, setText, setSearchTerm, setType
           value={type}
           onChange={handleDropdownChange}
         />
-      </View>
-    </View>
+      </ThemedView>
+    </ThemedView>
   );
 }
 

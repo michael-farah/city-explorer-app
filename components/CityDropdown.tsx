@@ -4,6 +4,8 @@ import { Dropdown } from "react-native-element-dropdown";
 import { StyleSheet } from "react-native";
 import { getCities } from "@/app/api";
 import { AppContext } from "@/app/AppContext";
+import { ThemedView } from "./ThemedView";
+import { ThemedText } from "./ThemedText";
 
 export default function CityDropdown({navigation}){
     const { cityName, setCityName, user, setUser } = useContext(AppContext);
@@ -37,15 +39,15 @@ export default function CityDropdown({navigation}){
     }
 if(isLoading){
     return(
-        <View>
-            <Text>City dropdown is loading...</Text>
-        </View>
+        <ThemedView>
+            <ThemedText>City dropdown is loading...</ThemedText>
+        </ThemedView>
     )
 }
 
-    return (<View>
+    return (<ThemedView>
         <Dropdown style={styles.dropdown} placeholder="Select City" data={citiesList} labelField="label" valueField="value" value={cityName} onChange={handleDropdownChange}/>
-    </View>)
+    </ThemedView>)
 }
 
 const styles = StyleSheet.create({
