@@ -35,6 +35,8 @@ export default function ItineraryPage({navigation}){
             setBucketList(locations);
             setOrigin(null);
             setDestination(null);
+            setOriginName("No origin selected yet");
+            setDestinationName("No destination selected yet");
       }, [cityName, username, bucketListMemo]);
     
       const handleMarkerPress = (coordinate: LatLng) => {
@@ -94,7 +96,7 @@ export default function ItineraryPage({navigation}){
             <ThemedText type="title">Itinerary</ThemedText>
           </View>
           <View>
-          <ThemedText>How to use the itinerary page:{"\n\n"}1. Use the dropdown to choose your city. {"\n\n"}2. See your bucket list places for that city on the map. {"\n\n"}3. Select your preferred start and end points by clicking on the places and selecting 'Set as start' or 'Set as end'.{"\n\n"}4. Hit 'Show me the route' to see your route!{"\n\n"}5. Go and hve fun seeing everything on your bucket list!</ThemedText></View>
+          <ThemedText>How to use the itinerary page:{"\n\n"}1. Use the dropdown to choose your city and see your bucket list places for that city on the map. {"\n\n"}2. Choose "Walking" or "Driving" from the dropdown menu to select your travel mode. {"\n\n"}3. Select your preferred start and end points by clicking on the places and selecting 'Set as start' or 'Set as end'. If you do not complete this a random route from the places you have selected will be provided.{"\n\n"}4. Hit 'Show me the route' to see your route!{"\n\n"}5. Go and have fun seeing everything on your bucket list!</ThemedText></View>
           <View style= {styles.buttons}><CityDropdown navigation={navigation}/> 
            <Dropdown style={styles.dropdown} placeholder="Select mode of transport" data={data} labelField="label" valueField="value" value={transport} onChange={handleDropdownChange}/>
         </View>
@@ -102,7 +104,7 @@ export default function ItineraryPage({navigation}){
           <ThemedView style={styles.routePointsContainer}>
             {originName ? <ThemedText style={styles.startPointText}>Start Point: {originName}</ThemedText> : null}
             {destinationName ? <ThemedText style={styles.endPointText}>End Point: {destinationName}</ThemedText> : null}
-          </ThemedView>    
+          </ThemedView>
           <View style={{ height: 400 }}>
             <MapComponent
               city={cityName}
