@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     borderBox:{
       borderWidth: 8,
       borderColor: 	"#D580FF",
-      borderRadius: 15,
-      padding: 2
+      borderRadius: 30,
+      padding: 8
     },
 
     top:{
