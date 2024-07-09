@@ -149,11 +149,9 @@ const styles = StyleSheet.create({
     },
     startPointText: {
       flex: 1,
-      borderWidth: 1
     },
     endPointText: {
       flex: 2,
-      borderWidth: 1
     },
     buttons: {
       flex: 1,
