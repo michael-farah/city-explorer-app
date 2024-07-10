@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions, Platform } from "react-native";
 import React from "react";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { Ionicons } from "@expo/vector-icons";
@@ -68,13 +68,8 @@ export default function AttractionPage({ route, navigation }) {
               >
                 {photo ? (
                   <Image style={styles.image} source={{ uri: photo }} alt={`photo of ${attraction.displayName.text}`} />
-                ) : (
-                  <Icon
-          
-                    name="photo"
-                    size={"1000%"}
-                    color="#B8E2F2"
-                  />
+                ) : ( 
+                  <Image style={styles.image} source={require=("../../assets/images/icon.png")} alt={`placeholder for attraction image`} />
                 )}
               </View>
               <View style={styles.mainTextBody}>
@@ -104,7 +99,7 @@ export default function AttractionPage({ route, navigation }) {
                           {attraction.nationalPhoneNumber}
                         </ThemedText>
                       </ThemedText>
-                    ) : null}{" "}
+                    ) : null}
                   </View>
                 </View>
                 {attraction.regularOpeningHours ? (
@@ -224,22 +219,29 @@ const styles = StyleSheet.create({
   summaryBlock: {
   },
   addressAndphone: {
-    display: "flex",
-     flexDirection: "row",
-     justifyContent: "space-between",
-     flexWrap: "wrap",
-     gap: 20,
- 
+    ...Platform.select({android: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 20,
+    }, web: {
+      display: "flex",
+       flexDirection: "row",
+       justifyContent: "space-between",
+       flexWrap: "wrap",
+       gap: 20,
+    }}),
    },
    openingHours: {
   },
   accessibility: {
   },
   address: {
-    flex: 1,
-    flexBasis: "auto",
-    flexShrink: 1,
-    flexWrap: "wrap",
+    ...Platform.select({android: {}, web: {
+      flex: 1,
+      flexBasis: "auto",
+      flexShrink: 1,
+      flexWrap: "wrap",
+  }}),
   },
   phone: {
     flex: 1,
@@ -252,24 +254,37 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
   },
   reviewBox: {
-    backgroundColor: "#FFFFF",
-    margin: "3%",
-    marginTop: "5%",
-    borderWidth: 8,
-    borderRadius: 30,
-    padding: "5%",
-    borderColor: "#89CFF0",
+    ...Platform.select({android: {
+      backgroundColor: "#FFFFF",
+      marginTop: "5%",
+      borderWidth: 8,
+      borderRadius: 30,
+      padding: "5%",
+      borderColor: "#89CFF0",      
+    }, web: {
+      backgroundColor: "#FFFFF",
+      margin: "3%",
+      marginTop: 30,
+      borderWidth: 8,
+      borderRadius: 30,
+      padding: "5%",
+      borderColor: "#89CFF0",
+    }}),
   },
-  imageContainer: 
-  { alignSelf: "center",
-  borderRadius: 5,
-  minHeight: 150, 
-  maxWidth: 400,
-  width: "80%",
-  marginVertical: "8%",
-  // borderColor: "yellow",
- 
-
+  imageContainer: { 
+    ...Platform.select({android: {
+      alignSelf: "center",
+      borderRadius: 5,
+      height: 250,
+      marginVertical: "8%",
+    }, web: {
+      alignSelf: "center",
+      borderRadius: 5,
+      minHeight: 150, 
+      maxWidth: 400,
+      width: "80%",
+      marginVertical: 50,
+    }}),
 
 },
   image: {
@@ -287,7 +302,7 @@ const styles = StyleSheet.create({
   websiteAndButton: {
     display: "flex",
     flexDirection: "row",
-    marginTop: "5%",
+    marginTop: 30,
     flexWrap: "wrap",
     justifyContent: "space-around",
     alignItems: "center"
@@ -301,6 +316,6 @@ const styles = StyleSheet.create({
     borderWidth: 5
   },
   review: {
-    marginVertical: "5%",
+    marginVertical: 15,
   },
 });

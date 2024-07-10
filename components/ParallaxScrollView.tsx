@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactElement } from "react";
-import { StyleSheet, useColorScheme, View } from "react-native";
+import { StyleSheet, useColorScheme, View, Platform  } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedRef,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 32,
+    ...Platform.select({android: {padding: 0}, web: {padding: 32}}),
     gap: 16,
     overflow: "hidden",
   },

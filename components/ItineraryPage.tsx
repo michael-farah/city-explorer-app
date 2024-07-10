@@ -40,13 +40,8 @@ export default function ItineraryPage({navigation}){
             setBucketList(locations);
             setOrigin(null);
             setDestination(null);
-            // if(Platform.OS === "web"){
               setOriginName("");
               setDestinationName("");
-            // } else {
-            //   setOriginName(placeDisplayNames[0].label);
-            //   setDestinationName(placeDisplayNames[0].label);
-            // }
       }, [cityName, username, bucketListMemo]);
     
       const handleMarkerPress = (coordinate: LatLng) => {
@@ -118,16 +113,21 @@ export default function ItineraryPage({navigation}){
           }
         >
         
-          <ThemedView style={styles.overallContainer}>
+          <ThemedView style={styles.borderBox}>
+          <View style={styles.androidBorder}>
           <View style={styles.titleContainer}>
             <ThemedText type="title">Itinerary</ThemedText>
           </View>
           <View>
           <ThemedText>How to use the itinerary page:{"\n\n"}1. Use the dropdown to choose your city and see your bucket list places for that city on the map. {"\n\n"}2. Choose "Walking" or "Driving" from the dropdown menu to select your travel mode. {"\n\n"}3. Select your preferred start and end points by clicking on the places and selecting 'Set as start' or 'Set as end'. If you do not complete this a random route from the places you have selected will be provided.{"\n\n"}4. Hit 'Show me the route' to see your route!{"\n\n"}5. Go and have fun seeing everything on your bucket list!</ThemedText></View>
-          <View style= {styles.buttons}><CityDropdown navigation={navigation}/> 
+          <View style= {styles.buttons}>
+            <View style={styles.dropdownContainer}>
+              <CityDropdown navigation={navigation}/> 
+            </View>
+            <View style={styles.dropdownContainer}>
            <Dropdown style={styles.dropdown} placeholder="Select mode of transport" data={data} labelField="label" valueField="value" value={transport} onChange={handleDropdownChange}/>
+           </View>
         </View>
-        <View><Button title="Show me the route" onPress={renderRoute} /></View>
         {Platform.OS === "web" ?
           <ThemedView style={styles.routePointsContainer}>
             {originName ? <ThemedText style={styles.startPointText}>Start Point: {originName}</ThemedText> : null}
@@ -144,6 +144,7 @@ export default function ItineraryPage({navigation}){
             </View>
         </View>
         }
+        <View><Button title="Show me the route" onPress={renderRoute} /></View>
           <View style={{ height: 400 }}>
             <MapComponent
               city={cityName}
@@ -160,7 +161,7 @@ export default function ItineraryPage({navigation}){
               setDestinationName={setDestinationName}
             />
           </View>
-      
+          </View>
           </ThemedView>
 
         </ParallaxScrollView>
@@ -174,12 +175,22 @@ const styles = StyleSheet.create({
       left: -35,
       position: "absolute",
     },
-    overallContainer: {
-      borderWidth: 8,
-      borderColor: "#56bf52",
+    borderBox: {
+      ...Platform.select({android: {}, web: {
+          borderRadius: 30,
+          borderWidth: 8,
+          borderColor: "#56bf52",}}),
       padding: "5%",
-      borderRadius:30,
       gap: 15
+    },
+    androidBorder: {
+      ...Platform.select({android: {
+        padding: 20,
+        borderRadius: 30,
+        borderWidth: 8,
+        borderColor: "#56bf52",
+      }}),
+      gap: 15,
     },
     titleContainer: {
       flex: 1,
@@ -197,27 +208,59 @@ const styles = StyleSheet.create({
       flex: 1
     },
     startEndSetter: {
-      flexDirection: "column",
-      gap: 20
+      ...Platform.select({android: {
+        flexDirection: "column",
+        gap: 10,
+        flexWrap: "wrap"
+      }, web: {
+        flexDirection: "column",
+        gap: 20,
+        flexWrap: "wrap"
+      }}),
     },
     startEndDropdown: {
+      ...Platform.select({android: {
+        flexDirection: "column",
+        gap: 5
+      }, web: {
       flexDirection: "column",
-      gap: 10
+      gap: 20,
+      flexWrap: "wrap",
+    }})
     },
     buttons: {
-      flexDirection: "row", 
-      justifyContent: "space-evenly",
-      flexWrap: "wrap",
-      gap: 20,
+      ...Platform.select({android: {
+        gap: 10,
+      }, web: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        minWidth: 200,
+        gap: 10,
+    }})
     } ,
+    dropdownContainer: {
+      flex: 1,
+      flexWrap: "wrap",
+    },
     dropdown: {
-      backgroundColor: "white",
-      height: 40,
-      width: 250,
-      borderColor: 'gray',
-      borderWidth: 1,
-      borderRadius: 10,
-      padding: 10
+      ...Platform.select({android: {
+        backgroundColor: "white",
+        height: 40,
+        width: 250,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: 10        
+      }, web: {
+          backgroundColor: "white",
+          height: 40,
+          maxWidth: 200,
+          minWidth: 100,
+          borderColor: 'gray',
+          borderWidth: 1,
+          borderRadius: 10,
+          padding: 10
+      }})
     }
   });
   
