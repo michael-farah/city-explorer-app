@@ -266,11 +266,15 @@ const styles = StyleSheet.create({
   minHeight: 150, 
   maxWidth: 400,
   width: "80%",
-  marginVertical: "8%"
+  marginVertical: "8%",
+  // borderColor: "yellow",
+ 
 
 
 },
   image: {
+    borderColor: "#89CFF0",
+    borderWidth: 8,
     width: "100%",
     height: "100%",
     aspectRatio: 1,

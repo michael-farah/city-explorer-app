@@ -180,12 +180,19 @@ const styles = StyleSheet.create({
     gap:10,
     borderWidth: 8,
     borderColor: "#FBAED2"
+    // borderColor: "yellow"
   },
 
   image: {
     width: 200,
     height: 200,
     borderRadius: 100,
+    borderWidth: 4,
+    // borderColor: "#56bf52" //green
+
+    borderColor:"#89CFF0", //blue
+    // borderColor: "#faf7f0" //off white
+    // borderColor: "yellow"
   },
   textBody: {
     display: "flex",
