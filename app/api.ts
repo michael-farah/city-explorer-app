@@ -299,7 +299,7 @@ export const getUser = (username: string) => {
     });
 };
 
-export const postUsers = (username: string, password: string) => {
+export const postUser = (username: string, password: string) => {
   return cityExplorerAPI
     .post(`/users`, {
       username: username,
