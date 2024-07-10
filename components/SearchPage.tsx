@@ -144,6 +144,7 @@ export default function SearchPage({ navigation }) {
             </ThemedText>
 
             <CityDropdown navigation={navigation} />
+            <View style={styles.searchAndFilterContainer}>
             <AttractionSearchByName
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
@@ -153,13 +154,16 @@ export default function SearchPage({ navigation }) {
               text={text}
               setText={setText}
             />
-
             <AttractionFilter
+            setGobbledigook={setGobbledigook}
               type={type}
               setType={setType}
               setText={setText}
               setSearchTerm={setSearchTerm}
             />
+            </View>   
+             {gobbledigook ?
+         <ThemedText>Sorry, we can't find a place matching that search, please try something else.</ThemedText>: null}
             <View style={styles.accessibilityCheckboxContainer}>
               <CheckBox
                 value={accessibleOnly}
@@ -215,7 +219,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: "column",
-    gap: 8,
+    gap: 8
   },
   accessibilityCheckboxContainer: {
     flexDirection: "row",
@@ -229,4 +233,10 @@ const styles = StyleSheet.create({
   attractionsListLoading: {
     padding: 20,
   },
+  searchAndFilterContainer: {
+    flexDirection: "row",
+    gap: 20,
+    flexWrap: "wrap",
+    marginTop: 10
+  }
 });

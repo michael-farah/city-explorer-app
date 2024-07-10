@@ -61,17 +61,15 @@ export default function AttractionPage({ route, navigation }) {
               {attraction.displayName.text}
             </ThemedText>
             <View style={styles.imageAndText}>
-              <View
-                style={[
+            
+                {photo ? (<View style={
                   styles.imageContainer
-                ]}
-              >
-                {photo ? (
+                }>
                   <Image style={styles.image} source={{ uri: photo }} alt={`photo of ${attraction.displayName.text}`} />
-                ) : ( 
-                  <Image style={styles.image} source={require=("../../assets/images/icon.png")} alt={`placeholder for attraction image`} />
-                )}
-              </View>
+                </View>) : ( <View style= {styles.altImageContainer}> 
+                  <Image style={styles.altImage} source={require=("../../assets/images/image-outline.svg")} alt={`placeholder for attraction image`} />
+                  </View>)}
+              {/* </View> */}
               <View style={styles.mainTextBody}>
                     {attraction.editorialSummary &&
                     attraction.editorialSummary.text
@@ -285,7 +283,20 @@ const styles = StyleSheet.create({
       width: "80%",
       marginVertical: 50,
     }}),
-
+},
+altImageContainer: {
+  ...Platform.select({android: {
+    alignSelf: "center",
+    borderRadius: 5,
+    height: 250,
+    marginVertical: "8%",
+  }, web:{
+    alignSelf: "center",
+    minHeight: 150, 
+    maxWidth: 300,
+    width: "80%",
+    marginVertical: 10,
+  }})
 },
   image: {
     borderColor: "#89CFF0",
@@ -293,7 +304,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     aspectRatio: 1,
-    borderRadius: 5,
+    borderRadius: 5
+  },
+  altImage: {
+    width: "100%",
+    height: "100%",
+    aspectRatio: 1,
   },
   user: {
     fontWeight: "bold",

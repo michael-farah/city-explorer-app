@@ -27,40 +27,41 @@ if(gobbledigook){
 }, [gobbledigook])
 
   return (
-    <ThemedView>
-        <View style={styles.intro}>
-        <View style = {styles.question}>
-        <ThemedText type="defaultSemiBold" >Not sure where to start?</ThemedText><ThemedText type="default">Leave the search box below blank for a surprise list of popular attractions in your chosen city.
-        </ThemedText></View>
-<View style = {styles.question}><ThemedText type="defaultSemiBold">OR...already know where you're going?</ThemedText>
+    <ThemedView style={styles.overallContainer}>
+<View style = {styles.question}><ThemedText type="subtitle">Already know where you're going?</ThemedText> </View>
+<View>
 <ThemedText type="default">Search for it below and hit enter!
         </ThemedText>
         </View>
-        </View>
+     
         
       <TextInput style={styles.input} onChangeText= {(value)=>setText(value)} onSubmitEditing={(value)=> setSearchTerm(value.nativeEvent.text)} value={text} placeholder="Search here..."/>
-      <View>
-        {gobbledigook ? (<ThemedText>Sorry, we can't find a place matching that search, please try something else.</ThemedText>): null}
-      </View>
+      {/* {gobbledigook ?
+         <ThemedText>Sorry, we can't find a place matching that search, please try something else.</ThemedText>: null} */}
+      
 
     </ThemedView>
   )
 }
 
 const styles = StyleSheet.create(
-  {input: {
+  {
+    overallContainer: {flex: 1,
+      flexWrap: "wrap",
+      gap: 10,
+      justifyContent: "space-between",
+      minWidth: 200
+    },
+    input: {
     borderColor: "gray",
     backgroundColor: "white",
-    width: "100%",
+    maxWidth: 400,
+    minWidth: 100,
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
-    marginVertical: 10
   },
-  intro:{
-    flex: 1
-  }, 
   question:{
-    marginVertical: 10
+    flexWrap: "wrap"
   }
 })

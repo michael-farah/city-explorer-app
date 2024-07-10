@@ -19,7 +19,7 @@ const getRoutesHeaders = {
   "Content-Type": "application/json",
   "X-Goog-Api-Key": googleMapsApiKey,
   "X-Goog-FieldMask":
-    "routes.polyline.encodedPolyline,routes.optimizedIntermediateWaypointIndex",
+    "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.optimizedIntermediateWaypointIndex"
 };
 
 const getAttractionsHeaders = {
@@ -256,7 +256,6 @@ export const getRoutes = (
         },
         intermediates: intermediateWaypoints,
         travelMode: transport,
-        // routingPreference: "TRAFFIC_UNAWARE",
         optimizeWaypointOrder: true,
       },
       { headers: getRoutesHeaders },

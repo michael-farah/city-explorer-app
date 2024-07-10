@@ -28,6 +28,10 @@ export default function ItineraryPage({ navigation }) {
   const { username } = user;
   const [places, setPlaces] = useState([]);
 
+  const [travelTime, setTravelTime] = useState(0)
+  const [distance, setDistance] = useState(0)
+
+
   useEffect(() => {
     const locations = bucketListMemo.map(({ location, displayName }) => {
       return {
@@ -42,6 +46,8 @@ export default function ItineraryPage({ navigation }) {
           value: { name: displayName.text, position: location },
         };
       },
+
+
     );
     setPlaces(placeDisplayNames);
     setBucketList(locations);
@@ -61,7 +67,7 @@ export default function ItineraryPage({ navigation }) {
 
   const handleDropdownChange = (event) => {
     setTransport(event.value);
-  };
+  };   
 
   const setOriginMarker = (coordinate: LatLng) => {
     setOrigin(coordinate);
@@ -101,8 +107,15 @@ export default function ItineraryPage({ navigation }) {
       const end = rest.pop();
 
       const route = await getRoutes(start, end, rest, transport);
+      console.log(route, "route")
+      setDistance((route.routes[0].distanceMeters/1000).toFixed(1))
+      setTravelTime(()=>{
+        const timeInSec = route.routes[0].duration.substring(0,route.routes[0].duration.length-1)
+        const timeInMin = timeInSec / 60
+      return timeInMin.toFixed(0)})
+      console.log(distance)
       const decodedCoordinates = decodeRoutesPolyline(
-        route.routes[0].polyline.encodedPolyline,
+        route.routes[0].polyline.encodedPolyline
       );
       setRouteCoordinates(decodedCoordinates);
     } catch (error) {
@@ -114,11 +127,10 @@ export default function ItineraryPage({ navigation }) {
     { label: "Walking", value: "WALK" },
     { label: "Driving", value: "DRIVE" },
   ];
-
-  if (!user.username) {
+  
+    if (!user.username) {
     return <LoginForm />;
   }
-
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
@@ -126,7 +138,7 @@ export default function ItineraryPage({ navigation }) {
         <Ionicons size={310} name="calendar" style={styles.headerImage} />
       }
     >
-      <ThemedView style={styles.borderBox}>
+       <ThemedView style={styles.borderBox}>
         <Account />
       </ThemedView>
 
@@ -142,17 +154,19 @@ export default function ItineraryPage({ navigation }) {
               the map. {"\n\n"}2. Choose "Walking" or "Driving" from the
               dropdown menu to select your travel mode. {"\n\n"}3. Select your
               preferred start and end points by clicking on the places and
-              selecting 'Set as start' or 'Set as end'. If you do not complete
-              this a random route from the places you have selected will be
-              provided.{"\n\n"}4. Hit 'Show me the route' to see your route!
-              {"\n\n"}5. Go and have fun seeing everything on your bucket list!
+              selecting 'Set as start' or 'Set as end'. If you do not select
+              these, a random route will be suggested.{"\n\n"}4. Hit 'Show me
+              the route' to see your route.{"\n\n"}5. Go and have fun seeing
+              everything on your bucket list!
             </ThemedText>
           </View>
           <View style={styles.buttons}>
             <View style={styles.dropdownContainer}>
+              <ThemedText type="defaultSemiBold">City:</ThemedText>
               <CityDropdown navigation={navigation} />
             </View>
             <View style={styles.dropdownContainer}>
+              <ThemedText type="defaultSemiBold">Mode of transport:</ThemedText>
               <Dropdown
                 style={styles.dropdown}
                 placeholder="Select mode of transport"
@@ -162,6 +176,9 @@ export default function ItineraryPage({ navigation }) {
                 value={transport}
                 onChange={handleDropdownChange}
               />
+            </View>
+            <View style={styles.button}>
+              <Button title="Show me the route!" onPress={renderRoute} />
             </View>
           </View>
           {Platform.OS === "web" ? (
@@ -229,6 +246,10 @@ export default function ItineraryPage({ navigation }) {
               destinationName={destinationName}
               setDestinationName={setDestinationName}
             />
+          </View>
+          <View style={styles.calculations}>
+          <View style={styles.calc}> <ThemedText>Total distance: {distance} km </ThemedText></View>
+          <View style={styles.calc}> <ThemedText>Estimated travel time: {travelTime} min</ThemedText></View>
           </View>
         </View>
       </ThemedView>
@@ -317,13 +338,29 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         minWidth: 200,
-        gap: 10,
+        gap: 20,
       },
     }),
+  },
+  button: {
+    ...Platform.select({
+      android: {
+        alignItems: "center",
+      },
+      web: {
+        alignItems: "flex-start",
+        flex: 1,
+        minWidth: 200
+      },
+    }),
+    justifyContent: "flex-end",
   },
   dropdownContainer: {
     flex: 1,
     flexWrap: "wrap",
+    gap: 7.5,
+    justifyContent: "space-between",
+    minWidth: 200,
   },
   dropdown: {
     ...Platform.select({
@@ -348,4 +385,12 @@ const styles = StyleSheet.create({
       },
     }),
   },
+
+  calculations: {
+    flexDirection: "row",
+    gap: 10
+  }, 
+  calc: {flex: 1,
+
+  }
 });
