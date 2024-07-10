@@ -16,6 +16,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     setIsBucketListLoading(true);
     let isMounted = true;
+    if(user.username){
     getBucketListItemsByUser(user.username, cityName)
       .then(({ bucketList }) => {
         if (isMounted) {
@@ -38,6 +39,7 @@ export const AppProvider = ({ children }) => {
       .finally(() => {
         setIsBucketListLoading(false);
       });
+    }
     return () => {
       isMounted = false;
     };

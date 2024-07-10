@@ -108,7 +108,6 @@ export default function ItineraryPage({ navigation }) {
       const end = rest.pop();
 
       const route = await getRoutes(start, end, rest, transport);
-      console.log(route, "route")
       setDistance((route.routes[0].distanceMeters/1000).toFixed(1))
       setTravelTime(()=>{
         const timeInSec = route.routes[0].duration.substring(0,route.routes[0].duration.length-1)
@@ -177,9 +176,9 @@ export default function ItineraryPage({ navigation }) {
                 onChange={handleDropdownChange}
               />
             </View>
-            <View style={styles.button}>
+            {/* <View style={styles.button}>
               <Button title="Show me the route!" onPress={renderRoute} />
-            </View>
+            </View> */}
           </View>
           {Platform.OS === "web" ? (
             <ThemedView style={styles.routePointsContainer}>
@@ -248,8 +247,8 @@ export default function ItineraryPage({ navigation }) {
             />
           </View>
           <View style={styles.calculations}>
-          <View style={styles.calc}> <ThemedText>Total distance: {distance} km </ThemedText></View>
-          <View style={styles.calc}> <ThemedText>Estimated travel time: {travelTime} min</ThemedText></View>
+          <View style={styles.calc}><ThemedText>Total distance: {distance} km </ThemedText></View>
+          <View style={styles.calc}><ThemedText>Estimated travel time: {travelTime} min</ThemedText></View>
           </View>
         </View>
       </ThemedView>
