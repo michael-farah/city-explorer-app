@@ -12,6 +12,7 @@ import {
 import { AppContext } from "@/app/AppContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { getUsers, postUser } from "@/app/api";
+
 const LoginForm = () => {
   const { setUser } = useContext(AppContext);
   const [isLogin, setIsLogin] = useState(true);
@@ -19,13 +20,16 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [userError, setUserError] = useState("");
+
   function login(username, password) {
     getUsers()
       .then(({ users }) => {
         console.log(users);
         const user = users.find((user) => user.username === username);
-        console.log(user)
+
+
         if (user.password === password) {
+
           setUser(user);
         } else {
           setUserError("Incorrect username or password");
@@ -36,6 +40,7 @@ const LoginForm = () => {
         throw err;
       });
   }
+
   function register(username, password) {
     if (username && password) {
       getUsers()
@@ -62,6 +67,7 @@ const LoginForm = () => {
       register(username, password);
     }
   };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -93,6 +99,7 @@ const LoginForm = () => {
           </TouchableOpacity>
         </View>
         <Button title={isLogin ? "Login" : "Register"} onPress={handleSubmit} />
+
         {isLogin ? <View>
           <Text style={styles.switchText} onPress={() => setIsLogin(false)}>
             New to City Explorer? Register
@@ -111,6 +118,7 @@ const LoginForm = () => {
     </KeyboardAvoidingView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -150,7 +158,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   switchText: {
+
     color: "#007BFF",
+
     textAlign: "center",
     marginTop: 12,
   },
@@ -161,3 +171,5 @@ const styles = StyleSheet.create({
   },
 });
 export default LoginForm
+
+

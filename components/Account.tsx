@@ -4,6 +4,7 @@ import { Button } from "react-native";
 import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
 import { StyleSheet } from "react-native";
+
 export default function Account() {
   const { setUser, user } = useContext(AppContext);
   if (!user.username) {
@@ -14,6 +15,7 @@ export default function Account() {
       <ThemedText style={styles.text} type="title">
         {user.username}
       </ThemedText>
+
       <Button
         title="Logout"
         onPress={() => {
@@ -23,6 +25,7 @@ export default function Account() {
     </ThemedView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     gap: 10,
@@ -35,7 +38,9 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "bold",
   },
+
 });
+
 
 
 

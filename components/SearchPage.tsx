@@ -69,7 +69,7 @@ export default function SearchPage({ navigation }) {
             getAttractions(
               response.city.city_longitude,
               response.city.city_latitude,
-              response.city.city_radius
+              response.city.city_radius,
             )
               .then((response) => {
                 setAttractionsListIsLoading(false);
@@ -83,7 +83,7 @@ export default function SearchPage({ navigation }) {
               response.city.city_longitude,
               response.city.city_latitude,
               response.city.city_radius,
-              [type]
+              [type],
             )
               .then((response) => {
                 setAttractionsListIsLoading(false);
@@ -212,13 +212,14 @@ const styles = StyleSheet.create({
       web: {
         borderRadius: 30,
         borderWidth: 8,
-        borderColor: "#89CFF0",}}),
+        borderColor: "#89CFF0",
+      },
+    }),
     padding: "5%",
   },
   titleContainer: {
     flexDirection: "column",
     gap: 8
-   
   },
   accessibilityCheckboxContainer: {
     flexDirection: "row",
