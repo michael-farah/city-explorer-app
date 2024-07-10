@@ -25,6 +25,8 @@ export default function ItineraryPage({ navigation }) {
   const { user, cityName, bucketListMemo } = useContext(AppContext);
   const { username } = user;
   const [places, setPlaces] = useState([]);
+  const [travelTime, setTravelTime] = useState(0)
+  const [distance, setDistance] = useState(0)
 
   useEffect(() => {
     const locations = bucketListMemo.map(({ location, displayName }) => {
@@ -99,6 +101,13 @@ export default function ItineraryPage({ navigation }) {
       const end = rest.pop();
 
       const route = await getRoutes(start, end, rest, transport);
+      console.log(route, "route")
+      setDistance((route.routes[0].distanceMeters/1000).toFixed(1))
+      setTravelTime(()=>{
+        const timeInSec = route.routes[0].duration.substring(0,route.routes[0].duration.length-1)
+        const timeInMin = timeInSec / 60
+      return timeInMin.toFixed(0)})
+      console.log(distance)
       const decodedCoordinates = decodeRoutesPolyline(
         route.routes[0].polyline.encodedPolyline
       );
@@ -220,6 +229,10 @@ export default function ItineraryPage({ navigation }) {
               destinationName={destinationName}
               setDestinationName={setDestinationName}
             />
+          </View>
+          <View style={styles.calculations}>
+          <View style={styles.calc}> <ThemedText>Total distance: {distance} km </ThemedText></View>
+          <View style={styles.calc}> <ThemedText>Estimated travel time: {travelTime} min</ThemedText></View>
           </View>
         </View>
       </ThemedView>
@@ -355,4 +368,11 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  calculations: {
+    flexDirection: "row",
+    gap: 10
+  }, 
+  calc: {flex: 1,
+
+  }
 });
