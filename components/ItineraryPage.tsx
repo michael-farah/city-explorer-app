@@ -13,6 +13,8 @@ import { decodeRoutesPolyline } from "@/utils/decoder";
 import { LatLng } from "react-native-maps";
 import { Dropdown } from "react-native-element-dropdown";
 import CityDropdown from "./CityDropdown";
+import LoginForm from "./LoginForm";
+import Account from "./Account";
 
 export default function ItineraryPage({ navigation }) {
   const [bucketList, setBucketList] = useState<Location[]>([]);
@@ -27,6 +29,7 @@ export default function ItineraryPage({ navigation }) {
   const [places, setPlaces] = useState([]);
   const [travelTime, setTravelTime] = useState(0)
   const [distance, setDistance] = useState(0)
+  const [travelInstructions, setTravelInstructions] =useState()
 
   useEffect(() => {
     const locations = bucketListMemo.map(({ location, displayName }) => {
@@ -107,7 +110,6 @@ export default function ItineraryPage({ navigation }) {
         const timeInSec = route.routes[0].duration.substring(0,route.routes[0].duration.length-1)
         const timeInMin = timeInSec / 60
       return timeInMin.toFixed(0)})
-      console.log(distance)
       const decodedCoordinates = decodeRoutesPolyline(
         route.routes[0].polyline.encodedPolyline
       );
@@ -121,6 +123,10 @@ export default function ItineraryPage({ navigation }) {
     { label: "Walking", value: "WALK" },
     { label: "Driving", value: "DRIVE" },
   ];
+
+  if (!user.username) {
+    return <LoginForm />;
+  }
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
@@ -128,6 +134,9 @@ export default function ItineraryPage({ navigation }) {
         <Ionicons size={310} name="calendar" style={styles.headerImage} />
       }
     >
+       <ThemedView style={styles.borderBox}>
+        <Account />
+      </ThemedView>
       <ThemedView style={styles.borderBox}>
         <View style={styles.androidBorder}>
           <View style={styles.titleContainer}>

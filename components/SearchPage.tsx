@@ -20,9 +20,11 @@ import { checkIfConfigIsValid } from "react-native-reanimated/lib/typescript/rea
 import AttractionSearchByName from "./AttractionSearchByName";
 import AttractionFilter from "./AttractionFilter";
 import { getSearchPlaces } from "@/app/api";
+import LoginForm from "./LoginForm";
+import Account from "./Account";
 
 export default function SearchPage({ navigation }) {
-  const { cityName, setCityName } = useContext(AppContext);
+  const { cityName, setCityName, user } = useContext(AppContext);
   const [gobbledigook, setGobbledigook] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [attractions, setAttractions] = useState([]);
@@ -118,6 +120,10 @@ export default function SearchPage({ navigation }) {
     }
   }, [searchTerm]);
 
+  if (!user.username) {
+    return <LoginForm />;
+  }
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
@@ -125,6 +131,9 @@ export default function SearchPage({ navigation }) {
         <Ionicons size={310} name="home" style={styles.headerImage} />
       }
     >
+      <ThemedView style={styles.borderBox}>
+        <Account />
+      </ThemedView>
       <View style={styles.pageContainer}>
         <ThemedView style={styles.borderBox}>
           <View style={styles.titleContainer}>

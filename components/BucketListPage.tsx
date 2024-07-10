@@ -8,10 +8,16 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AppContext } from "@/app/AppContext";
+import LoginForm from "./LoginForm";
+import Account from "./Account";
 
 export default function BucketListPage({navigation}){
     const { user, cityName, bucketListMemo, isBucketListLoading } = useContext(AppContext)
     const { username } = user;
+
+    if (!user.username) {
+      return <LoginForm />;
+    }
 
     return (
         <ParallaxScrollView
@@ -20,6 +26,9 @@ export default function BucketListPage({navigation}){
           <Ionicons size={310} name="star" style={styles.headerImage} />
         }
       >
+         <ThemedView style={styles.borderBox}>
+        <Account />
+      </ThemedView>
         <View >
           <ThemedView style={styles.borderBox}>
           <ThemedView style={styles.top}>

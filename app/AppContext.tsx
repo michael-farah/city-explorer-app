@@ -5,8 +5,8 @@ export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [user, setUser] = useState({
-    username: "madexplorer",
-    password: "myPassword",
+    // username: "madexplorer",
+    // password: "myPassword",
   })
   const [cityName, setCityName] = useState("London")
   const [bucketListAttractions, setBucketListAttractions] = useState([])
