@@ -8,7 +8,7 @@ import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
 
 export default function CityDropdown({navigation}){
-    const { cityName, setCityName, user, setUser } = useContext(AppContext);
+    const { cityName, setCityName, user, setUser, bucketListMemo } = useContext(AppContext);
 
     const [citiesList, setCitiesList] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -33,7 +33,7 @@ export default function CityDropdown({navigation}){
                 setCitiesList(data)
             }).catch((err)=>{console.log(err)})
         }
-    }, [user])
+    }, [user, bucketListMemo])
     const handleDropdownChange = (event) => {
         setCityName(event.value)
     }

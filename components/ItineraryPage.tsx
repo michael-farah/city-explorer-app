@@ -30,6 +30,7 @@ export default function ItineraryPage({ navigation }) {
 
   const [travelTime, setTravelTime] = useState(0)
   const [distance, setDistance] = useState(0)
+  const [travelInstructions, setTravelInstructions] =useState()
 
 
   useEffect(() => {
@@ -113,7 +114,6 @@ export default function ItineraryPage({ navigation }) {
         const timeInSec = route.routes[0].duration.substring(0,route.routes[0].duration.length-1)
         const timeInMin = timeInSec / 60
       return timeInMin.toFixed(0)})
-      console.log(distance)
       const decodedCoordinates = decodeRoutesPolyline(
         route.routes[0].polyline.encodedPolyline
       );
@@ -127,8 +127,8 @@ export default function ItineraryPage({ navigation }) {
     { label: "Walking", value: "WALK" },
     { label: "Driving", value: "DRIVE" },
   ];
-  
-    if (!user.username) {
+
+  if (!user.username) {
     return <LoginForm />;
   }
   return (

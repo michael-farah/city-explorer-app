@@ -26,7 +26,10 @@ const LoginForm = () => {
       .then(({ users }) => {
         console.log(users);
         const user = users.find((user) => user.username === username);
-        if (user && user.password === password) {
+
+
+        if (user.password === password) {
+
           setUser(user);
         } else {
           setUserError("Incorrect username or password");
@@ -96,18 +99,21 @@ const LoginForm = () => {
           </TouchableOpacity>
         </View>
         <Button title={isLogin ? "Login" : "Register"} onPress={handleSubmit} />
-        {isLogin ? (
+
+        {isLogin ? <View>
           <Text style={styles.switchText} onPress={() => setIsLogin(false)}>
             New to City Explorer? Register
           </Text>
-        ) : (
+          </View> : <View>
           <Text style={styles.switchText} onPress={() => setIsLogin(true)}>
             Already have an account? Login
           </Text>
-        )}
-        {userError.length > 0 ? (
+          </View>
+        }
+        {userError.length > 0 ?<View>
           <Text style={styles.errorText}>{userError}</Text>
-        ) : null}
+          </View>
+         : null}
       </View>
     </KeyboardAvoidingView>
   );
@@ -152,7 +158,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   switchText: {
-    color: "#007bff",
+
+    color: "#007BFF",
+
     textAlign: "center",
     marginTop: 12,
   },
@@ -162,5 +170,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
+export default LoginForm
 
-export default LoginForm;
+

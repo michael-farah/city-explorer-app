@@ -18,8 +18,8 @@ const googleRoutesAPI = axios.create({
 const getRoutesHeaders = {
   "Content-Type": "application/json",
   "X-Goog-Api-Key": googleMapsApiKey,
-  "X-Goog-FieldMask":
-    "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.optimizedIntermediateWaypointIndex"
+  "X-Goog-FieldMask": 
+    "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.optimizedIntermediateWaypointIndex,routes.legs.steps.navigationInstruction"
 };
 
 const getAttractionsHeaders = {
@@ -280,43 +280,51 @@ export const getSearchPlaces = (rectangle, text) => {
         },
         maxResultCount: 20,
       },
-      { headers: getAttractionsHeaders },
-    )
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
-};
+    }, {headers: getAttractionsHeaders}
+  )
+  .catch((err) => {
+    console.error(err)
+    throw err
+  })
+  }
 
-export const getUser = (username: string) => {
-  return cityExplorerAPI
-    .get(`/users/${username}`)
-    .then((response) => response.data)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
-};
-
-export const postUser = (username: string, password: string) => {
-  return cityExplorerAPI
-    .post(`/users`, {
-      username: username,
-      password: password,
-    })
-    .then((response) => response.data)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
-};
-
-export const getUsers = () => {
-  return cityExplorerAPI
-    .get("/users")
-    .then((response) => response.data)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
-};
+  export const getUser = (username: string) => {
+    return cityExplorerAPI
+      .get(`/users/${username}`)
+      .then((response) => response.data)
+      .catch((err) => {
+        console.error(err);
+        throw err;
+      });
+  };
+  export const postUser = (username: string, password: string) => {
+    return cityExplorerAPI
+      .post(`/users`, {
+        username: username,
+        password: password,
+      })
+      .then((response) => response.data)
+      .catch((err) => {
+        console.error(err);
+        throw err;
+      });
+  };
+  export const getUsers = () => {
+    return cityExplorerAPI
+      .get("/users")
+      .then((response) => response.data)
+      .catch((err) => {
+        console.error(err);
+        throw err;
+      });
+  };
+  
+  
+  
+  
+  
+  
+  
+  
+  
+ 

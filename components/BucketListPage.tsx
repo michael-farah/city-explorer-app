@@ -15,21 +15,24 @@ export default function BucketListPage({ navigation }) {
     useContext(AppContext);
   const { username } = user;
 
-  if (!username) {
-    return <LoginForm />;
-  }
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
-      headerImage={
-        <Ionicons size={310} name="star" style={styles.headerImage} />
-      }
-    >
-      <ThemedView style={styles.borderBox}>
+
+    if (!user.username) {
+      return <LoginForm />;
+    }
+
+    return (
+        <ParallaxScrollView
+        headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
+        headerImage={
+          <Ionicons size={310} name="star" style={styles.headerImage} />
+        }
+      >
+         <ThemedView style={styles.borderBox}>
         <Account />
       </ThemedView>
-      <View>
-        <ThemedView style={styles.borderBox}>
+        <View >
+          <ThemedView style={styles.borderBox}>
+
           <ThemedView style={styles.top}>
             <ThemedText type="title">Bucket List</ThemedText>
             <ThemedText>

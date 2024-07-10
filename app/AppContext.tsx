@@ -4,11 +4,17 @@ import { getBucketListItemsByUser } from "@/app/api";
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [user, setUser] = useState({});
-  const [cityName, setCityName] = useState("London");
-  const [bucketListAttractions, setBucketListAttractions] = useState([]);
-  const [isBucketListLoading, setIsBucketListLoading] = useState(false);
-  const [loginOpen, setLoginOpen] = useState(false);
+
+  const [user, setUser] = useState({
+    // username: "madexplorer",
+    // password: "myPassword",
+  })
+  const [cityName, setCityName] = useState("London")
+  const [bucketListAttractions, setBucketListAttractions] = useState([])
+  const [isBucketListLoading, setIsBucketListLoading] = useState(false)
+
+<!--   const [loginOpen, setLoginOpen] = useState(false); -->
+
 
   useEffect(() => {
     setIsBucketListLoading(true);
