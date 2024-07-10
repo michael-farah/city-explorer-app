@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { ThemedView } from "./ThemedView";
 
-export default function AttractionFilter({ type, setText, setSearchTerm, setType }) {
+export default function AttractionFilter({ setGobbledigook, type, setText, setSearchTerm, setType }) {
   const typesList = [
     { label: "All", value: "All" },
     { label: "Museums", value: "museum" },
@@ -35,14 +35,15 @@ export default function AttractionFilter({ type, setText, setSearchTerm, setType
     setType(event.value);
     setText("")
     setSearchTerm("")
+    setGobbledigook(false)
   };
 
 
   return (
-    <ThemedView>
-      <ThemedText type="subtitle">Attraction Filter</ThemedText>
+    <ThemedView style= {styles.overallContainer}>
+      <ThemedText type="subtitle">OR.. not sure where to start?</ThemedText>
       <ThemedText type="default">
-        Filter your results by type to save time scrolling!
+   Search by attraction type using the dropdown below.
       </ThemedText>
 
       <ThemedView>
@@ -61,14 +62,21 @@ export default function AttractionFilter({ type, setText, setSearchTerm, setType
 }
 
 const styles = StyleSheet.create({
+  overallContainer: {
+    flex: 1,
+    gap: 10,
+    justifyContent: "space-between",
+    minWidth: 200
+  },
   dropdown: {
     backgroundColor: "white",
     height: 40,
-    width: 200,
+    maxWidth: 200,
+    minWidth: 100,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
-    marginTop: 20
+    // marginTop: 20
 }
 });
