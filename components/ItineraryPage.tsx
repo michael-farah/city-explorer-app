@@ -40,8 +40,13 @@ export default function ItineraryPage({navigation}){
             setBucketList(locations);
             setOrigin(null);
             setDestination(null);
-            setOriginName("No origin selected yet");
-            setDestinationName("No destination selected yet");
+            // if(Platform.OS === "web"){
+              setOriginName("");
+              setDestinationName("");
+            // } else {
+            //   setOriginName(placeDisplayNames[0].label);
+            //   setDestinationName(placeDisplayNames[0].label);
+            // }
       }, [cityName, username, bucketListMemo]);
     
       const handleMarkerPress = (coordinate: LatLng) => {
@@ -65,8 +70,6 @@ export default function ItineraryPage({navigation}){
     };
 
       const handleStartSelection = (event) => {
-        console.log(event)
-        console.log(event.value)
         setOriginName(event.value.name)
         setOriginMarker({
           latitude: event.value.position.latitude,
@@ -75,7 +78,6 @@ export default function ItineraryPage({navigation}){
       }
 
       const handleEndSelection = (event) => {
-        console.log(event.value)
         setDestinationName(event.value.name)
         setDestinationMarker({
           latitude: event.value.position.latitude,
@@ -131,12 +133,14 @@ export default function ItineraryPage({navigation}){
             {originName ? <ThemedText style={styles.startPointText}>Start Point: {originName}</ThemedText> : null}
             {destinationName ? <ThemedText style={styles.endPointText}>End Point: {destinationName}</ThemedText> : null}
           </ThemedView>
-        : <View>  
-            <View>
-                <Dropdown style={styles.dropdown} placeholder="Select start point" data={places} labelField="label" valueField="value" value={originName} onChange={handleStartSelection}/>
+        : <View style={styles.startEndSetter}>  
+            <View style={styles.startEndDropdown}>
+                <ThemedText>Route Start:</ThemedText>
+                <Dropdown style={styles.dropdown} placeholder={originName.length ? originName : "Select start point"} data={places} labelField="label" valueField="value" value={originName} onChange={handleStartSelection}/>
             </View>
-            <View>
-                <Dropdown style={styles.dropdown} placeholder="Select end point" data={places} labelField="label" valueField="value" value={destinationName} onChange={handleEndSelection}/>
+            <View style={styles.startEndDropdown}>
+                <ThemedText>Route End:</ThemedText>
+                <Dropdown style={styles.dropdown} placeholder={destinationName.length ? destinationName : "Select end point"} data={places} labelField="label" valueField="value" value={destinationName} onChange={handleEndSelection}/>
             </View>
         </View>
         }
@@ -191,6 +195,14 @@ const styles = StyleSheet.create({
     },
     endPointText: {
       flex: 1
+    },
+    startEndSetter: {
+      flexDirection: "column",
+      gap: 20
+    },
+    startEndDropdown: {
+      flexDirection: "column",
+      gap: 10
     },
     buttons: {
       flexDirection: "row", 
