@@ -280,7 +280,7 @@ export const getSearchPlaces = (rectangle, text) => {
         },
         maxResultCount: 20,
       },
-    }, {headers: getAttractionsHeaders}
+    {headers: getAttractionsHeaders}
   )
   .catch((err) => {
     console.error(err)

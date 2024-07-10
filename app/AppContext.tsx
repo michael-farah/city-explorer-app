@@ -13,9 +13,6 @@ export const AppProvider = ({ children }) => {
   const [bucketListAttractions, setBucketListAttractions] = useState([])
   const [isBucketListLoading, setIsBucketListLoading] = useState(false)
 
-<!--   const [loginOpen, setLoginOpen] = useState(false); -->
-
-
   useEffect(() => {
     setIsBucketListLoading(true);
     let isMounted = true;
@@ -61,9 +58,7 @@ export const AppProvider = ({ children }) => {
         bucketListAttractions,
         setBucketListAttractions,
         bucketListMemo,
-        isBucketListLoading,
-        loginOpen,
-        setLoginOpen,
+        isBucketListLoading
       }}
     >
       {children}
