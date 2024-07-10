@@ -19,7 +19,7 @@ const getRoutesHeaders = {
   "Content-Type": "application/json",
   "X-Goog-Api-Key": googleMapsApiKey,
   "X-Goog-FieldMask":
-    "routes.polyline.encodedPolyline,routes.optimizedIntermediateWaypointIndex",
+    "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.optimizedIntermediateWaypointIndex"
 };
 
 const getAttractionsHeaders = {
@@ -150,9 +150,6 @@ export const getAttractionsWithType = (
     });
 };
 
-
-
-
 export const getPhoto = (
   photoReference: string,
   maxHeightPx: number,
@@ -229,8 +226,6 @@ export const deleteBucketListItem = (attraction, username, cityName) => {
     })
   }
 
-  
-  
 export const getRoutes = (
   origin: LatLng,
   destination: LatLng,
@@ -260,7 +255,6 @@ export const getRoutes = (
         },
         intermediates: intermediateWaypoints,
         travelMode: transport,
-        // routingPreference: "TRAFFIC_UNAWARE",
         optimizeWaypointOrder: true,
       },
       { headers: getRoutesHeaders },
