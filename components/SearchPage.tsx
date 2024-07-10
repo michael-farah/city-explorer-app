@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Platform } from "react-native";
 import CheckBox from "expo-checkbox";
 import { Ionicons } from "@expo/vector-icons";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -195,15 +195,15 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   borderBox: {
-    borderRadius: 30,
-    borderWidth: 8,
-    borderColor: "#89CFF0",
+    ...Platform.select({
+      web: {
+        borderRadius: 30,
+        borderWidth: 8,
+        borderColor: "#89CFF0",}}),
     padding: "5%",
-    // backgroundColor: "#353636",
   },
   titleContainer: {
     flexDirection: "column",
-    // backgroundColor: "green",
     gap: 8,
    
   },

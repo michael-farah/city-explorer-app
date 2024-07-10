@@ -177,9 +177,7 @@ const MapComponent = ({
                 <InfoWindow onCloseClick={() => setSelectedPlace(null)}>
                   <View style={styles.buttonsAndName}>
                     <View>
-                      <Text>{location.name}</Text>
-                      <Text>Current Start Point: {originName}</Text>
-                      <Text>Current End Point: {destinationName}</Text>
+                      <Text style={{fontWeight: "bold"}}>{location.name}</Text>
                     </View>
                     {originName === location.name ? null : <Button
                     title="Set as Start"

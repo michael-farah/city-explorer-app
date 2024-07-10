@@ -1,4 +1,4 @@
-import { Text, View, FlatList, Image, ScrollView, StyleSheet } from 'react-native';
+import { Text, View, FlatList, Image, ScrollView, StyleSheet, Platform } from 'react-native';
 import { useEffect , useState} from 'react';
 import { ThemedText } from './ThemedText';
 import { ReverseThemedText } from './ReverseThemedText';
@@ -48,6 +48,6 @@ const [wheelchairAccessibleAttractions, setWheelChairAccessibleAttractions] = us
 
 const styles = StyleSheet.create({
     container: {flex:1,
-        padding: "5%",
+        ...Platform.select({android: {padding: 0}, web: {padding: "5%"}}),
     }
 })

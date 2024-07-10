@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, Platform } from "react-native";
 import CityDropdown from "./CityDropdown";
 import AttractionsList from "./AttractionsList";
 import { Suspense, useContext, useEffect, useState } from "react";
@@ -48,10 +48,16 @@ const styles = StyleSheet.create({
       position: "absolute",
     },
     borderBox:{
-      borderWidth: 8,
-      borderColor: 	"#D580FF",
-      borderRadius: 30,
-      padding: "5%"
+      // borderWidth: 8,
+      // borderColor: 	"#D580FF",
+      // borderRadius: 30,
+      // padding: "5%"
+      ...Platform.select({
+        web: {
+          borderRadius: 30,
+          borderWidth: 8,
+          borderColor: "#D580FF",}}),
+      padding: "5%",
     },
 
     top:{

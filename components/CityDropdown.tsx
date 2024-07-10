@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, View, Platform } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { StyleSheet } from "react-native";
@@ -52,12 +52,24 @@ if(isLoading){
 
 const styles = StyleSheet.create({
     dropdown: {
+      ...Platform.select({android: {
         backgroundColor: "white",
         height: 40,
-        width: 200,
+        width: 250,
         borderColor: 'gray',
         borderWidth: 1,
         borderRadius: 10,
-        padding: 10
+        padding: 10        
+      }, web: {
+          backgroundColor: "white",
+          height: 40,
+          maxWidth: 200,
+          minWidth: 100,
+          borderColor: 'gray',
+          borderWidth: 1,
+          borderRadius: 10,
+          padding: 10
+      }
+    })
     }
 })

@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, Image } from "react-native";
+import { View, Text, Button, StyleSheet, Image, Platform } from "react-native";
 import { Linking } from "react-native";
 import { useContext, useState, useEffect } from "react";
 import { deleteBucketListItem } from "@/app/api";
@@ -171,87 +171,148 @@ export default function AttractionCard({ navigation, attraction }) {
 }
 
 const styles = StyleSheet.create({
- 
   container: {
-    marginVertical: 20,
-    flex: 1,
-    borderRadius: 30,
-    padding: 20,
-    gap:10,
-    borderWidth: 8,
-    borderColor: "#FBAED2"
-    // borderColor: "yellow"
+    ...Platform.select({android: {
+      marginVertical: 20,
+      flex: 1,
+      borderRadius: 30,
+      padding: 20,
+      gap:10,
+      borderWidth: 8,
+      borderColor: "#FBAED2"
+    }, web: {
+      marginVertical: 20,
+      flex: 1,
+      borderRadius: 30,
+      padding: 20,
+      gap:10,
+      borderWidth: 8,
+      borderColor: "#FBAED2"
+    }}),
   },
-
   image: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    borderWidth: 4,
-    // borderColor: "#56bf52" //green
-
-    borderColor:"#89CFF0", //blue
-    // borderColor: "#faf7f0" //off white
-    // borderColor: "yellow"
+    ...Platform.select({android: {
+      width: 200,
+      height: 200,
+      borderRadius: 100,
+      borderWidth: 4,
+      borderColor:"#89CFF0",
+    }, web: {
+      width: 200,
+      height: 200,
+      borderRadius: 100,
+      borderWidth: 4,
+      borderColor:"#89CFF0",
+    }}),
   },
   textBody: {
-    display: "flex",
-    gap: 30
-
-  }
-,
+    ...Platform.select({android: {
+      display: "flex",
+      gap: 30
+    }, web: {
+      display: "flex",
+      gap: 30
+  }}),
+  },
   titleText: {
-    fontWeight: "bold",
-    fontSize: 20,
-    marginBottom: 10,
+    ...Platform.select({android: {
+      fontWeight: "bold",
+      fontSize: 20,
+      marginBottom: 10,
+    }, web: {
+      fontWeight: "bold",
+      fontSize: 20,
+      marginBottom: 10,
+  }}),
   },
   mainBody: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    flex: 1,
-    gap: 30
+    ...Platform.select({android: {
+      flexWrap: "wrap",
+      flex: 1,
+      gap: 30
+    }, web: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      flex: 1,
+      gap: 30
+  }}),
   },
   textAndButtonsBody: {
-    flex: 5,
-    flexWrap: "wrap",
-    flexBasis: 300,
-    height: "auto",
-    justifyContent: "space-between"
+    ...Platform.select({android: {
+      flex: 1,
+      flexWrap: "wrap",
+      height: "auto",
+      justifyContent: "space-between"
+    }, web: {
+      flex: 5,
+      flexWrap: "wrap",
+      flexBasis: 300,
+      height: "auto",
+      justifyContent: "space-between"
+  }}),
   },
   details: {
-    // marginHorizontal: 50,
-    display: "flex",
-    gap: 10
-
+    ...Platform.select({android: {
+      display: "flex",
+      gap: 10
+    }, web: {
+      display: "flex",
+      gap: 10
+  }}),
   },
   buttonContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 10,
-    justifyContent: "flex-start",
-    gap: 15,
-    // marginHorizontal: 50
+    ...Platform.select({android: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      marginTop: 10,
+      justifyContent: "center",
+      gap: 15,
+    }, web: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      marginTop: 10,
+      justifyContent: "flex-start",
+      gap: 15,
+  }}),
   },
   editorialSummary: {
-    flex: 1,
-    width: "100%",
-    fontWeight: "bold",
+    ...Platform.select({android: {
+      fontWeight: "bold",
+    }, web: {
+      flex: 1,
+      width: "100%",
+      fontWeight: "bold",
+  }}),
   },
   imageBox: {
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-    height: "auto",
-    flexBasis: 200,
+    ...Platform.select({android: {
+      justifyContent: "center",
+      alignItems: "center",
+      flex: 1,
+      height: "auto",
+      flexBasis: 200,
+    }, web: {
+      justifyContent: "center",
+      alignItems: "center",
+      flex: 1,
+      height: "auto",
+      flexBasis: 200,
+  }}),
   },
   rating: {
-    flex: 1,
-    width: "100%",
+    ...Platform.select({android: {}, web: {
+      flex: 1,
+      width: "100%",
+  }}),
   },
   category: {
+    ...Platform.select({android: {}, web: {
     flex: 1,
     width: "100%",
+  }}),
   },
   button: {
+    ...Platform.select({android: {}, web: {
     justifyContent: "center",
+  }}),
   }});
