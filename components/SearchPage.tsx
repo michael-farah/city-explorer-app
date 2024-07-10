@@ -59,6 +59,7 @@ export default function SearchPage({ navigation }) {
   }, [type]);
 
   useEffect(() => {
+    if(user.username){
     setAttractionsListIsLoading(true);
     if (searchTerm === "") {
       setText("");
@@ -112,7 +113,8 @@ export default function SearchPage({ navigation }) {
           }
         });
     }
-  }, [cityName, type, searchTerm]);
+  }
+  }, [cityName, type, searchTerm, user]);
 
   useEffect(() => {
     if (searchTerm !== "") {

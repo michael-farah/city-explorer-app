@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, CheckBox } from "react-native";
+import { View, Text, StyleSheet, CheckBox, Platform } from "react-native";
 import React from "react";
 import { ThemedText } from "./ThemedText";
 import { useEffect, useState } from "react";
@@ -63,10 +63,13 @@ export default function AttractionFilter({ setGobbledigook, type, setText, setSe
 
 const styles = StyleSheet.create({
   overallContainer: {
+    ...Platform.select({android: {
+    }, web: {
     flex: 1,
     gap: 10,
     justifyContent: "space-between",
     minWidth: 200
+  }})
   },
   dropdown: {
     backgroundColor: "white",
@@ -77,6 +80,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
-    // marginTop: 20
 }
 });

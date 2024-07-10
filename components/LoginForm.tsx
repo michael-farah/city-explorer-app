@@ -24,13 +24,9 @@ const LoginForm = () => {
   function login(username, password) {
     getUsers()
       .then(({ users }) => {
-        console.log(users);
-        const user = users.find((user) => user.username === username);
-
-
-        if (user.password === password) {
-
-          setUser(user);
+        const existingUser = users.find((user) => user.username === username);
+        if (existingUser && existingUser.password === password) {
+          setUser(existingUser);
         } else {
           setUserError("Incorrect username or password");
         }

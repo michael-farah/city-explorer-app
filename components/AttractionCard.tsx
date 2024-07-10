@@ -272,7 +272,6 @@ height: 200
     ...Platform.select({android: {
       flexDirection: "row",
       flexWrap: "wrap",
-      marginTop: 10,
       justifyContent: "center",
       gap: 15,
     }, web: {
