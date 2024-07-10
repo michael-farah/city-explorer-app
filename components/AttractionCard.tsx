@@ -98,7 +98,11 @@ export default function AttractionCard({ navigation, attraction }) {
       </View>
       <View style={styles.mainBody}>
         <View style={styles.imageBox}>
-          {photo?  <Image style={styles.image} source={{uri: photo }} alt={`photo of ${attraction.displayName.text}`}/> : <Icon name="photo" size={170} color="#B8E2F2"/>}
+          {photo?  <Image style={styles.image} source={{uri: photo }} alt={`photo of ${attraction.displayName.text}`}/> : 
+          <Image style={styles.altImage} source={require=("../../assets/images/image-outline.svg")} alt={`photo of ${attraction.displayName.text}`}/>
+      
+          // <Icon name="photo" size={170} color="#B8E2F2"/>
+          }
          
         </View>
         <View style={styles.textAndButtonsBody}>
@@ -204,6 +208,10 @@ const styles = StyleSheet.create({
       borderWidth: 4,
       borderColor:"#89CFF0",
     }}),
+  },
+  altImage: {
+width: 200,
+height: 200
   },
   textBody: {
     ...Platform.select({android: {
