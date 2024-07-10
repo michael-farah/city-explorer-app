@@ -52,7 +52,7 @@ export const getCity = (city: string) => {
 export const getAttractions = (
   longitude: number,
   latitude: number,
-  radius: number
+  radius: number,
 ) => {
   return googlePlacesAPI
     .post(
@@ -100,7 +100,8 @@ export const getAttractions = (
           "hiking_area",
           "historical_landmark",
           "marina",
-          "movie_theater"],
+          "movie_theater",
+        ],
         maxResultCount: 20,
         locationRestriction: {
           circle: {
@@ -124,7 +125,7 @@ export const getAttractionsWithType = (
   longitude: number,
   latitude: number,
   radius: number,
-  type: Array<string> 
+  type: Array<string>,
 ) => {
   return googlePlacesAPI
     .post(
@@ -150,9 +151,6 @@ export const getAttractionsWithType = (
     });
 };
 
-
-
-
 export const getPhoto = (
   photoReference: string,
   maxHeightPx: number,
@@ -168,7 +166,7 @@ export const getPhoto = (
   url += `&skipHttpRedirect=true`;
   return googlePlacesAPI
     .get(url)
-    .then((response) =>  response.data.photoUri)
+    .then((response) => response.data.photoUri)
     .catch((err) => {
       console.error("Error fetching place photo:", err);
       throw err;
@@ -223,19 +221,17 @@ export const deleteBucketListItem = (attraction, username, cityName) => {
     return cityExplorerAPI
       .delete(`bucket_list/${bucketListId}`)
       .catch((err) => {
-        console.error(err)
-        throw err
-      })
-    })
-  }
+        console.error(err);
+        throw err;
+      });
+  });
+};
 
-  
-  
 export const getRoutes = (
   origin: LatLng,
   destination: LatLng,
   intermediates: LatLng[],
-  transport: string ,
+  transport: string,
 ) => {
   const intermediateWaypoints = intermediates.map((coordinate) => ({
     location: {
@@ -266,24 +262,62 @@ export const getRoutes = (
       { headers: getRoutesHeaders },
     )
     .then((response) => {
-      return response.data})
+      return response.data;
+    })
     .catch((err) => {
       console.error("Error fetching routes:", err);
       throw err;
     });
 };
 
-  export const getSearchPlaces = (rectangle, text)=>{
-    return googlePlacesAPI.post(`/places:searchText`, {
-      textQuery: `${text}`,
-      locationRestriction: {
-        rectangle: rectangle
+export const getSearchPlaces = (rectangle, text) => {
+  return googlePlacesAPI
+    .post(
+      `/places:searchText`,
+      {
+        textQuery: `${text}`,
+        locationRestriction: {
+          rectangle: rectangle,
+        },
+        maxResultCount: 20,
       },
-      maxResultCount: 20,
-    }, {headers: getAttractionsHeaders}
-  )
-  .catch((err) => {
-    console.error(err)
-    throw err
-  })
-  }
+      { headers: getAttractionsHeaders },
+    )
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const getUser = (username: string) => {
+  return cityExplorerAPI
+    .get(`/users/${username}`)
+    .then((response) => response.data)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const postUsers = (username: string, password: string) => {
+  return cityExplorerAPI
+    .post(`/users`, {
+      username: username,
+      password: password,
+    })
+    .then((response) => response.data)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const getUsers = () => {
+  return cityExplorerAPI
+    .get("/users")
+    .then((response) => response.data)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
