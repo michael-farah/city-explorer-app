@@ -13,6 +13,8 @@ import { decodeRoutesPolyline } from "@/utils/decoder";
 import { LatLng } from "react-native-maps";
 import { Dropdown } from "react-native-element-dropdown";
 import CityDropdown from "./CityDropdown";
+import LoginForm from "./LoginForm";
+import Account from "./Account";
 
 export default function ItineraryPage({ navigation }) {
   const [bucketList, setBucketList] = useState<Location[]>([]);
@@ -25,8 +27,10 @@ export default function ItineraryPage({ navigation }) {
   const { user, cityName, bucketListMemo } = useContext(AppContext);
   const { username } = user;
   const [places, setPlaces] = useState([]);
+
   const [travelTime, setTravelTime] = useState(0)
   const [distance, setDistance] = useState(0)
+
 
   useEffect(() => {
     const locations = bucketListMemo.map(({ location, displayName }) => {
@@ -41,7 +45,9 @@ export default function ItineraryPage({ navigation }) {
           label: displayName.text,
           value: { name: displayName.text, position: location },
         };
-      }
+      },
+
+
     );
     setPlaces(placeDisplayNames);
     setBucketList(locations);
@@ -61,7 +67,7 @@ export default function ItineraryPage({ navigation }) {
 
   const handleDropdownChange = (event) => {
     setTransport(event.value);
-  };
+  };   
 
   const setOriginMarker = (coordinate: LatLng) => {
     setOrigin(coordinate);
@@ -121,6 +127,10 @@ export default function ItineraryPage({ navigation }) {
     { label: "Walking", value: "WALK" },
     { label: "Driving", value: "DRIVE" },
   ];
+  
+    if (!user.username) {
+    return <LoginForm />;
+  }
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
@@ -128,6 +138,10 @@ export default function ItineraryPage({ navigation }) {
         <Ionicons size={310} name="calendar" style={styles.headerImage} />
       }
     >
+       <ThemedView style={styles.borderBox}>
+        <Account />
+      </ThemedView>
+
       <ThemedView style={styles.borderBox}>
         <View style={styles.androidBorder}>
           <View style={styles.titleContainer}>
@@ -214,6 +228,9 @@ export default function ItineraryPage({ navigation }) {
               </View>
             </View>
           )}
+          <View>
+            <Button title="Show me the route" onPress={renderRoute} />
+          </View>
           <View style={{ height: 400 }}>
             <MapComponent
               city={cityName}
@@ -368,6 +385,7 @@ const styles = StyleSheet.create({
       },
     }),
   },
+
   calculations: {
     flexDirection: "row",
     gap: 10
