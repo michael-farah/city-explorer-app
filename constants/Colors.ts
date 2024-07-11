@@ -3,7 +3,7 @@ export const Colors = {
     text: "#11181C",
     // background: "#faf7f0",
     background: "white",
-    tint: "#FF4D4D",
+    tint: "black",
     icon: "#FF6666",
     tabIconDefault: "#FF6666",
     tabIconSelected: "#FF4D4D",

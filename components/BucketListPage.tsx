@@ -75,10 +75,6 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   borderBox: {
-    // borderWidth: 8,
-    // borderColor: 	"#D580FF",
-    // borderRadius: 30,
-    // padding: "5%"
     ...Platform.select({
       web: {
         borderRadius: 30,

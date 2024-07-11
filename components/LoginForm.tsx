@@ -73,28 +73,36 @@ const LoginForm = () => {
       <View>
         <FontAwesome name="user-circle" style={styles.avatar} />
         <Text style={styles.title}>{isLogin ? "Login" : "Register"}</Text>
+        <View style={styles.usernameContainer}>
         <TextInput
           style={styles.input}
           placeholder="Username"
           value={username}
           onChangeText={setUsername}
         />
+        </View>
         <View style={styles.passwordContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
-          />
+          <View style={styles.passwordInput}>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+            />
+          </View>
+          <View style={styles.passwordIcon}>
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <FontAwesome
               name={showPassword ? "eye-slash" : "eye"}
               style={styles.eyeIcon}
             />
           </TouchableOpacity>
+          </View>
         </View>
-        <Button title={isLogin ? "Login" : "Register"} onPress={handleSubmit} />
+        <View style={styles.loginButton}>
+          <Button title={isLogin ? "Login" : "Register"} onPress={handleSubmit} />
+        </View>
 
         {isLogin ? <View>
           <Text style={styles.switchText} onPress={() => setIsLogin(false)}>
@@ -118,6 +126,7 @@ const LoginForm = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 40,
   },
   overlay: {
     position: "absolute",
@@ -132,6 +141,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignSelf: "center",
     marginBottom: 20,
+    color: "#56bf52",
   },
   title: {
     fontSize: 24,
@@ -139,24 +149,67 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   input: {
+    ...Platform.select({
+      android: {
+        width: "100%"
+      }, web: {
+        width: "100%",
+      },
+    }),
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
+    borderRadius: 10,
+    backgroundColor: "white"
   },
   passwordContainer: {
-    flexDirection: "row",
+    ...Platform.select({
+      android: {
+        width: 200,
+        flexDirection: "row",
+      }, web: {
+        width: 400,
+        flexDirection: "row",
+      },
+    }),
     alignItems: "center",
+    justifyContent: "center",
+    margin: "auto",
+  },
+  passwordInput: {
+    ...Platform.select({
+      android: {
+        width: "85%"
+      }, web: {
+        width: "93%"
+  },
+}),
+  },
+  usernameContainer: {
+      ...Platform.select({
+        android: {
+          width: 200
+        }, web: {
+          width: 400,
+        },
+      }),
+    flexDirection: "row",
+    justifyContent: "center",
+    margin: "auto",
   },
   eyeIcon: {
     fontSize: 20,
     marginLeft: 8,
+    color: "#56bf52",
+  },
+  loginButton: {
+    width: 200,
+    margin: "auto"
   },
   switchText: {
-
     color: "#007BFF",
-
     textAlign: "center",
     marginTop: 12,
   },

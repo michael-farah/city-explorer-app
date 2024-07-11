@@ -23,7 +23,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "home" : "home-outline"}
-              color={color}
+              color="#89CFF0"
             />
           ),
         }}
@@ -35,7 +35,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "star" : "star-outline"}
-              color={color}
+              color="#D580FF"
             />
           ),
         }}
@@ -47,7 +47,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "calendar" : "calendar-outline"}
-              color={color}
+              color="#56bf52"
             />
           ),
         }}
