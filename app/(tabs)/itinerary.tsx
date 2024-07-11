@@ -6,7 +6,7 @@ const Stack = createNativeStackNavigator()
 export default function ItineraryScreen() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Itinerary" component={ItineraryPage} options={{title: "Itinerary"}}/>
+      <Stack.Screen name="Itinerary" component={ItineraryPage} options={{title: "City Explorer"}}/>
   </Stack.Navigator>
 );
 }

@@ -137,7 +137,7 @@ export default function ItineraryPage({ navigation }) {
         <Ionicons size={310} name="calendar" style={styles.headerImage} />
       }
     >
-       <ThemedView style={styles.borderBox}>
+       <ThemedView style={styles.user}>
         <Account />
       </ThemedView>
 
@@ -262,6 +262,20 @@ const styles = StyleSheet.create({
     bottom: -90,
     left: -35,
     position: "absolute",
+  },
+  user: {
+    ...Platform.select({
+      android:{
+        marginTop: 20
+      },
+      web: {
+        marginTop: -10,
+      },
+    }),
+    borderRadius: 30,
+    borderWidth: 8,
+    borderColor: "#56bf52",
+    padding: 15,
   },
   borderBox: {
     ...Platform.select({

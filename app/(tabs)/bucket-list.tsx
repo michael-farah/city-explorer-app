@@ -7,8 +7,8 @@ const Stack = createNativeStackNavigator()
 export default function BucketListScreen() {
   return (
       <Stack.Navigator>
-        <Stack.Screen name="BucketList" component={BucketListPage} options={{title: "Bucket List"}}/>
-        <Stack.Screen name="Attraction" component={AttractionPage} options={{title: "Attraction"}}/>
+        <Stack.Screen name="BucketList" component={BucketListPage} options={{title: "City Explorer"}}/>
+        <Stack.Screen name="Attraction" component={AttractionPage} options={{title: "City Explorer"}}/>
     </Stack.Navigator>
   );
 }

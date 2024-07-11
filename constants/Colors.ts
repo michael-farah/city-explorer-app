@@ -12,7 +12,7 @@ export const Colors = {
     text: "#ECEDEE",
     // background: "#151718",
     background: "#353636",
-    tint: "#990000",
+    tint: "white",
     icon: "#CC0000",
     tabIconDefault: "#CC0000",
     tabIconSelected: "#990000",
