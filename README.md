@@ -1,14 +1,17 @@
 # **City Explorer App**
 
+Welcome to City Explorer App. This mobile and web app is designed to help tourists explore UK cities through suggestions of local attractions. The app organises the attractions the user wants to visit into a personal bucket list based on preferences, and plans the most efficient route between them.
+
+This app was developed in 2 weeks as our final project for Northcoders Software Development Bootcamp. Our group is Bug Busters, including Catherine Pulman, Michael Farah and Elizabeth Ray.
+
 ## Hosted Web App:
-
-https://city-explorer-web.netlify.app/
-
     Warning: At this stage, please use passwords that you do not use elsewhere while we work on implementing a more secure authentication system.
 
-### Backend repo:
+- App: https://city-explorer-web.netlify.app/
 
-[https://github.com/EliR94/city-explorer-backend](https://github.com/EliR94/city-explorer-backend)
+### Backend Links:
+- API: https://city-explorer-backend-6i2i.onrender.com/api/
+- GitHub: [https://github.com/EliR94/city-explorer-backend](https://github.com/EliR94/city-explorer-backend)
 
 ## Local Frontend Setup
 
@@ -16,9 +19,8 @@ To get the web app up and running on your local machine, follow these steps:
 
 ### **Prerequisites**
 
-Before proceeding, ensure you have the following installed:
+Ensure you have **[Node.js](https://nodejs.org/)** (minimum version: v21.7.3) installed.
 
-- **[Node.js](https://nodejs.org/)** (minimum version: v21.7.3)
 
 ### 1. Clone the Repository
 
@@ -49,5 +51,5 @@ You'll need to create a .env file to store a Google Maps API key:
 ```bash
 npm start
 ```
-Go to the link displayed in your terminal.
+Click on the link displayed in your terminal.
     It should look like this: http://localhost:8081
