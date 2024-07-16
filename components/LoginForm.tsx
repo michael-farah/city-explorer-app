@@ -16,14 +16,17 @@ import { getUsers, postUser } from "@/app/api";
 const LoginForm = () => {
   const { setUser } = useContext(AppContext);
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [userError, setUserError] = useState("");
 
   function login(username, password) {
+    setIsLoading(true)
     getUsers()
       .then(({ users }) => {
+        setIsLoading(false)
         const existingUser = users.find((user) => user.username === username);
         if (existingUser && existingUser.password === password) {
           setUser(existingUser);
@@ -32,6 +35,7 @@ const LoginForm = () => {
         }
       })
       .catch((err) => {
+        setIsLoading(false)
         console.error(err);
         throw err;
       });
@@ -39,8 +43,10 @@ const LoginForm = () => {
 
   function register(username, password) {
     if (username && password) {
+      setIsLoading(true)
       getUsers()
         .then(({ users }) => {
+          setIsLoading(false)
           const user = users.find((user) => user.username === username);
           if (user) {
             setUserError("Username already exists");
@@ -51,6 +57,7 @@ const LoginForm = () => {
           });
         })
         .catch((err) => {
+          setIsLoading(false)
           console.error(err);
           throw err;
         });
@@ -73,6 +80,8 @@ const LoginForm = () => {
       <View>
         <FontAwesome name="user-circle" style={styles.avatar} />
         <Text style={styles.title}>{isLogin ? "Login" : "Register"}</Text>
+        {isLogin ? null : <View style={styles.warningContainer}><Text style={styles.warning}>
+          Warning: Please use a password that you do not use elsewhere while we work on implementing a more secure authentication system.</Text></View>}
         <View style={styles.usernameContainer}>
         <TextInput
           style={styles.input}
@@ -101,10 +110,13 @@ const LoginForm = () => {
           </View>
         </View>
         <View style={styles.loginButton}>
-          <Button title={isLogin ? "Login" : "Register"} onPress={handleSubmit} />
+          <Button title={isLogin ? "Login" : "Register"} onPress={handleSubmit} disabled={isLoading? true:false}/>
         </View>
 
-        {isLogin ? <View>
+        {isLoading ? 
+        <View>
+          <Text style={styles.loading}>Please be patient our API is waking up...</Text>
+        </View> : isLogin ? <View>
           <Text style={styles.switchText} onPress={() => setIsLogin(false)}>
             New to City Explorer? Register
           </Text>
@@ -212,6 +224,25 @@ const styles = StyleSheet.create({
     color: "#007BFF",
     textAlign: "center",
     marginTop: 12,
+  },
+  loading: {
+    textAlign: "center",
+    marginTop: 12,
+  },
+  warning: {
+    ...Platform.select({
+      android: {
+        padding: 0,
+        width: 280
+      }, web: {
+        width: 400,
+      },
+    }),
+    color: "red",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 12,
+    margin: "auto"
   },
   errorText: {
     color: "red",
