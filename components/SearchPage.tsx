@@ -10,13 +10,9 @@ import { useContext, useState, useEffect } from "react";
 import {
   getAttractions,
   getAttractionsWithType,
-  getCities,
   getCity,
 } from "@/app/api";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AppContext } from "@/app/AppContext";
-import { checkIfConfigIsValid } from "react-native-reanimated/lib/typescript/reanimated2/animation/springUtils";
 import AttractionSearchByName from "./AttractionSearchByName";
 import AttractionFilter from "./AttractionFilter";
 import { getSearchPlaces } from "@/app/api";

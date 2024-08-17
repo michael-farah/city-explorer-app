@@ -44,9 +44,9 @@ export default function BucketListPage({ navigation }) {
           </ThemedView>
 
           {isBucketListLoading ? (
-            <ThemedText>Loading...</ThemedText>
+            <ThemedText><p><br></br>Loading...</p></ThemedText>
           ) : (
-            <Suspense fallback={<ThemedText>Loading...</ThemedText>}>
+            <Suspense fallback={<ThemedText><p><br></br>Loading...</p></ThemedText>}>
               {bucketListMemo.length ? (
                 <AttractionsList
                   cityName={cityName}
@@ -55,8 +55,8 @@ export default function BucketListPage({ navigation }) {
                 />
               ) : (
                 <ThemedText>
-                  No attractions in your bucket list for {cityName}, go to the
-                  home page to add some or choose another city!
+                  <p><br></br>No attractions in your bucket list for {cityName}, go to the
+                  home page to add some or choose another city!</p>
                 </ThemedText>
               )}
             </Suspense>

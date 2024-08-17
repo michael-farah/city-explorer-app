@@ -115,7 +115,7 @@ const LoginForm = () => {
 
         {isLoading ? 
         <View>
-          <Text style={styles.loading}>Please be patient our API is waking up...</Text>
+          <Text style={styles.loading}>Please be patient, our API is waking up...</Text>
         </View> : isLogin ? <View>
           <Text style={styles.switchText} onPress={() => setIsLogin(false)}>
             New to City Explorer? Register
