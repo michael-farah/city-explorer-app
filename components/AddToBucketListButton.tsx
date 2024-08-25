@@ -19,7 +19,7 @@ export default function AddToBucketListButton({attraction}){
     const isItemInBucketList = bucketListMemo.map((item)=> item.id).includes(attraction.id)
 
     return (
-        <Button style={styles.button}
+        <Button 
             title={isItemInBucketList ? "Added to Bucket List" : isAdding?"Adding to Bucket List":"Add to Bucket List"}
             onPress={() => bucketListClick({attraction})}
             disabled={isItemInBucketList||isAdding?true:false}
@@ -27,7 +27,3 @@ export default function AddToBucketListButton({attraction}){
     )
 } 
 
-const styles = StyleSheet.create({
-button: {
-}
-})

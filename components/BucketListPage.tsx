@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, Platform } from "react-native";
+import { Text, StyleSheet, View, Platform, Dimensions } from "react-native";
 import CityDropdown from "./CityDropdown";
 import AttractionsList from "./AttractionsList";
 import { Suspense, useContext } from "react";
@@ -9,17 +9,28 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { AppContext } from "@/app/AppContext";
 import LoginForm from "./LoginForm";
 import Account from "./Account";
+import { useState, useEffect } from "react";
 
 export default function BucketListPage({ navigation }) {
   const { user, cityName, bucketListMemo, isBucketListLoading } =
     useContext(AppContext);
+    const [styles, setStyles] = useState(calculateStyles());
   const { username } = user;
 
 
     if (!user.username) {
       return <LoginForm />;
     }
-
+    useEffect(() => {
+      const onChange = ({window}) => {
+        setStyles(calculateStyles(window.width));
+      };
+      const subscription = Dimensions.addEventListener('change', onChange);
+  
+      return () => {
+        subscription?.remove();
+      };
+    }, []);
     return (
         <ParallaxScrollView
         headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
@@ -66,8 +77,10 @@ export default function BucketListPage({ navigation }) {
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
+const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
+  const isSmallScreen = screenWidth < 550;
+  const isLargeScreen = screenWidth >= 550;
+  return StyleSheet.create({
   headerImage: {
     color: "#D580FF",
     bottom: -90,
@@ -75,27 +88,25 @@ const styles = StyleSheet.create({
     position: "absolute",
   },  
   user: {
-    ...Platform.select({
-      android:{
-        marginTop: 20
-      },
-      web: {
-        marginTop: -10,
-      },
+    ...(isSmallScreen? {
+      marginTop: 20
+    } : {
+      marginTop: -10
     }),
+  
     borderRadius: 30,
     borderWidth: 8,
     borderColor: "#D580FF",
     padding: 15,
   },
   borderBox: {
-    ...Platform.select({
-      web: {
-        borderRadius: 30,
-        borderWidth: 8,
-        borderColor: "#D580FF",
-      },
+    ...(isLargeScreen && {
+      borderRadius: 30,
+          borderWidth: 8,
+          borderColor: "#89CFF0",
+        
     }),
+   
     padding: "5%",
   },
 
@@ -103,3 +114,4 @@ const styles = StyleSheet.create({
     gap: 30,
   },
 });
+}
