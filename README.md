@@ -42,7 +42,7 @@ This command will fetch and install the required packages.
 
 #### 3. Create Environment Variable Files
 
-You'll need to create a .env file to store a Google Maps API key:
+You'll need to create a .env file to store a Google Maps API key.
 
 - Check the .env.example for an example of how this is written.
 

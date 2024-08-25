@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState , useEffect} from "react";
 import {
   View,
   Text,
@@ -7,11 +7,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform,
+  Platform, Dimensions
 } from "react-native";
 import { AppContext } from "@/app/AppContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { getUsers, postUser } from "@/app/api";
+
 
 const LoginForm = () => {
   const { setUser } = useContext(AppContext);
@@ -21,7 +22,17 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [userError, setUserError] = useState("");
-
+  const [styles, setStyles] = useState(calculateStyles());
+  useEffect(() => {
+      const onChange = ({window}) => {
+        setStyles(calculateStyles(window.width));
+      };
+      const subscription = Dimensions.addEventListener('change', onChange);
+  
+      return () => {
+        subscription?.remove();
+      };
+    }, []);
   function login(username, password) {
     setIsLoading(true)
     getUsers()
@@ -115,7 +126,7 @@ const LoginForm = () => {
 
         {isLoading ? 
         <View>
-          <Text style={styles.loading}>Please be patient our API is waking up...</Text>
+          <Text style={styles.loading}>Please be patient, our API is waking up...</Text>
         </View> : isLogin ? <View>
           <Text style={styles.switchText} onPress={() => setIsLogin(false)}>
             New to City Explorer? Register
@@ -135,7 +146,10 @@ const LoginForm = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
+  const isSmallScreen = screenWidth < 550;
+  const isLargeScreen = screenWidth >= 550;
+  return StyleSheet.create({
   container: {
     flex: 1,
     margin: 40,
@@ -161,13 +175,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   input: {
-    ...Platform.select({
-      android: {
-        width: "100%"
-      }, web: {
-        width: "100%",
-      },
-    }),
+      width: "100%",
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
@@ -177,36 +185,20 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   passwordContainer: {
-    ...Platform.select({
-      android: {
-        width: 200,
-        flexDirection: "row",
-      }, web: {
-        width: 400,
-        flexDirection: "row",
-      },
-    }),
+    flexDirection: "row",
+    width: isLargeScreen? 400: "80%"
+  ,
     alignItems: "center",
     justifyContent: "center",
     margin: "auto",
   },
   passwordInput: {
-    ...Platform.select({
-      android: {
-        width: "85%"
-      }, web: {
-        width: "93%"
-  },
-}),
+    width: isLargeScreen? "93%": "90%"
+
   },
   usernameContainer: {
-      ...Platform.select({
-        android: {
-          width: 200
-        }, web: {
-          width: 400,
-        },
-      }),
+    width: isLargeScreen? 400: "80%"
+     ,
     flexDirection: "row",
     justifyContent: "center",
     margin: "auto",
@@ -230,14 +222,9 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   warning: {
-    ...Platform.select({
-      android: {
-        padding: 0,
-        width: 280
-      }, web: {
-        width: 400,
-      },
-    }),
+    padding: 0,
+    width: isLargeScreen? 400: "80%"
+  ,
     color: "red",
     fontWeight: "bold",
     textAlign: "center",
@@ -250,6 +237,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
+}
 export default LoginForm
 
 

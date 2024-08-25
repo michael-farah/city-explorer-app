@@ -15,8 +15,18 @@ export default function AttractionPage({ route, navigation }) {
   const { attraction } = route.params;
   const [photo, setPhoto] = useState("");
 
+  const [styles, setStyles] = useState(calculateStyles());
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
+  useEffect(() => {
+    const onChange = ({window}) => {
+      setStyles(calculateStyles(window.width));
+    };
+    const subscription = Dimensions.addEventListener('change', onChange);
 
+    return () => {
+      subscription?.remove();
+    };
+  }, []);
   useEffect(() => {
     if (attraction.accessibilityOptions) {
       setAccessibilityFeatures((features) => {
@@ -181,7 +191,10 @@ export default function AttractionPage({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
+  const isSmallScreen = screenWidth < 550;
+  const isLargeScreen = screenWidth >= 550;
+  return StyleSheet.create({
   headerImage: {
     color: "#89CFF0",
     bottom: -90,
@@ -189,16 +202,19 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   container: {
-    flexDirection: "column",
-    height: "100%",
-    minWidth: 310,
-    borderWidth: 8,
-    borderRadius: 30,
-    borderColor: "yellow"
+    ...(isLargeScreen && {
+      flexDirection: "column",
+      height: "100%",
+      minWidth: 310,
+      borderWidth: 8,
+      borderRadius: 30,
+      borderColor: "yellow"
+    })
+   
   },
   mainBlock: {
     borderRadius: 10,
-    padding: "7%",
+    padding: "5%",
   },
 
   imageAndText: {
@@ -217,17 +233,12 @@ const styles = StyleSheet.create({
   summaryBlock: {
   },
   addressAndphone: {
-    ...Platform.select({android: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 20,
-    }, web: {
-      display: "flex",
-       flexDirection: "row",
-       justifyContent: "space-between",
-       flexWrap: "wrap",
-       gap: 20,
-    }}),
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 20,
+    ...(isLargeScreen&& {flexDirection: "row",
+      justifyContent: "space-between"})
+  
    },
    openingHours: {
   },
@@ -252,22 +263,18 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
   },
   reviewBox: {
-    ...Platform.select({android: {
-      backgroundColor: "#FFFFF",
-      marginTop: "5%",
-      borderWidth: 8,
-      borderRadius: 30,
-      padding: "5%",
-      borderColor: "#89CFF0",      
-    }, web: {
-      backgroundColor: "#FFFFF",
-      margin: "3%",
-      marginTop: 30,
-      borderWidth: 8,
+    borderWidth: 8,
       borderRadius: 30,
       padding: "5%",
       borderColor: "#89CFF0",
-    }}),
+      backgroundColor: "#FFFFF",
+      ...(isLargeScreen? {
+        margin: "3%",
+        marginTop: 30,
+      }: {
+        margin: "1%",
+        marginTop: "5%",
+      })
   },
   imageContainer: { 
     ...Platform.select({android: {
@@ -334,4 +341,4 @@ altImageContainer: {
   review: {
     marginVertical: 15,
   },
-});
+});}

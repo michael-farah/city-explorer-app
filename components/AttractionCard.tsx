@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, Image, Platform } from "react-native";
+import { View, Text, Button, StyleSheet, Image, Platform, Dimensions } from "react-native";
 import { Linking } from "react-native";
 import { useContext, useState, useEffect } from "react";
 import { deleteBucketListItem } from "@/app/api";
@@ -17,6 +17,7 @@ export default function AttractionCard({ navigation, attraction }) {
   const [accessibilityFeatures, setAccessibilityFeatures] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
   const [seeMoreClicked, setSeeMoreClicked] = useState(false);
+  
 
   useEffect(() => {
     setIsDeleting(false);
@@ -88,6 +89,18 @@ export default function AttractionCard({ navigation, attraction }) {
 
   const { routes, index } = navigation.getState();
   const currentRoute = routes[index].name;
+  const [styles, setStyles] = useState(calculateStyles());
+
+  useEffect(() => {
+    const onChange = ({window}) => {
+      setStyles(calculateStyles(window.width));
+    };
+    const subscription = Dimensions.addEventListener('change', onChange);
+
+    return () => {
+      subscription?.remove();
+    };
+  }, []);
 
   return (
     <ThemedView style={styles.container}>
@@ -173,8 +186,9 @@ export default function AttractionCard({ navigation, attraction }) {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
+const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
+  const isSmallScreen = screenWidth < 550;
+  return StyleSheet.create({
   container: {
     ...Platform.select({android: {
       marginVertical: 20,
@@ -322,4 +336,4 @@ height: 200
     ...Platform.select({android: {}, web: {
     justifyContent: "center",
   }}),
-  }});
+  }});}

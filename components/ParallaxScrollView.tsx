@@ -1,11 +1,12 @@
 import type { PropsWithChildren, ReactElement } from "react";
-import { StyleSheet, useColorScheme, View, Platform  } from "react-native";
+import { StyleSheet, useColorScheme, View, Platform, Dimensions  } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
 } from "react-native-reanimated";
+import { useState , useEffect} from "react";
 
 import { ThemedView } from "@/components/ThemedView";
 
@@ -21,9 +22,21 @@ export default function ParallaxScrollView({
   headerImage,
   headerBackgroundColor,
 }: Props) {
+  const [styles, setStyles] = useState(calculateStyles());
   const colorScheme = useColorScheme() ?? "light";
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
+
+  useEffect(() => {
+    const onChange = ({window}) => {
+      setStyles(calculateStyles(window.width));
+    };
+    const subscription = Dimensions.addEventListener('change', onChange);
+
+    return () => {
+      subscription?.remove();
+    };
+  }, []);
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
     return {
@@ -64,26 +77,23 @@ export default function ParallaxScrollView({
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    ...Platform.select({android: {
+const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
+  const isSmallScreen = screenWidth < 550;
+  return StyleSheet.create({
+    container: {
       flex: 1,
       backgroundColor: "#FBAED2",
-      minWidth: 360    
-    }, web: {
+      minWidth: isSmallScreen ? 330 : 380,
+    },
+    header: {
+      height: HEADER_HEIGHT,
+      overflow: "hidden",
+    },
+    content: {
       flex: 1,
-      backgroundColor: "#FBAED2",
-      minWidth: 380      
-    }}),
-  },
-  header: {
-    height: 250,
-    overflow: "hidden",
-  },
-  content: {
-    flex: 1,
-    ...Platform.select({android: {padding: 0}, web: {padding: 32}}),
-    gap: 16,
-    overflow: "hidden",
-  },
-});
+      padding: isSmallScreen ? 0 : 32,
+      gap: 16,
+      overflow: "hidden",
+    },
+  });
+};
