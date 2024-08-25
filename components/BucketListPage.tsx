@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, Platform, Dimensions } from "react-native";
+import { Text, StyleSheet, View, Platform } from "react-native";
 import CityDropdown from "./CityDropdown";
 import AttractionsList from "./AttractionsList";
 import { Suspense, useContext } from "react";
@@ -9,28 +9,17 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { AppContext } from "@/app/AppContext";
 import LoginForm from "./LoginForm";
 import Account from "./Account";
-import { useState, useEffect } from "react";
 
 export default function BucketListPage({ navigation }) {
   const { user, cityName, bucketListMemo, isBucketListLoading } =
     useContext(AppContext);
-    const [styles, setStyles] = useState(calculateStyles());
   const { username } = user;
 
 
     if (!user.username) {
       return <LoginForm />;
     }
-    useEffect(() => {
-      const onChange = ({window}) => {
-        setStyles(calculateStyles(window.width));
-      };
-      const subscription = Dimensions.addEventListener('change', onChange);
-  
-      return () => {
-        subscription?.remove();
-      };
-    }, []);
+
     return (
         <ParallaxScrollView
         headerBackgroundColor={{ light: "#faf7f0", dark: "#353636" }}
@@ -55,9 +44,9 @@ export default function BucketListPage({ navigation }) {
           </ThemedView>
 
           {isBucketListLoading ? (
-            <ThemedText><p><br></br>Loading...</p></ThemedText>
+            <ThemedText>Loading...</ThemedText>
           ) : (
-            <Suspense fallback={<ThemedText><p><br></br>Loading...</p></ThemedText>}>
+            <Suspense fallback={<ThemedText>Loading...</ThemedText>}>
               {bucketListMemo.length ? (
                 <AttractionsList
                   cityName={cityName}
@@ -66,8 +55,8 @@ export default function BucketListPage({ navigation }) {
                 />
               ) : (
                 <ThemedText>
-                  <p><br></br>No attractions in your bucket list for {cityName}, go to the
-                  home page to add some or choose another city!</p>
+                  No attractions in your bucket list for {cityName}, go to the
+                  home page to add some or choose another city!
                 </ThemedText>
               )}
             </Suspense>
@@ -77,10 +66,8 @@ export default function BucketListPage({ navigation }) {
     </ParallaxScrollView>
   );
 }
-const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
-  const isSmallScreen = screenWidth < 550;
-  const isLargeScreen = screenWidth >= 550;
-  return StyleSheet.create({
+
+const styles = StyleSheet.create({
   headerImage: {
     color: "#D580FF",
     bottom: -90,
@@ -88,25 +75,27 @@ const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
     position: "absolute",
   },  
   user: {
-    ...(isSmallScreen? {
-      marginTop: 20
-    } : {
-      marginTop: -10
+    ...Platform.select({
+      android:{
+        marginTop: 20
+      },
+      web: {
+        marginTop: -10,
+      },
     }),
-  
     borderRadius: 30,
     borderWidth: 8,
     borderColor: "#D580FF",
     padding: 15,
   },
   borderBox: {
-    ...(isLargeScreen && {
-      borderRadius: 30,
-          borderWidth: 8,
-          borderColor: "#89CFF0",
-        
+    ...Platform.select({
+      web: {
+        borderRadius: 30,
+        borderWidth: 8,
+        borderColor: "#D580FF",
+      },
     }),
-   
     padding: "5%",
   },
 
@@ -114,4 +103,3 @@ const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
     gap: 30,
   },
 });
-}

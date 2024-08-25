@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, View, Button, Platform , Dimensions} from "react-native";
+import { StyleSheet, View, Button, Platform } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -27,19 +27,6 @@ export default function ItineraryPage({ navigation }) {
   const { user, cityName, bucketListMemo } = useContext(AppContext);
   const { username } = user;
   const [places, setPlaces] = useState([]);
-
-  const [styles, setStyles] = useState(calculateStyles());
-
-  useEffect(() => {
-    const onChange = ({window}) => {
-      setStyles(calculateStyles(window.width));
-    };
-    const subscription = Dimensions.addEventListener('change', onChange);
-
-    return () => {
-      subscription?.remove();
-    };
-  }, []);
 
   const [travelTime, setTravelTime] = useState(0)
   const [distance, setDistance] = useState(0)
@@ -269,10 +256,7 @@ export default function ItineraryPage({ navigation }) {
   );
 }
 
-const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
-  const isSmallScreen = screenWidth < 550;
-  const isLargeScreen = screenWidth >= 550;
-  return StyleSheet.create({
+const styles = StyleSheet.create({
   headerImage: {
     color: "#56bf52",
     bottom: -90,
@@ -280,10 +264,13 @@ const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
     position: "absolute",
   },
   user: {
-    ...(isSmallScreen? {
-      marginTop: 20
-    } : {
-      marginTop: -10
+    ...Platform.select({
+      android:{
+        marginTop: 20
+      },
+      web: {
+        marginTop: -10,
+      },
     }),
     borderRadius: 30,
     borderWidth: 8,
@@ -291,12 +278,14 @@ const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
     padding: 15,
   },
   borderBox: {
-    ...(isLargeScreen&& {
-      borderRadius: 30,
-      borderWidth: 8,
-      borderColor: "#56bf52",
+    ...Platform.select({
+      android: {},
+      web: {
+        borderRadius: 30,
+        borderWidth: 8,
+        borderColor: "#56bf52",
+      },
     }),
-   
     padding: "5%",
     gap: 15,
   },
@@ -418,4 +407,3 @@ const calculateStyles = (screenWidth = Dimensions.get("window").width) => {
 
   }
 });
-}

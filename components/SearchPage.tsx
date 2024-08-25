@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Platform, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Platform } from "react-native";
 import CheckBox from "expo-checkbox";
 import { Ionicons } from "@expo/vector-icons";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -10,9 +10,13 @@ import { useContext, useState, useEffect } from "react";
 import {
   getAttractions,
   getAttractionsWithType,
+  getCities,
   getCity,
 } from "@/app/api";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AppContext } from "@/app/AppContext";
+import { checkIfConfigIsValid } from "react-native-reanimated/lib/typescript/reanimated2/animation/springUtils";
 import AttractionSearchByName from "./AttractionSearchByName";
 import AttractionFilter from "./AttractionFilter";
 import { getSearchPlaces } from "@/app/api";
@@ -20,7 +24,6 @@ import LoginForm from "./LoginForm";
 import Account from "./Account";
 
 export default function SearchPage({ navigation }) {
-  const [styles, setStyles] = useState(calculateStyles());
   const { cityName, setCityName, user } = useContext(AppContext);
   const [gobbledigook, setGobbledigook] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,17 +50,6 @@ export default function SearchPage({ navigation }) {
     },
   });
   const [type, setType] = useState("All");
-
-  useEffect(() => {
-    const onChange = () => {
-      setStyles(calculateStyles());
-    };
-    const subscription = Dimensions.addEventListener('change', onChange);
-
-    return () => {
-      subscription?.remove();
-    };
-  }, []);
 
   useEffect(() => {
     if (type !== "All") {
@@ -210,60 +202,57 @@ export default function SearchPage({ navigation }) {
   );
 }
 
-const calculateStyles = () => {
-  const { width: screenWidth } = Dimensions.get('window');
-  const isSmallScreen = screenWidth < 550;
-  const isLargeScreen = screenWidth >=550
-  return StyleSheet.create({
-    headerImage: {
-      color: "#89CFF0",
-      bottom: -90,
-      left: -35,
-      position: "absolute",
-    },
-    user: {
-      ...(isSmallScreen? {
+const styles = StyleSheet.create({
+  headerImage: {
+    color: "#89CFF0",
+    bottom: -90,
+    left: -35,
+    position: "absolute",
+  },
+  user: {
+    ...Platform.select({
+      android:{
         marginTop: 20
-      } : {
-        marginTop: -10
-      }),
-      borderRadius: 30,
-      borderWidth: 8,
-      borderColor: "#89CFF0",
-      padding: 15,
-    },
-    borderBox: {
-      ...(isLargeScreen && {
+      },
+      web: {
+        marginTop: -10,
+      },
+    }),
+    borderRadius: 30,
+    borderWidth: 8,
+    borderColor: "#89CFF0",
+    padding: 15,
+  },
+  borderBox: {
+    ...Platform.select({
+      web: {
         borderRadius: 30,
-            borderWidth: 8,
-            borderColor: "#89CFF0",
-          
-      }),
-      padding: "5%",
-    },
-    titleContainer: {
-      flexDirection: "column",
-      gap: 8
-    },
-    accessibilityCheckboxContainer: {
-      flexDirection: "row",
-    },
-    label: {
-      margin: 8,
-    },
-    checkbox: {
-      alignSelf: "center",
-    },
-    attractionsListLoading: {
-      padding: 20,
-    },
-    searchAndFilterContainer: {
-      flexDirection: "row",
-      gap: 20,
-      flexWrap: "wrap",
-      marginTop: 10
-    }
-  });
-  
-};
-
+        borderWidth: 8,
+        borderColor: "#89CFF0",
+      },
+    }),
+    padding: "5%",
+  },
+  titleContainer: {
+    flexDirection: "column",
+    gap: 8
+  },
+  accessibilityCheckboxContainer: {
+    flexDirection: "row",
+  },
+  label: {
+    margin: 8,
+  },
+  checkbox: {
+    alignSelf: "center",
+  },
+  attractionsListLoading: {
+    padding: 20,
+  },
+  searchAndFilterContainer: {
+    flexDirection: "row",
+    gap: 20,
+    flexWrap: "wrap",
+    marginTop: 10
+  }
+});
