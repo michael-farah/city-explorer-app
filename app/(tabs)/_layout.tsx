@@ -20,7 +20,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({  focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "home" : "home-outline"}
               color="#89CFF0"
@@ -32,7 +32,7 @@ export default function TabLayout() {
         name="bucket-list"
         options={{
           title: "Bucket List",
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "star" : "star-outline"}
               color="#D580FF"
@@ -44,7 +44,7 @@ export default function TabLayout() {
         name="itinerary"
         options={{
           title: "Itinerary",
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "calendar" : "calendar-outline"}
               color="#56bf52"
